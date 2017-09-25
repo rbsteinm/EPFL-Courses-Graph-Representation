@@ -1,0 +1,12 @@
+LOAD CSV WITH HEADERS FROM "file:////course_neo.csv" AS csvLine
+CREATE (c:Course { code: csvLine.code, title: csvLine.title, resume: csvLine.resume, content: csvLine.content, keyword: csvLine.keyword})
+
+USING PERIODIC COMMIT 500
+LOAD CSV WITH HEADERS FROM "file:///pre_ind.csv" AS csvLine
+MATCH (source:Course {code: csvLine.Source}),(target:Course {code: csvLine.Target})
+CREATE (source)-[:REQUIRE_IND]->(target)
+
+USING PERIODIC COMMIT 500
+LOAD CSV WITH HEADERS FROM "file:///pre_obl.csv" AS csvLine
+MATCH (source:Course {code: csvLine.Source}),(target:Course {code: csvLine.Target})
+CREATE (source)-[:REQUIRE_OBL]->(target)
