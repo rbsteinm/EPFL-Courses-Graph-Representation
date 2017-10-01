@@ -78,6 +78,7 @@ def get_graph():
         '''
         for name in record['cast']:
             actor = {"title": name, "label": "actor"}
+            
             try:
                 source = nodes.index(actor)
             except ValueError:
