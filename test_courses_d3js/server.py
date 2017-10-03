@@ -13,11 +13,12 @@ driver = GraphDatabase.driver('bolt://localhost', auth=basic_auth("neo4j", "pika
 # basic auth with: driver = GraphDatabase.driver('bolt://localhost', auth=basic_auth("<user>", "<pwd>"))
 
 
-def serialize_course(course):
+def serialize_course(course, c_id):
     return {
         'title': course['title'],
         'code': course['code'],
-        'resume': course['resume']
+        'resume': course['resume'],
+        'id': c_id
 }
 
 def get_db():
@@ -34,27 +35,21 @@ def close_db(error):
 def get_index():
     return app.send_static_file('index.html')
 
-
 # displays the graph when the page is loaded
 @app.route("/graph")
 def get_graph():
     db = get_db()
-    results = db.run("MATCH (c:Course) RETURN ID(c) as node_id, c.code as code, c.title as course")
-    nodes = []
-    rels = []
-    index_dict = {} # contains matching between neo4j's node ids and node indexes for the front end
-    node_index = 0
+    results = db.run("MATCH (c:Course) RETURN ID(c) as node_id, c.code as code, c.title as course") # get all node records from the db in a list
+
+    nodes = [] # all nodes
+    rels = [] # all relations (edges)
     for record in results:
-        nodes.append({"node_id": record["node_id"], "code": record["code"], "title": record["course"], "label": "course", "index" : node_index})
-        assert(not record["node_id"] in index_dict)
-        index_dict[record["node_id"]] = node_index
-        node_index += 1
+        nodes.append({"node_id": record["node_id"], "code": record["code"], "title": record["course"], "label": "course"})
 
     relationships = db.run("MATCH (c1:Course) -[r]->(c2:Course) RETURN ID(c1) as source, ID(c2) as target")
     for rel in relationships:
-
-        index_c1 = index_dict[rel["source"]]
-        index_c2 = index_dict[rel["target"]]
+        index_c1 = rel['source']
+        index_c2 = rel['target']
         rels.append({"source": index_c1, "target": index_c2})
 
     return Response(dumps({"nodes": nodes, "links": rels}),
@@ -68,11 +63,10 @@ def get_search():
         return []
     else:
         db = get_db()
-        results = db.run("MATCH (c:Course) "
-                 "WHERE c.title =~ {title} "
-                 "RETURN c", {"title": "(?i).*" + q + ".*"}
-        )
-        return Response(dumps([serialize_course(record['c']) for record in results]),
+        results = db.run("MATCH (c:Course) WHERE c.title =~ {title} RETURN c as c, id(c) as c_id", {"title": "(?i).*" + q + ".*"})
+        #for record in results:
+            #print(record['c'])
+        return Response(dumps([serialize_course(record['c'], c_id) for record in results]),
                         mimetype="application/json")
 
 

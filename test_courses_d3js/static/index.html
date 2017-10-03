@@ -82,8 +82,9 @@
         var node = svg.selectAll(".node")
                 .data(graph.nodes).enter()
                 .append("circle")
-                .attr("class", function (d) { return "node "+d.label })
+                .attr("class", function (d) { return d.label + " node" })
                 .attr("r", 10)
+                .attr("id", function(d) {return d.id})
                 .call(force.drag);
 
         // html title attribute
