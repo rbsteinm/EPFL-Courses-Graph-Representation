@@ -66,7 +66,7 @@ def get_search():
         results = db.run("MATCH (c:Course) WHERE c.title =~ {title} RETURN c as c, id(c) as c_id", {"title": "(?i).*" + q + ".*"})
         #for record in results:
             #print(record['c'])
-        return Response(dumps([serialize_course(record['c'], c_id) for record in results]),
+        return Response(dumps([serialize_course(record['c'], record['c_id']) for record in results]),
                         mimetype="application/json")
 
 

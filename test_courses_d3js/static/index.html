@@ -50,6 +50,14 @@
         top: 0;
         left: 0;
     }
+
+    .node{
+        fill: grey;
+    }
+
+    .selected_node{
+        fill: red;
+    }
     </style>
 
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
@@ -79,12 +87,13 @@
                 .data(graph.links).enter()
                 .append("line").attr("class", "link");
 
+        // for each node in the JSON data, we create an svg circle and give it as attributes the node's id from neo4j
         var node = svg.selectAll(".node")
                 .data(graph.nodes).enter()
                 .append("circle")
-                .attr("class", function (d) { return d.label + " node" })
+                .attr("class", function (d) { return "node" })
                 .attr("r", 10)
-                .attr("id", function(d) {return d.id})
+                .attr("id", function(d) {return d.node_id})
                 .call(force.drag);
 
         // html title attribute
@@ -127,9 +136,14 @@
                     function (data) {
                         var t = $("table#results tbody").empty();
                         if (!data || data.length == 0) return;
+                        // for each node returned by the query
                         data.forEach(function (course) {
+                            // append a line in the list of selected courses with the course's title and code
                             $("<tr><td class='course'>" + course.title + "</td><td>" + course.code + "</td><td>" + "</td></tr>").appendTo(t);
                                     //.click(function() { showMovie($(this).find("td.movie").text());})
+                            //console.log(course.id);
+                            var node = $('#' + course.id);
+                            node.attr("r", 20).attr("class", "selected_node");
                         });
                         //showMovie(data[0].title);
                     }, "json");
