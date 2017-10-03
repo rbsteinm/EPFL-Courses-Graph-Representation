@@ -12,6 +12,14 @@ app = Flask(__name__, static_url_path='/static/')
 driver = GraphDatabase.driver('bolt://localhost', auth=basic_auth("neo4j", "pikachu74"))
 # basic auth with: driver = GraphDatabase.driver('bolt://localhost', auth=basic_auth("<user>", "<pwd>"))
 
+
+def serialize_course(course):
+    return {
+        'title': course['title'],
+        'code': course['code'],
+        'resume': course['resume']
+}
+
 def get_db():
     if not hasattr(g, 'neo4j_db'):
         g.neo4j_db = driver.session()
@@ -45,6 +53,21 @@ def get_graph():
 
     return Response(dumps({"nodes": nodes, "links": rels}),
                     mimetype="application/json")
+
+@app.route("/search")
+def get_search():
+    try:
+        q = request.args["q"]
+    except KeyError:
+        return []
+    else:
+        db = get_db()
+        results = db.run("MATCH (c:Course) "
+                 "WHERE c.title =~ {title} "
+                 "RETURN c", {"title": "(?i).*" + q + ".*"}
+        )
+        return Response(dumps([serialize_course(record['c']) for record in results]),
+                        mimetype="application/json")
 
 
 if __name__ == '__main__':

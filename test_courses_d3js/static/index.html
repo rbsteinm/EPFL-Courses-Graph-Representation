@@ -6,22 +6,41 @@
 </head>
 
 <body>
+<form role="search" class="navbar-form" id="search">
+    <div class="form-group">
+        <input type="text" placeholder="Search for courses" class="form-control" name="search">
+    </div>
+    <button class="btn btn-default" type="submit">Search</button>
+</form>
+
+
+<table id="results" class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th>Course</th>
+        <th>Code</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
 <div id="graph" class = "svg-container">
 
 </div>
 
 <style type="text/css">
     .node { stroke: #222; stroke-width: 1.5px; }
-    .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; }
+    .link { stroke: #999; stroke-opacity: .6; stroke-width: 5px; }
 
     .svg-container {
         display: inline-block;
         position: relative;
-        width: 95%;
-        height: 95% ;
+        width: 80%;
+        height: 80% ;
         vertical-align: top;
         overflow: hidden;
-        border:1px solid black;
+        border: 1px solid black;
     }
     .svg-content {
         display: inline-block;
@@ -30,36 +49,27 @@
         height: 100% ;  
         top: 0;
         left: 0;
-        border:1px solid blue}
+        border:0px solid blue}
     </style>
 
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="http://d3js.org/d3.v3.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
-    //var width = 300, height = 300;
+    // define width/height as the svg container dimensions
     var width = document.getElementsByClassName('svg-container')[0].clientWidth;
     var height = document.getElementsByClassName('svg-container')[0].clientHeight;
-    console.log(width, height)
-
 
     var force = d3.layout.force().charge(-200).linkDistance(30).size([width, height]);
 
-    //var svg = d3.select("#graph").append("svg")
-    //        .attr("width", "100%").attr("height", "100%")
-    //        .attr("pointer-events", "all");
+    var svg = d3.select("div#graph").append("svg")
+        .attr("width", "100%").attr("height", "100%")
+        .call(d3.behavior.zoom().on("zoom", function () {
+            svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
+        }))
+        .classed("svg-content", true).append("g");
 
-    //var svg = d3.select("div#graph").append("svg").attr("preserveAspectRatio", "xMinYMin meet").attr("viewBox", "0 0 3000 3000").classed("svg-content", true);
-    var svg = d3.select("div#graph").append("svg").attr("width", "100%").attr("height", "100%").call(d3.behavior.zoom().on("zoom", function () {
-        svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
-  }))
-  .append("g").classed("svg-content", true);
-
-
-    // trying to add zoom
-    var inner_svg = d3.select("#svg-content");
-    //inner_svg.append("svg")
-
+    
     d3.json("/graph", function(error, graph) {
 		if (error) return;
 
@@ -93,6 +103,41 @@
                     .attr("cy", function(d) { return d.y; });
         });
     });
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        /*function showMovie(title) {
+            $.get("/movie/" + encodeURIComponent(title),
+                    function (data) {
+                        if (!data) return;
+                        $("#title").text(data.title);
+                        $("#poster").attr("src","http://neo4j-contrib.github.io/developer-resources/language-guides/assets/posters/"+encodeURIComponent(data.title)+".jpg");
+                        var $list = $("#crew").empty();
+                        data.cast.forEach(function (cast) {
+                            $list.append($("<li>" + cast.name + " " +cast.job + (cast.job == "acted"?" as " + cast.role : "") + "</li>"));
+                        });
+                    }, "json");
+            return false;
+        }*/
+        function search() {
+            var query=$("#search").find("input[name=search]").val();
+            $.get("/search?q=" + encodeURIComponent(query),
+                    function (data) {
+                        var t = $("table#results tbody").empty();
+                        if (!data || data.length == 0) return;
+                        data.forEach(function (course) {
+                            $("<tr><td class='course'>" + course.title + "</td><td>" + course.code + "</td><td>" + "</td></tr>").appendTo(t);
+                                    //.click(function() { showMovie($(this).find("td.movie").text());})
+                        });
+                        //showMovie(data[0].title);
+                    }, "json");
+            return false;
+        }
+
+        $("#search").submit(search);
+        //search();
+    })
 </script>
 </body>
 </html>
