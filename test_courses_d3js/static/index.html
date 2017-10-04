@@ -133,30 +133,31 @@
                     }, "json");
             return false;
         }*/
+
+        function clear_search(){
+            $(".selected_node").attr("class", "node").attr("r", 10);
+        }
+
         function search() {
             var query=$("#search").find("input[name=search]").val();
-            if(query === ""){
-                display_graph();
-            }
-            else{
-                $(".selected_node").attr("class", "node").attr("r", 10);
-                $.get("/search?q=" + encodeURIComponent(query),
-                        function (data) {
-                            var t = $("table#results tbody").empty();
-                            if (!data || data.length == 0) return;
-                            // for each node returned by the query
-                            data.forEach(function (course) {
-                                // append a line in the list of selected courses with the course's title and code
-                                $("<tr><td class='course'>" + course.title + "</td><td>" + course.code + "</td><td>" + "</td></tr>").appendTo(t);
-                                        //.click(function() { showMovie($(this).find("td.movie").text());})
-                                //console.log(course.id);
-                                var node = $('#' + course.id);
-                                node.attr("r", 20).attr("class", "selected_node");
-                            });
-                            //showMovie(data[0].title);
-                        }, "json");
-            }
-                return false;
+            clear_search();
+            $(".selected_node").attr("class", "node").attr("r", 10);
+            $.get("/search?q=" + encodeURIComponent(query),
+                    function (data) {
+                        var t = $("table#results tbody").empty();
+                        if (!data || data.length == 0) return;
+                        // for each node returned by the query
+                        data.forEach(function (course) {
+                            // append a line in the list of selected courses with the course's title and code
+                            $("<tr><td class='course'>" + course.title + "</td><td>" + course.code + "</td><td>" + "</td></tr>").appendTo(t);
+                                    //.click(function() { showMovie($(this).find("td.movie").text());})
+                            //console.log(course.id);
+                            var node = $('#' + course.id);
+                            node.attr("r", 20).attr("class", "selected_node");
+                        });
+                        //showMovie(data[0].title);
+                    }, "json");
+            return false;
         }
 
         $("#search").submit(search);
