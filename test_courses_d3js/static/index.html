@@ -30,8 +30,11 @@
 
 
 <style type="text/css">
-    .node { stroke: #222; stroke-width: 1.5px; }
-    .link { stroke: #999; stroke-opacity: .6; stroke-width: 5px; }
+    .link {
+        stroke: #999;
+        stroke-opacity: .8;
+        stroke-width: 1px;
+    }
 
     .svg-container {
         display: inline-block;
@@ -53,10 +56,14 @@
 
     .node{
         fill: grey;
+        r: 4;
+        /*stroke: #222;
+        stroke-width: 1.5px;*/
     }
 
     .selected_node{
         fill: red;
+        r: 4;
     }
     </style>
 
@@ -66,15 +73,28 @@
 <script type="text/javascript">
     function display_graph(){
         // define width/height as the svg container dimensions
-        var width = document.getElementsByClassName('svg-container')[0].clientWidth;
-        var height = document.getElementsByClassName('svg-container')[0].clientHeight;
+        const width = document.getElementsByClassName('svg-container')[0].clientWidth;
+        const height = document.getElementsByClassName('svg-container')[0].clientHeight;
 
-        var force = d3.layout.force().charge(-200).linkDistance(30).size([width, height]);
-
-        var svg = d3.select("div#graph").append("svg")
+        const force = d3.layout.force().charge(-200).linkDistance(30).size([width, height]);
+        let radius;
+        let line_width;
+        const svg = d3.select("div#graph").append("svg")
             .attr("width", "100%").attr("height", "100%")
             .call(d3.behavior.zoom().on("zoom", function () {
                 svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
+                // when zooming, it updates the size of the nodes and edges
+                radius = (4.0/(Math.sqrt(d3.event.scale)));
+                line_width = (1.0/((d3.event.scale)));
+                console.log(radius);
+                if(radius > 1.0 && radius < 20.0){
+                    console.log("resizing nodes");
+                    d3.selectAll(".node").style("r", radius); // update nodes size
+                }
+                if(line_width > 0.1 && line_width < 10.0){
+                    console.log("resizing edges");
+                    d3.selectAll(".link").style("stroke-width", line_width); // update edges size
+                }
             }))
             .classed("svg-content", true).append("g");
 
@@ -94,8 +114,8 @@
                     .append("circle")
                     .attr("class", function (d) { return "node" })
                     .attr("r", 10)
-                    .attr("id", function(d) {return d.node_id})
-                    .call(force.drag);
+                    .attr("id", function(d) {return d.node_id});
+                    //.call(force.drag);
 
             // html title attribute
             node.append("title")
@@ -119,50 +139,38 @@
 </script>
 
 <script type="text/javascript">
-    $(function () {
-        /*function showMovie(title) {
-            $.get("/movie/" + encodeURIComponent(title),
-                    function (data) {
-                        if (!data) return;
-                        $("#title").text(data.title);
-                        $("#poster").attr("src","http://neo4j-contrib.github.io/developer-resources/language-guides/assets/posters/"+encodeURIComponent(data.title)+".jpg");
-                        var $list = $("#crew").empty();
-                        data.cast.forEach(function (cast) {
-                            $list.append($("<li>" + cast.name + " " +cast.job + (cast.job == "acted"?" as " + cast.role : "") + "</li>"));
-                        });
-                    }, "json");
-            return false;
-        }*/
-
+        const t = $("table#results tbody");
         function clear_search(){
-            $(".selected_node").attr("class", "node").attr("r", 10);
+            $(".selected_node").attr("class", "node");
+            t.empty();
         }
 
         function search() {
             var query=$("#search").find("input[name=search]").val();
             clear_search();
-            $(".selected_node").attr("class", "node").attr("r", 10);
-            $.get("/search?q=" + encodeURIComponent(query),
-                    function (data) {
-                        var t = $("table#results tbody").empty();
-                        if (!data || data.length == 0) return;
-                        // for each node returned by the query
-                        data.forEach(function (course) {
-                            // append a line in the list of selected courses with the course's title and code
-                            $("<tr><td class='course'>" + course.title + "</td><td>" + course.code + "</td><td>" + "</td></tr>").appendTo(t);
-                                    //.click(function() { showMovie($(this).find("td.movie").text());})
-                            //console.log(course.id);
-                            var node = $('#' + course.id);
-                            node.attr("r", 20).attr("class", "selected_node");
-                        });
-                        //showMovie(data[0].title);
-                    }, "json");
+            if(query.length != 0){
+                $.get("/search?q=" + encodeURIComponent(query),
+                        function (data) {
+                            console.log(data);
+                            if (!data || data.length == 0){
+                                console.log("empty search");
+                                return false;
+                            }
+                            // for each node returned by the query
+                            data.forEach(function (course) {
+                                // append a line in the list of selected courses with the course's title and code
+                                $("<tr><td class='course'>" + course.title + "</td><td>" + course.code + "</td><td>" + "</td></tr>").appendTo(t);
+                                var node = $('#' + course.id);
+                                node.attr("class", "node selected_node");
+                            });
+                        }, "json");
+            }
             return false;
+            
         }
 
         $("#search").submit(search);
         //search();
-    })
 </script>
 </body>
 </html>
