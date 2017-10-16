@@ -81,7 +81,7 @@ with open(path_edges_plsa, 'rb') as csvfile:
 
 
 # add aggregate courses to ISA
-isa_codes_with_aggr = []
+isa_codes_aggr_only = []
 for x in isa_codes:
     if '(' in x:
         if x[0] is '(' and x[-1] is ')':
@@ -94,11 +94,12 @@ for x in isa_codes:
             else:
                 break
         if aggr != '':
-            isa_codes_with_aggr.append(aggr)
+            isa_codes_aggr_only.append(aggr)
 
         #print('before: ' + x + ' after: ' + aggr)
-isa_codes_with_aggr = set(isa_codes_with_aggr)
-isa_codes = isa_codes_with_aggr.union(isa_codes)
+isa_codes_aggr_only = set(isa_codes_aggr_only)
+isa_codes_no_aggr = isa_codes
+isa_codes = isa_codes_aggr_only.union(isa_codes)
 
 
 # Max's courses and ISA's courses
@@ -153,7 +154,7 @@ print('There are ' + str(len(k_not_isa)) + ' courses in khsitij but not in Max U
 # it seems that it could be fine if we merge Max and ISA courses
 # let's check if the course that have same code also have same name between Max and ISA
 not_same = 0
-for code in max_codes.intersection(isa_codes).difference(isa_codes_with_aggr):
+for code in max_codes.intersection(isa_codes).difference(isa_codes_aggr_only):
     #if(dict_max[code] != dict_isa[code]):
     if SM(None, dict_max[code], dict_isa[code]).ratio() < 0.5:
         not_same += 1
@@ -166,4 +167,11 @@ print(not_same)
 '''
 process to follow:
 - take courses from ISA
-- 
+- remove ill formated courses from Max
+- add all courses from Max that are not existing in ISA (with descriptions)
+- add aggregations
+- maybe add a new field is_super and has_super
+- check the proportion of edges that are matched
+
+
+
