@@ -1,0 +1,2 @@
+inference 1: comes from the description of the course
+inference 2: comes from Wikipedia
