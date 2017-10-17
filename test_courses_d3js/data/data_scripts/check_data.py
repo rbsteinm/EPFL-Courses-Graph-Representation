@@ -143,13 +143,17 @@ for x in plsa:
 print('')
 
 k_not_isa = courses_k.difference(isa_codes)
-print('There are ' + str(len(k_not_isa)) + ' courses in khsitij but not in ISA: ')
-
+print('There are ' + str(len(k_not_isa)) + ' courses in kshitij but not in ISA: ')
+for course in k_not_isa:
+    print(course)
+print('')
 
 max_and_isa = max_codes.union(isa_codes)
 
 k_not_isa = courses_k.difference(max_and_isa)
-print('There are ' + str(len(k_not_isa)) + ' courses in khsitij but not in Max U ISA: ')
+print('There are ' + str(len(k_not_isa)) + ' courses in kshitij but not in Max U ISA: ')
+for course in k_not_isa:
+    print(course)
 
 # it seems that it could be fine if we merge Max and ISA courses
 # let's check if the course that have same code also have same name between Max and ISA
@@ -172,6 +176,6 @@ process to follow:
 - add aggregations
 - maybe add a new field is_super and has_super
 - check the proportion of edges that are matched
-
+'''
 
 

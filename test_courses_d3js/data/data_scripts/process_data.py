@@ -99,4 +99,43 @@ isa_codes = set(isa_codes)
 print("Size of isa: " + str(len(isa_codes)))
 
 isa_U_max = max_codes.union(isa_codes)
+#isa_U_max = isa_codes
 print("Size of ISA union Max: " + str(len(isa_U_max)))
+
+# Add aggregations (TODO add field that distinguishes if it's a supernode or not)
+aggregations = []
+for x in isa_U_max:
+    if '(' in x:
+        if x[0] is '(' and x[-1] is ')':
+            x = x[1:-1]
+
+        aggr = ''
+        for char in x:
+            if char is not '(':
+                aggr = aggr + char
+            else:
+                break
+        if aggr != '':
+            aggregations.append(aggr)
+
+codes_with_aggr = isa_U_max.union(set(aggregations))
+print("Size of codes with aggregations: " + str(len(codes_with_aggr)))
+
+
+# Max's edges and ISA's couses
+
+edges_to_dump_obl = sum(1 for x in max_egdes_obl if (x[0] not in codes_with_aggr or x[1] not in codes_with_aggr))
+edges_to_dump_ind = sum(1 for x in max_egdes_ind if (x[0] not in codes_with_aggr or x[1] not in codes_with_aggr))
+total_dump = edges_to_dump_ind + edges_to_dump_obl
+total_edges = len(max_egdes_obl) + len(max_egdes_ind)
+print("If we use ISA_U_Max courses_ISA and Max's edges, we would have to dump " + str(total_dump) + " out of " + str(total_edges) + " edges")
+print('')
+
+# Kshitij's edges and ISA's courses
+
+names = ['plsa', 'lda', 'inf2', 'inf1', 'baseline']
+
+for edges in [baseline, inf1, inf2, lda, plsa]:
+    edges_to_dump = sum(1 for x in edges if (x[0] not in codes_with_aggr or x[1] not in codes_with_aggr))
+    total_edges = len(edges)
+    print("If we use ISA_U_Max and Kshitij's "  + names.pop() + " edges, we would have to dump " + str(edges_to_dump) + " out of " + str(total_edges) + " edges.")
