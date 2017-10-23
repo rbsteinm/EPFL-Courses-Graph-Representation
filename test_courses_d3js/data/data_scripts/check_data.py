@@ -114,8 +114,14 @@ print('ISA and Max have ' + str(len(inter)) + ' courses in common')
 print('Max has ' + str(len(max_codes.difference(isa_codes))) + ' that ISA has not')
 print('ISA has ' + str(len(isa_codes.difference(max_codes))) + ' courses that Max has not')
 
-ill_form_max = sum(1 for x in max_codes if len(x) > 10)
+ill_form_max = sum(1 for x in max_codes if len(x) > 15)
 print('Max has ' + str(ill_form_max) + ' courses that seem ill-formated (len(code) > 10)')
+
+
+print("The courses that Maxime has but ISA has not: ")
+for course in max_codes.difference(isa_codes):
+    if(len(course) < 15):
+        print(course)
 
 
 # Max's edges and ISA's couses
@@ -144,16 +150,16 @@ print('')
 
 k_not_isa = courses_k.difference(isa_codes)
 print('There are ' + str(len(k_not_isa)) + ' courses in kshitij but not in ISA: ')
-for course in k_not_isa:
-    print(course)
+#for course in k_not_isa:
+#    print(course)
 print('')
 
 max_and_isa = max_codes.union(isa_codes)
 
 k_not_isa = courses_k.difference(max_and_isa)
 print('There are ' + str(len(k_not_isa)) + ' courses in kshitij but not in Max U ISA: ')
-for course in k_not_isa:
-    print(course)
+#for course in k_not_isa:
+    #print(course)
 
 # it seems that it could be fine if we merge Max and ISA courses
 # let's check if the course that have same code also have same name between Max and ISA

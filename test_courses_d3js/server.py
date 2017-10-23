@@ -13,6 +13,8 @@ driver = GraphDatabase.driver('bolt://localhost', auth=basic_auth("neo4j", "pika
 # basic auth with: driver = GraphDatabase.driver('bolt://localhost', auth=basic_auth("<user>", "<pwd>"))
 
 
+# input: a node and its id
+# output: a dict containing the node's attributes
 def serialize_course(course, c_id):
     return {
         'title': course['title'],
@@ -55,6 +57,7 @@ def get_graph():
     return Response(dumps({"nodes": nodes, "links": rels}),
                     mimetype="application/json")
 
+# return search bar results
 @app.route("/search")
 def get_search():
     try:
@@ -64,8 +67,6 @@ def get_search():
     else:
         db = get_db()
         results = db.run("MATCH (c:Course) WHERE c.title =~ {title} RETURN c as c, id(c) as c_id", {"title": "(?i).*" + q + ".*"})
-        #for record in results:
-            #print(record['c'])
         return Response(dumps([serialize_course(record['c'], record['c_id']) for record in results]),
                         mimetype="application/json")
 
