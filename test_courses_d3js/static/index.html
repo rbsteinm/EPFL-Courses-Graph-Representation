@@ -39,8 +39,8 @@
     .svg-container {
         display: inline-block;
         position: relative;
-        width: 80%;
-        height: 80% ;
+        width: 100%;
+        height: 85% ;
         vertical-align: top;
         overflow: hidden;
         border: 1px solid black;
@@ -72,7 +72,7 @@
 
 <script type="text/javascript">
 
-    function count_hidden(){
+    /*function count_hidden(){
         let nodes = d3.selectAll(".node");
         console.log(nodes[0][0])
         let c = 0;
@@ -82,6 +82,49 @@
             }
         }
         console.log("hidden nodes " + c);
+    }*/
+
+    const MAX_SCALE_FACTOR = 30.0;
+    const MIN_SCALE_FACTOR = 0.1;
+    const MAX_RADIUS = 20;
+    const MIN_RADIUS = 1;
+    const MAX_LINE_WIDTH = 10;
+    const MIN_LINE_WIDTH = 0.1;
+
+    function get_node_size(scale_factor){
+        return (4/(Math.sqrt(scale_factor))).toFixed(1);
+    }
+
+    function get_line_width(scale_factor){
+        return (1.0/((scale_factor))).toFixed(2);
+    }
+
+    // rescale the scaling factor to a value between 0 and 100
+    /*function range_scaling_factor(factor, max_before, min_before, max_after, min_after){
+        
+        if(factor > max_before){
+            factor = max_before;
+        }
+        else if(factor < min_before){
+            factor = min_before;
+        }
+        percent = (factor - min_before) / (max_before - min_before);
+        return Math.round(percent * (max_after - min_after) + min_after);
+        //return  Math.round(100 * (factor - min_value) / (max_value - min_value));
+    }*/
+
+    function get_new_coordinates(x, y, matrix){
+        /*let new_x = (x + translate[0]) / scale;
+        let new_y = (y + translate[1]) / scale;
+        return [new_x, new_y];*/
+        //console.log(matrix);
+        //var matrix = element.matrix.invert(),
+        //matrix = matrix.inverse();
+        //x1 = x * matrix.a + y * matrix.b + matrix.e,
+        //y1 = x * matrix.c + y * matrix.d + matrix.f;
+        x1 = x * matrix.a + y * matrix.c + matrix.e,
+        y1 = x * matrix.b + y * matrix.d + matrix.f;
+        return [x1, y1];
     }
 
     function display_graph(){
@@ -92,22 +135,41 @@
         const force = d3.layout.force().charge(-200).linkDistance(30).size([width, height]);
         let radius;
         let line_width;
+        let scale_factor;
+        let scale;
+        let translate;
+        let matrix;
         const svg = d3.select("div#graph").append("svg")
             .attr("width", "100%").attr("height", "100%")
             .call(d3.behavior.zoom().on("zoom", function () {
-                count_hidden();
+                scale = d3.event.scale;
+                translate = d3.event.translate;
+                
+                //scale_factor = range_scaling_factor(d3.event.scale, MAX_SCALE_FACTOR, MIN_SCALE_FACTOR, 100, 0);
+                //console.log("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
+                scale_factor = d3.event.scale.toFixed(1);
+                //count_hidden();
                 svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
+                matrix = svg[0][0].getCTM();
+                console.log(matrix);
+                console.log(d3.event.translate);
+                //console.log(svg[0][0].getCTM().inverse());
+                //d3.selectAll(".node").attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
+                //d3.selectAll(".link").attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
+                //console.log(d3.select(".node")[0].getCTM());
                 // when zooming, it updates the size of the nodes and edges
-                radius = d3.format(".2f")(4.0/(Math.sqrt(d3.event.scale)));
-                line_width = d3.format(".2f")(1.0/((d3.event.scale)));
-                //console.log(radius);
-                if(radius > 1.0 && radius < 20.0){
+                //radius = d3.format(".2f")(4.0/(Math.sqrt(scale_factor)));
+                radius = get_node_size(d3.event.scale);
+
+                line_width = get_line_width(scale_factor);
+                //console.log(radius + " " + line_width);
+                if(radius > MIN_RADIUS && radius < MAX_RADIUS){
                     //console.log("resizing nodes");
-                    d3.selectAll(".node").style("r", radius); // update nodes size
+                    //d3.selectAll(".node").style("r", radius); // update nodes size
                 }
-                if(line_width > 0.1 && line_width < 10.0){
+                if(line_width > MIN_LINE_WIDTH && line_width < MAX_LINE_WIDTH){
                     //console.log("resizing edges");
-                    d3.selectAll(".link").style("stroke-width", line_width); // update edges size
+                    //d3.selectAll(".link").style("stroke-width", line_width); // update edges size
                 }
             }))
             .classed("svg-content", true).append("g");
@@ -126,14 +188,18 @@
             var node = svg.selectAll(".node")
                     .data(graph.nodes).enter()
                     .append("circle")
-                    .attr("class", function (d) { return "node" })
+                    .attr("class", "node")
                     .attr("r", 10)
-                    .attr("id", function(d) {return d.node_id});
+                    .attr("id", function(d) {return d.node_id})
+                    .on("click", function(d) {
+                        [new_x, new_y] = get_new_coordinates(d.x, d.y, matrix);
+                        console.log(new_x + ", " + new_y);
+                        //d3.event.stopPropagation();
+                    });;
                     //.call(force.drag);
 
             // html title attribute
-            node.append("title")
-                    .text(function (d) { return d.title; })
+            node.append("title").text(function (d) { return d.title; })
 
             // force feed algo ticks
             force.on("tick", function() {
