@@ -114,17 +114,27 @@
     }*/
 
     function get_new_coordinates(x, y, matrix){
-        /*let new_x = (x + translate[0]) / scale;
-        let new_y = (y + translate[1]) / scale;
-        return [new_x, new_y];*/
-        //console.log(matrix);
-        //var matrix = element.matrix.invert(),
-        //matrix = matrix.inverse();
-        //x1 = x * matrix.a + y * matrix.b + matrix.e,
-        //y1 = x * matrix.c + y * matrix.d + matrix.f;
-        x1 = x * matrix.a + y * matrix.c + matrix.e,
+        let x1 = x * matrix.a + y * matrix.c + matrix.e,
         y1 = x * matrix.b + y * matrix.d + matrix.f;
         return [x1, y1];
+    }
+
+    function node_is_visible(node, width, height, matrix){
+        //console.log(node.x);
+        let x, y;
+        [x, y] = get_new_coordinates(node.x, node.y, matrix)
+        return x > 0 && x < width && y > 0 && y < height;
+    }
+
+    function edge_is_visible(edge, width, height, matrix){
+        //console.log(edge.target.x);
+        let x1, x2, y1, y2;
+        [x1, y1] = get_new_coordinates(edge.source.x ,edge.source.y, matrix);
+        [x2, y2] = get_new_coordinates(edge.target.x ,edge.target.y, matrix);
+        //console.log(x1 + " " + x2 + " " + y1 + " " + y2);
+        //console.log(edge.source.x + " " + edge.target.x);
+        return (x1 > 0 && x1 < width && y1 > 0 && y1 < height) || (x2 > 0 && x2 < width && y2 > 0 && y2 < height);
+
     }
 
     function display_graph(){
@@ -151,26 +161,13 @@
                 //count_hidden();
                 svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
                 matrix = svg[0][0].getCTM();
-                console.log(matrix);
-                console.log(d3.event.translate);
-                //console.log(svg[0][0].getCTM().inverse());
-                //d3.selectAll(".node").attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
-                //d3.selectAll(".link").attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
-                //console.log(d3.select(".node")[0].getCTM());
                 // when zooming, it updates the size of the nodes and edges
                 //radius = d3.format(".2f")(4.0/(Math.sqrt(scale_factor)));
                 radius = get_node_size(d3.event.scale);
+                line_width = get_line_width(d3.event.scale);
 
-                line_width = get_line_width(scale_factor);
-                //console.log(radius + " " + line_width);
-                if(radius > MIN_RADIUS && radius < MAX_RADIUS){
-                    //console.log("resizing nodes");
-                    //d3.selectAll(".node").style("r", radius); // update nodes size
-                }
-                if(line_width > MIN_LINE_WIDTH && line_width < MAX_LINE_WIDTH){
-                    //console.log("resizing edges");
-                    //d3.selectAll(".link").style("stroke-width", line_width); // update edges size
-                }
+                d3.selectAll(".node").filter(node => node_is_visible(node, width, height, matrix)).style("r", radius);
+                d3.selectAll(".link").filter(edge => edge_is_visible(edge, width, height, matrix)).style("stroke-width", line_width); // update edges size
             }))
             .classed("svg-content", true).append("g");
 
@@ -192,7 +189,7 @@
                     .attr("r", 10)
                     .attr("id", function(d) {return d.node_id})
                     .on("click", function(d) {
-                        [new_x, new_y] = get_new_coordinates(d.x, d.y, matrix);
+                        [new_x, new_y] = get_new_coordinates(d.x, d.y, svg[0][0].getCTM());
                         console.log(new_x + ", " + new_y);
                         //d3.event.stopPropagation();
                     });;
