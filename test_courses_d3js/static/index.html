@@ -65,24 +65,16 @@
         fill: red;
         r: 4;
     }
+
+    .unselected_node{
+
+    }
     </style>
 
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="http://d3js.org/d3.v3.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
-
-    /*function count_hidden(){
-        let nodes = d3.selectAll(".node");
-        console.log(nodes[0][0])
-        let c = 0;
-        for(let i = 0; i < nodes.size(); i++){
-            if(nodes[0][i].offsetParent === null){
-                c = c + 1;
-            }
-        }
-        console.log("hidden nodes " + c);
-    }*/
 
     const MAX_SCALE_FACTOR = 30.0;
     const MIN_SCALE_FACTOR = 0.1;
@@ -92,7 +84,7 @@
     const MIN_LINE_WIDTH = 0.1;
 
     function get_node_size(scale_factor){
-        return (4/(Math.sqrt(scale_factor))).toFixed(1);
+        return (5/(Math.sqrt(scale_factor))).toFixed(1);
     }
 
     function get_line_width(scale_factor){
@@ -134,38 +126,57 @@
         //console.log(x1 + " " + x2 + " " + y1 + " " + y2);
         //console.log(edge.source.x + " " + edge.target.x);
         return (x1 > 0 && x1 < width && y1 > 0 && y1 < height) || (x2 > 0 && x2 < width && y2 > 0 && y2 < height);
+    }
 
+    function highlight_node(node){
+        clear_selection();
+        node.classList.remove('unselected_node');
+        node.classList.add('selected_node');
+        d3.selectAll('.unselected_node').style('opacity', 0.5);
+        // also highlight neighbors
+        //console.log(node.id)
+        neighbors = get_neighbors(node.id)
+
+    }
+
+    function get_neighbors(nodeId){
+        $.get("/get_neighbors?q=" + encodeURIComponent(nodeId),
+                function (data) {
+                    console.log(data);
+                    if (!data || data.length == 0){
+                        console.log("no neighbors");
+                        return [];
+                    }
+                    return data
+                }, "json");
+        return false;
+    }
+
+    function clear_selection(){
+        d3.selectAll('.selected_node').attr('class', 'node unselected_node');
+        d3.selectAll('.node').style('opacity', 1);
     }
 
     function display_graph(){
         // define width/height as the svg container dimensions
         const width = document.getElementsByClassName('svg-container')[0].clientWidth;
         const height = document.getElementsByClassName('svg-container')[0].clientHeight;
-
         const force = d3.layout.force().charge(-200).linkDistance(30).size([width, height]);
+
         let radius;
         let line_width;
         let scale_factor;
-        let scale;
-        let translate;
         let matrix;
+
         const svg = d3.select("div#graph").append("svg")
             .attr("width", "100%").attr("height", "100%")
             .call(d3.behavior.zoom().on("zoom", function () {
-                scale = d3.event.scale;
-                translate = d3.event.translate;
-                
-                //scale_factor = range_scaling_factor(d3.event.scale, MAX_SCALE_FACTOR, MIN_SCALE_FACTOR, 100, 0);
-                //console.log("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
-                scale_factor = d3.event.scale.toFixed(1);
-                //count_hidden();
-                svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
                 matrix = svg[0][0].getCTM();
-                // when zooming, it updates the size of the nodes and edges
-                //radius = d3.format(".2f")(4.0/(Math.sqrt(scale_factor)));
                 radius = get_node_size(d3.event.scale);
                 line_width = get_line_width(d3.event.scale);
-
+                
+                svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
+                // when zooming, it updates the size of the nodes and edges
                 d3.selectAll(".node").filter(node => node_is_visible(node, width, height, matrix)).style("r", radius);
                 d3.selectAll(".link").filter(edge => edge_is_visible(edge, width, height, matrix)).style("stroke-width", line_width); // update edges size
             }))
@@ -185,12 +196,11 @@
             var node = svg.selectAll(".node")
                     .data(graph.nodes).enter()
                     .append("circle")
-                    .attr("class", "node")
+                    .attr("class", "node unselected_node")
                     .attr("r", 10)
                     .attr("id", function(d) {return d.node_id})
-                    .on("click", function(d) {
-                        [new_x, new_y] = get_new_coordinates(d.x, d.y, svg[0][0].getCTM());
-                        console.log(new_x + ", " + new_y);
+                    .on("click", function() {
+                        highlight_node(this);
                         //d3.event.stopPropagation();
                     });;
                     //.call(force.drag);
@@ -213,7 +223,7 @@
 
             // Arrange nodes in background, and only display the graph when it's done
             force.start();
-            for (let i = 10; i > 0; --i) force.tick();
+            for (let i = 1; i > 0; --i) force.tick();
             force.stop();
         });
     }
@@ -221,38 +231,38 @@
 </script>
 
 <script type="text/javascript">
-        const t = $("table#results tbody");
-        function clear_search(){
-            $(".selected_node").attr("class", "node");
-            t.empty();
-        }
+    const t = $("table#results tbody");
+    function clear_search(){
+        $(".selected_node").attr("class", "node");
+        t.empty();
+    }
 
-        function search() {
-            var query=$("#search").find("input[name=search]").val();
-            clear_search();
-            if(query.length != 0){
-                $.get("/search?q=" + encodeURIComponent(query),
-                        function (data) {
-                            console.log(data);
-                            if (!data || data.length == 0){
-                                console.log("empty search");
-                                return false;
-                            }
-                            // for each node returned by the query
-                            data.forEach(function (course) {
-                                // append a line in the list of selected courses with the course's title and code
-                                $("<tr><td class='course'>" + course.title + "</td><td>" + course.code + "</td><td>" + "</td></tr>").appendTo(t);
-                                var node = $('#' + course.id);
-                                node.attr("class", "node selected_node");
-                            });
-                        }, "json");
-            }
-            return false;
-            
+    function search() {
+        var query=$("#search").find("input[name=search]").val();
+        clear_search();
+        if(query.length != 0){
+            $.get("/search?q=" + encodeURIComponent(query),
+                    function (data) {
+                        console.log(data);
+                        if (!data || data.length == 0){
+                            console.log("empty search");
+                            return false;
+                        }
+                        // for each node returned by the query
+                        data.forEach(function (course) {
+                            // append a line in the list of selected courses with the course's title and code
+                            $("<tr><td class='course'>" + course.title + "</td><td>" + course.code + "</td><td>" + "</td></tr>").appendTo(t);
+                            var node = $('#' + course.id);
+                            node.attr("class", "node selected_node");
+                        });
+                    }, "json");
         }
+        return false;
+        
+    }
 
-        $("#search").submit(search);
-        //search();
+    $("#search").submit(search);
+    //search();
 </script>
 </body>
 </html>

@@ -70,6 +70,20 @@ def get_search():
         return Response(dumps([serialize_course(record['c'], record['c_id']) for record in results]),
                         mimetype="application/json")
 
+@app.route("/get_neighbors")
+def get_neighbors():
+    try:
+        nodeId = request.args["q"]
+    except KeyError:
+        print("keyerror")
+        return []
+    else:
+        # return all the neighbors of the query node
+        db = get_db()
+        neighbors = db.run("MATCH (n)-[*1..1]-(m) WHERE ID(n)="+nodeId+" RETURN distinctID(m) as id")
+        return Response(dumps([{'neigh':neigh['id']} for neigh in neighbors]), mimetype="application/json")
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
