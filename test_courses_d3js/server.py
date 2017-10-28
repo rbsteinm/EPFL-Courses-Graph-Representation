@@ -13,6 +13,15 @@ driver = GraphDatabase.driver('bolt://localhost', auth=basic_auth("neo4j", "pika
 # basic auth with: driver = GraphDatabase.driver('bolt://localhost', auth=basic_auth("<user>", "<pwd>"))
 
 
+# returns  a dictionary of each node's neighbors {(node) -> [neighbors]}
+def neighbors_dict(relationships):
+    neighs = dict()
+    for rel in relationships:
+        source = rel["source"]
+        target = rel["target"]
+        if not rel in neighs:
+            neighs[rel]
+
 # input: a node and its id
 # output: a dict containing the node's attributes
 def serialize_course(course, c_id):
@@ -45,16 +54,26 @@ def get_graph():
 
     nodes = [] # all nodes
     rels = [] # all relations (edges)
+    neighs_dict = {} # neighboring information
     for record in results:
         nodes.append({"node_id": record["node_id"], "code": record["code"], "title": record["course"], "label": "course"})
+        neighs_dict[record["node_id"]] = set()
 
     relationships = db.run("MATCH (c1:Course) -[r]->(c2:Course) RETURN ID(c1) as source, ID(c2) as target")
     for rel in relationships:
         index_c1 = rel['source']
         index_c2 = rel['target']
+        if(index_c1 == 3 or index_c2 == 3):
+            print(str(index_c1) + '<->' + str(index_c2))
         rels.append({"source": index_c1, "target": index_c2})
+        neighs_dict[index_c1].add(index_c2)
+        neighs_dict[index_c2].add(index_c1)
 
-    return Response(dumps({"nodes": nodes, "links": rels}),
+    # remove duplicates
+    neighs_dict = {k: list(v) for k, v in neighs_dict.items()}
+
+
+    return Response(dumps({"nodes": nodes, "links": rels, "neighbors_dict": neighs_dict}),
                     mimetype="application/json")
 
 # return search bar results
@@ -70,6 +89,7 @@ def get_search():
         return Response(dumps([serialize_course(record['c'], record['c_id']) for record in results]),
                         mimetype="application/json")
 
+# returns the neighbors of a single node given as argument
 @app.route("/get_neighbors")
 def get_neighbors():
     try:
@@ -80,7 +100,7 @@ def get_neighbors():
     else:
         # return all the neighbors of the query node
         db = get_db()
-        neighbors = db.run("MATCH (n)-[*1..1]-(m) WHERE ID(n)="+nodeId+" RETURN distinctID(m) as id")
+        neighbors = db.run("MATCH (n)-[*1..1]-(m) WHERE ID(n)="+nodeId+" RETURN distinct ID(m) as id")
         return Response(dumps([{'neigh':neigh['id']} for neigh in neighbors]), mimetype="application/json")
 
 

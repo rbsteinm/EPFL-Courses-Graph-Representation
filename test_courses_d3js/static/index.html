@@ -62,7 +62,7 @@
     }
 
     .selected_node{
-        fill: red;
+        fill: black;
         r: 4;
     }
 
@@ -82,6 +82,8 @@
     const MIN_RADIUS = 1;
     const MAX_LINE_WIDTH = 10;
     const MIN_LINE_WIDTH = 0.1;
+
+    let neighbors_dict = {};
 
     function get_node_size(scale_factor){
         return (5/(Math.sqrt(scale_factor))).toFixed(1);
@@ -128,28 +130,47 @@
         return (x1 > 0 && x1 < width && y1 > 0 && y1 < height) || (x2 > 0 && x2 < width && y2 > 0 && y2 < height);
     }
 
-    function highlight_node(node){
-        clear_selection();
+    function highlight_node(node, is_source=true){
+        if(is_source){
+            clear_selection();
+        }
+        console.log(node);
         node.classList.remove('unselected_node');
         node.classList.add('selected_node');
-        d3.selectAll('.unselected_node').style('opacity', 0.5);
+        node.style('opacity', 1);
+        console.log(node);
+        
         // also highlight neighbors
-        //console.log(node.id)
-        neighbors = get_neighbors(node.id)
+        if(is_source){
+            highlight_neighbors(node.id);
+            d3.selectAll('.unselected_node').style('opacity', 0.5);
+        }
+        /*
+        console.log(neighbors);
+        console.log(neighbors.length);
+        for(let i = 0; i < neighbors.length; i++){
+            console.log(get_node_by_id(neighbors[i]));
+        }*/
+        //console.log(get_node_by_id(neighbors[0]));
 
     }
 
-    function get_neighbors(nodeId){
+    function get_node_by_id(id){
+        return d3.select('[id="' + id + '"]')[0][0];
+    }
+
+    function highlight_neighbors(nodeId){
         $.get("/get_neighbors?q=" + encodeURIComponent(nodeId),
                 function (data) {
-                    console.log(data);
                     if (!data || data.length == 0){
                         console.log("no neighbors");
                         return [];
                     }
-                    return data
+                    data.forEach(function(node){
+                        highlight_node(get_node_by_id(node.neigh), false);
+                        //console.log(node.neigh);
+                    });
                 }, "json");
-        return false;
     }
 
     function clear_selection(){
@@ -205,6 +226,12 @@
                     });;
                     //.call(force.drag);
 
+            /*node.each(function(d,i){
+                    neighbors_dict[d.node_id] = [];
+            });*/
+            neighbors_dict = graph.neighbors_dict
+            console.log(neighbors_dict[0]);
+
             // html title attribute
             node.append("title").text(function (d) { return d.title; })
 
@@ -216,6 +243,11 @@
                         .attr("y1", function(d) { return d.source.y; })
                         .attr("x2", function(d) { return d.target.x; })
                         .attr("y2", function(d) { return d.target.y; });
+
+                /*link.each(function(d,i){
+                    neighbors_dict[d.source].push(d.target);
+                    neighbors_dict[d.target].push(d.source);
+                });*/
 
                 node.attr("cx", function(d) { return d.x; })
                         .attr("cy", function(d) { return d.y; });
