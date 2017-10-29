@@ -13,15 +13,6 @@ driver = GraphDatabase.driver('bolt://localhost', auth=basic_auth("neo4j", "pika
 # basic auth with: driver = GraphDatabase.driver('bolt://localhost', auth=basic_auth("<user>", "<pwd>"))
 
 
-# returns  a dictionary of each node's neighbors {(node) -> [neighbors]}
-def neighbors_dict(relationships):
-    neighs = dict()
-    for rel in relationships:
-        source = rel["source"]
-        target = rel["target"]
-        if not rel in neighs:
-            neighs[rel]
-
 # input: a node and its id
 # output: a dict containing the node's attributes
 def serialize_course(course, c_id):
@@ -63,8 +54,6 @@ def get_graph():
     for rel in relationships:
         index_c1 = rel['source']
         index_c2 = rel['target']
-        if(index_c1 == 3 or index_c2 == 3):
-            print(str(index_c1) + '<->' + str(index_c2))
         rels.append({"source": index_c1, "target": index_c2})
         neighs_dict[index_c1].add(index_c2)
         neighs_dict[index_c2].add(index_c1)

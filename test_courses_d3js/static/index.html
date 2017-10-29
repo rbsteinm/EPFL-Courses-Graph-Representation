@@ -31,8 +31,8 @@
 
 <style type="text/css">
     .link {
-        stroke: #999;
-        stroke-opacity: .8;
+        stroke: rgba(125, 125, 125, .8);
+        /*stroke-opacity: .8;*/
         stroke-width: 1px;
     }
 
@@ -55,7 +55,7 @@
     }
 
     .node{
-        fill: grey;
+        fill: rgba(125, 125, 125, 1);
         r: 4;
         /*stroke: #222;
         stroke-width: 1.5px;*/
@@ -82,7 +82,15 @@
     const MIN_RADIUS = 1;
     const MAX_LINE_WIDTH = 10;
     const MIN_LINE_WIDTH = 0.1;
+    const NODE_COLOR = "rgba(125, 125, 125, 1)";
+    const EDGE_COLOR = "rgba(125, 125, 125, 0.8)";
+    const SELECTED_NODE_COLOR = "rgba(0, 0, 0, 1)";
+    const SELECTED_EDGE_COLOR = "rgba(0, 0, 0, 0.8)";
+    const BACKGROUND_NODE_COLOR = "rgba(125, 125, 125, 0.3)";
+    const BACKGROUND_EDGE_COLOR = "rgba(125, 125, 125, 0.3)";
 
+    let nodes;
+    let edges;
     let neighbors_dict = {};
 
     function get_node_size(scale_factor){
@@ -93,89 +101,73 @@
         return (1.0/((scale_factor))).toFixed(2);
     }
 
-    // rescale the scaling factor to a value between 0 and 100
-    /*function range_scaling_factor(factor, max_before, min_before, max_after, min_after){
-        
-        if(factor > max_before){
-            factor = max_before;
-        }
-        else if(factor < min_before){
-            factor = min_before;
-        }
-        percent = (factor - min_before) / (max_before - min_before);
-        return Math.round(percent * (max_after - min_after) + min_after);
-        //return  Math.round(100 * (factor - min_value) / (max_value - min_value));
-    }*/
-
     function get_new_coordinates(x, y, matrix){
         let x1 = x * matrix.a + y * matrix.c + matrix.e,
         y1 = x * matrix.b + y * matrix.d + matrix.f;
         return [x1, y1];
     }
 
+    // does this node appear on the screen with the current scale/translate values?
     function node_is_visible(node, width, height, matrix){
-        //console.log(node.x);
         let x, y;
         [x, y] = get_new_coordinates(node.x, node.y, matrix)
         return x > 0 && x < width && y > 0 && y < height;
     }
 
+    // does this edge appear on the screen with the current scale/translate values?
     function edge_is_visible(edge, width, height, matrix){
-        //console.log(edge.target.x);
         let x1, x2, y1, y2;
         [x1, y1] = get_new_coordinates(edge.source.x ,edge.source.y, matrix);
         [x2, y2] = get_new_coordinates(edge.target.x ,edge.target.y, matrix);
-        //console.log(x1 + " " + x2 + " " + y1 + " " + y2);
-        //console.log(edge.source.x + " " + edge.target.x);
         return (x1 > 0 && x1 < width && y1 > 0 && y1 < height) || (x2 > 0 && x2 < width && y2 > 0 && y2 < height);
     }
 
-    function highlight_node(node, is_source=true){
+    // highlights the given node and its neighbors 
+    // is_source: true if the node is the selected node (root node)
+    // distance: highlight all nodes that are d hops away from the root, for all d <= distance
+    function highlight_selection(node, is_source=true, distance=2){
         if(is_source){
-            clear_selection();
+            clear_selection(true);
         }
-        console.log(node);
-        node.classList.remove('unselected_node');
-        node.classList.add('selected_node');
-        node.style('opacity', 1);
-        console.log(node);
-        
-        // also highlight neighbors
-        if(is_source){
-            highlight_neighbors(node.id);
-            d3.selectAll('.unselected_node').style('opacity', 0.5);
-        }
-        /*
-        console.log(neighbors);
-        console.log(neighbors.length);
-        for(let i = 0; i < neighbors.length; i++){
-            console.log(get_node_by_id(neighbors[i]));
-        }*/
-        //console.log(get_node_by_id(neighbors[0]));
+        // highlight the node
+        highlight_node(node);
 
+        // also highlight neighbors (and the edge that links to each neighbor)
+        if(distance > 0){
+            neighbors_dict[node.id].forEach(function(neighbor_id){
+            highlight_selection(get_node_by_id(neighbor_id), false, distance-1);
+            let edges = get_edge_by_id(node.id);
+            edges.forEach(x => highlight_edge(x));
+            });
+        }
     }
 
+    function highlight_node(node){
+        node.style['fill'] = SELECTED_NODE_COLOR;
+    }
+
+    function highlight_edge(edge){
+        edge.style['stroke'] = SELECTED_EDGE_COLOR;
+    }
+
+    // returns the DOM node object given its node ID
     function get_node_by_id(id){
         return d3.select('[id="' + id + '"]')[0][0];
     }
 
-    function highlight_neighbors(nodeId){
-        $.get("/get_neighbors?q=" + encodeURIComponent(nodeId),
-                function (data) {
-                    if (!data || data.length == 0){
-                        console.log("no neighbors");
-                        return [];
-                    }
-                    data.forEach(function(node){
-                        highlight_node(get_node_by_id(node.neigh), false);
-                        //console.log(node.neigh);
-                    });
-                }, "json");
+    function get_edge_by_id(node_id){
+        return d3.selectAll(".link[target='"+node_id+"'], .link[source='"+node_id+"']")[0];
     }
 
-    function clear_selection(){
-        d3.selectAll('.selected_node').attr('class', 'node unselected_node');
-        d3.selectAll('.node').style('opacity', 1);
+    function clear_selection(new_selection=false){
+        if(new_selection){
+            nodes.style('fill', BACKGROUND_NODE_COLOR);
+            edges.style('stroke', BACKGROUND_EDGE_COLOR);
+        }
+        else{
+            nodes.style('fill', NODE_COLOR);
+            edges.style('stroke', EDGE_COLOR); 
+        }
     }
 
     function display_graph(){
@@ -186,20 +178,32 @@
 
         let radius;
         let line_width;
-        let scale_factor;
         let matrix;
+        let previous_radius = 0;
+        let previous_line_width = 0;
 
         const svg = d3.select("div#graph").append("svg")
             .attr("width", "100%").attr("height", "100%")
             .call(d3.behavior.zoom().on("zoom", function () {
                 matrix = svg[0][0].getCTM();
+                previous_radius = radius;
+                previous_line_width = line_width;
                 radius = get_node_size(d3.event.scale);
                 line_width = get_line_width(d3.event.scale);
                 
                 svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
-                // when zooming, it updates the size of the nodes and edges
-                d3.selectAll(".node").filter(node => node_is_visible(node, width, height, matrix)).style("r", radius);
-                d3.selectAll(".link").filter(edge => edge_is_visible(edge, width, height, matrix)).style("stroke-width", line_width); // update edges size
+
+                /*if(previous_radius != radius){
+                    d3.selectAll(".node").filter(node => node_is_visible(node, width, height, matrix)).style("r", radius); // update node size
+                    console.log("update node size");
+                }
+                if(previous_line_width != line_width){
+                    d3.selectAll(".link").filter(edge => edge_is_visible(edge, width, height, matrix)).style("stroke-width", line_width); // update edges size
+                    console.log("update edge size");
+                }*/
+                nodes.filter(node => node_is_visible(node, width, height, matrix)).style("r", radius); // update node size
+                edges.filter(edge => edge_is_visible(edge, width, height, matrix)).style("stroke-width", line_width); // update edges size
+
             }))
             .classed("svg-content", true).append("g");
 
@@ -207,55 +211,50 @@
         d3.json("/graph", function(error, graph) {
     		if (error) return;
 
-            force.nodes(graph.nodes).links(graph.links).start();
+            force.nodes(graph.nodes).links(graph.links);
 
-            var link = svg.selectAll(".link")
+            // create an SVG line for each link in the JSON data
+            edges = svg.selectAll(".link")
                     .data(graph.links).enter()
-                    .append("line").attr("class", "link");
+                    .append("line")
+                    .attr("class", "link")
+                    .attr("source", link => link.source)
+                    .attr("target", link => link.target);
 
             // for each node in the JSON data, we create an svg circle and give it as attributes the node's id from neo4j
-            var node = svg.selectAll(".node")
+            nodes = svg.selectAll(".node")
                     .data(graph.nodes).enter()
                     .append("circle")
                     .attr("class", "node unselected_node")
                     .attr("r", 10)
-                    .attr("id", function(d) {return d.node_id})
-                    .on("click", function() {
-                        highlight_node(this);
+                    .attr("id", d => d.node_id)
+                    .on("click", function(d) {
+                        highlight_selection(this);
                         //d3.event.stopPropagation();
-                    });;
+                    });
                     //.call(force.drag);
-
-            /*node.each(function(d,i){
-                    neighbors_dict[d.node_id] = [];
-            });*/
-            neighbors_dict = graph.neighbors_dict
-            console.log(neighbors_dict[0]);
+            
+            // fill in neighbors dictionary
+            neighbors_dict = graph.neighbors_dict;
 
             // html title attribute
-            node.append("title").text(function (d) { return d.title; })
+            nodes.append("title").text(function (d) { return d.title; })
 
             // force feed algo ticks
             force.on("tick", function() {
-                node[0].x = width / 2;
-                node[0].y = height / 2;
-                link.attr("x1", function(d) { return d.source.x; })
+                nodes[0].x = width / 2;
+                nodes[0].y = height / 2;
+                edges.attr("x1", function(d) { return d.source.x; })
                         .attr("y1", function(d) { return d.source.y; })
                         .attr("x2", function(d) { return d.target.x; })
                         .attr("y2", function(d) { return d.target.y; });
-
-                /*link.each(function(d,i){
-                    neighbors_dict[d.source].push(d.target);
-                    neighbors_dict[d.target].push(d.source);
-                });*/
-
-                node.attr("cx", function(d) { return d.x; })
+                nodes.attr("cx", function(d) { return d.x; })
                         .attr("cy", function(d) { return d.y; });
             });
 
             // Arrange nodes in background, and only display the graph when it's done
             force.start();
-            for (let i = 1; i > 0; --i) force.tick();
+            for (let i = 2; i > 0; --i) force.tick();
             force.stop();
         });
     }
@@ -275,7 +274,6 @@
         if(query.length != 0){
             $.get("/search?q=" + encodeURIComponent(query),
                     function (data) {
-                        console.log(data);
                         if (!data || data.length == 0){
                             console.log("empty search");
                             return false;
