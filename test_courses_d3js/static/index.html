@@ -125,25 +125,29 @@
     // highlights the given node and its neighbors 
     // is_source: true if the node is the selected node (root node)
     // distance: highlight all nodes that are d hops away from the root, for all d <= distance
-    function highlight_selection(node, is_source=true, distance=2){
+    // previous_node: the node that led to highlight this node (to avoid highlighting a node twice)
+    function highlight_selection(node, is_source=true, distance=2, previous_node){
         if(is_source){
             clear_selection(true);
         }
         // highlight the node
-        highlight_node(node);
+        highlight_node(node, distance);
 
         // also highlight neighbors (and the edge that links to each neighbor)
         if(distance > 0){
-            neighbors_dict[node.id].forEach(function(neighbor_id){
-            highlight_selection(get_node_by_id(neighbor_id), false, distance-1);
-            let edges = get_edge_by_id(node.id);
-            edges.forEach(x => highlight_edge(x));
+            neighbors_dict[node.id].filter(neighbor => neighbor != previous_node).forEach(function(neighbor_id){
+                highlight_selection(get_node_by_id(neighbor_id), false, distance-1, node.id);
+                let edges = get_edge_by_id(node.id);
+                edges.forEach(x => highlight_edge(x));
             });
         }
     }
 
-    function highlight_node(node){
-        node.style['fill'] = SELECTED_NODE_COLOR;
+    function highlight_node(node, distance_to_leaf){
+        const opacity = 0.5 + 0.25 * distance_to_leaf;
+        console.log(distance_to_leaf + " " + opacity);
+        node.style['fill'] = "rgba(0, 0, 0, " + opacity + ")";
+        //node.style['fill'] = SELECTED_NODE_COLOR;
     }
 
     function highlight_edge(edge){
@@ -170,6 +174,16 @@
         }
     }
 
+    function zoomed(svg, width, height, scale, translate){
+        const matrix = svg[0][0].getCTM();
+        const radius = get_node_size(d3.event.scale);
+        const line_width = get_line_width(d3.event.scale);
+        
+        svg.attr("transform", "translate(" + translate + ")" + " scale(" + scale + ")");
+        nodes.filter(node => node_is_visible(node, width, height, matrix)).style("r", radius); // update node size
+        edges.filter(edge => edge_is_visible(edge, width, height, matrix)).style("stroke-width", line_width); // update edges size
+    }
+
     function display_graph(){
         // define width/height as the svg container dimensions
         const width = document.getElementsByClassName('svg-container')[0].clientWidth;
@@ -179,33 +193,18 @@
         let radius;
         let line_width;
         let matrix;
-        let previous_radius = 0;
-        let previous_line_width = 0;
 
         const svg = d3.select("div#graph").append("svg")
             .attr("width", "100%").attr("height", "100%")
             .call(d3.behavior.zoom().on("zoom", function () {
-                matrix = svg[0][0].getCTM();
-                previous_radius = radius;
-                previous_line_width = line_width;
-                radius = get_node_size(d3.event.scale);
-                line_width = get_line_width(d3.event.scale);
-                
-                svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
-
-                /*if(previous_radius != radius){
-                    d3.selectAll(".node").filter(node => node_is_visible(node, width, height, matrix)).style("r", radius); // update node size
-                    console.log("update node size");
-                }
-                if(previous_line_width != line_width){
-                    d3.selectAll(".link").filter(edge => edge_is_visible(edge, width, height, matrix)).style("stroke-width", line_width); // update edges size
-                    console.log("update edge size");
-                }*/
-                nodes.filter(node => node_is_visible(node, width, height, matrix)).style("r", radius); // update node size
-                edges.filter(edge => edge_is_visible(edge, width, height, matrix)).style("stroke-width", line_width); // update edges size
-
+                zoomed(svg, width, height, d3.event.scale, d3.event.translate);
             }))
             .classed("svg-content", true).append("g");
+
+        // When the background is clicked, clear the current selection
+        d3.select("div#graph").on("click", function(){
+            //clear_selection(false);
+        });
 
         
         d3.json("/graph", function(error, graph) {
@@ -230,7 +229,7 @@
                     .attr("id", d => d.node_id)
                     .on("click", function(d) {
                         highlight_selection(this);
-                        //d3.event.stopPropagation();
+                        d3.event.stopPropagation();
                     });
                     //.call(force.drag);
             
