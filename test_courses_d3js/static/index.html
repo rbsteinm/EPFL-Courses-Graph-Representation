@@ -145,7 +145,7 @@
                 highlight_selection(get_node_by_id(neighbor_id), false, distance-1, node.id);
                 let edges = get_outgoing_edges(node.id);
                 //console.log(edges);
-                edges.forEach(x => highlight_edge(x));
+                edges.each(x => highlight_edge(x));
             });
         }
     }
@@ -157,18 +157,25 @@
     }
 
     function highlight_edge(edge, distance_to_leaf){
-        edge.style['stroke'] = SELECTED_EDGE_COLOR;
+        console.log(edge);
+        d3.select('#id_' + edge.index).style('stroke', SELECTED_EDGE_COLOR);
+        //edge.style['stroke'] = SELECTED_EDGE_COLOR;
     }
 
     // returns the DOM node object given its node ID
     function get_node_by_id(id){
-        return d3.select('[id="' + id + '"]')._groups[0][0];
+        //console.log(d3.select('[id="' + id + '"]')._groups[0][0]);
+        //console.log(d3.select('[id="' + id + '"]').node());
+        return d3.select('[id="' + id + '"]').node();
     }
 
     function get_outgoing_edges(node_id){
-        console.log(node_id);
-        console.log(d3.selectAll(".link[target='"+node_id+"'], .link[source='"+node_id+"']")._groups[0]);
-        return d3.selectAll(".link[target='"+node_id+"'], .link[source='"+node_id+"']")._groups[0];
+        //console.log("yo");
+        //console.log(edges.filter(edge => edge.source.node_id == node_id || edge.target.node_id == node_id).node());
+        //console.log(node_id);
+        //console.log(d3.selectAll(".link[target='"+node_id+"'], .link[source='"+node_id+"']")._groups[0]);
+        return edges.filter(edge => edge.source.node_id == node_id || edge.target.node_id == node_id);
+        //return d3.selectAll(".link[target='"+node_id+"'], .link[source='"+node_id+"']")._groups[0];
     }
 
     function clear_selection(new_selection=false){
@@ -202,30 +209,17 @@
         let line_width;
         let matrix;
 
-        /*let svg = d3.select("div#graph").append("svg")
-            .attr("width", "100%").attr("height", "100%")
-            .call(d3.zoom().on("zoom", function () {
-                //d3.event.stopPropagation();
-                zoomed(svg, width, height, d3.event.scale, d3.event.translate);
-            }))
-            .classed("svg-content", true).append("g");*/
-
         let svg = d3.select("div#graph").append("svg")
-        .attr("width", "100%").attr("height", "100%")
-        /*.call(d3.zoom().on("zoom", function () {
-                //d3.event.stopPropagation();
-                zoomed(svg, width, height, d3.event.transform.scale, d3.event.transform.translate);
-            }))*/
+            .attr("width", "100%")
+            .attr("height", "100%")
             .classed("svg-content", true);
 
-        let g = svg.append("g")/*.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")*/;
-
-        //let zoom_actions = zoomed(svg, width, height, d3.event.transform.scale, d3.event.transform.translate);
+        let g = svg.append("g");
 
         let zoom_handler = d3.zoom().on("zoom", function(){
-            //g.attr("transform", d3.event.transform);
             zoomed(g, width, height);
         });
+
         zoom_handler(svg);
 
         // When the background is clicked, clear the current selection
@@ -237,16 +231,10 @@
         d3.json("/graph", function(error, graph) {
             if (error) return;
 
-            //force.nodes(graph.nodes).links(graph.links);
-
             let forceSimulation = d3.forceSimulation();
-
             forceSimulation.nodes(graph.nodes);
-    
             let link_force = d3.forceLink(graph.links).distance(100).strength(1).iterations(10);//.id(function(d){return d.source})
-
             let charge_force = d3.forceManyBody().strength(-20);
-
             let center_force = d3.forceCenter(width / 2, height / 2);
 
             forceSimulation
@@ -271,8 +259,9 @@
                     .attr("x2", function(d) { return d.target.x; })
                     .attr("y2", function(d) { return d.target.y; })
                     .attr("class", "link")
-                    .attr("source", link => link.source) // add source and target nodes IDs
-                    .attr("target", link => link.target);
+                    //.attr("source", edge => edge.source) // add source and target nodes IDs
+                    //.attr("target", edge => edge.target)
+                    .attr("id", edge => 'id_' + edge.index);
 
             // for each node in the JSON data, we create an svg circle and give it as attributes the node's id from neo4j
             nodes = g.selectAll(".node")
@@ -288,6 +277,9 @@
                         //d3.event.stopPropagation();
                     });
                     //.call(force.drag);
+
+            console.log(edges.filter(edge => edge.source.node_id==0));
+            console.log(edges.data().filter(edge => edge.source.node_id==0));
             
             // fill in neighbors dictionary
             neighbors_dict = graph.neighbors_dict;
@@ -297,8 +289,6 @@
 
             // force feed algo ticks
             forceSimulation.on("tick", function() {
-                //nodes[0].x = width / 2;
-                //nodes[0].y = height / 2;
                 edges.attr("x1", function(d) { return d.source.x; })
                         .attr("y1", function(d) { return d.source.y; })
                         .attr("x2", function(d) { return d.target.x; })
