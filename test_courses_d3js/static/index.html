@@ -92,7 +92,7 @@
 
     let nodes;
     let edges;
-    let neighbors_dict = {};
+    let adjacency_list = {};
     let debug_transf;
 
     function get_node_size(scale_factor){
@@ -103,6 +103,7 @@
         return (1.0/((scale_factor))).toFixed(2);
     }
 
+    // returns the coordinates after a transformation (zoom, pan)
     function get_new_coordinates(x, y, transf){
         let x1 = x * transf.k + transf.x,
         y1 = y * transf.k + transf.y;
@@ -124,62 +125,29 @@
         return (x1 > 0 && x1 < width && y1 > 0 && y1 < height) || (x2 > 0 && x2 < width && y2 > 0 && y2 < height);
     }
 
-    // highlights the given node and its neighbors 
+    // BFS search to highlight the given node and its neighbors
     // is_source: true if the node is the selected node (root node)
     // distance: highlight all nodes that are d hops away from the root, for all d <= distance
-    // previous_node: the node that led to highlight this node (to avoid highlighting a node twice)
-    /*function highlight_selection(node, is_source=true, distance=2, previous_node){
-        if(is_source){
-            clear_selection(true);
-        }
-        // highlight the node
-        highlight_node(node, distance);
-
-        // also highlight neighbors (and the edge that links to each neighbor)
-        if(distance > 0){
-            neighbors_dict[node.id].filter(neighbor => neighbor != previous_node).forEach(function(neighbor_id){
-                highlight_selection(get_node_by_id(neighbor_id), false, distance-1, node.id);
-                let edges = get_outgoing_edges(node.id);
-                //console.log(edges);
-                edges.each(x => highlight_edge(x));
-            });
-        }
-    }*/
-
-
+    // already_seen: the nodes that were already visited and highlightd by the algorithm (to avoid highlighting a node twice)
     function highlight_selection(node, is_source=true, distance=2, already_seen=[]){
         if(is_source){
             clear_selection(true);
+            already_seen.push(Number(node.id));
         }
-
         highlight_node(node, distance);
-        already_seen.push(Number(node.id));
 
         // also highlight neighbors (and the edge that links to each neighbor)
         if(distance > 0){
-            let adjacent_edges = neighbors_dict[node.id].map(edge_id => get_edge_by_id(edge_id));
+            let adjacent_edges = adjacency_list[node.id].map(edge_id => get_edge_by_id(edge_id));
             adjacent_edges.forEach(edge => highlight_edge(edge, distance));
-            let adjacent_nodes = adjacent_edges.map(edge => get_neighbor(node.id, edge));
-            let unvisited_nodes = adjacent_nodes.filter(node_id => !already_seen.includes(node_id));
+            let unvisited_nodes = adjacent_edges.map(edge => get_neighbor(node.id, edge)).filter(node_id => !already_seen.includes(node_id));
             unvisited_nodes.forEach(node_id => already_seen.push(node_id));
             unvisited_nodes.forEach(node_id =>  highlight_selection(get_node_by_id(node_id), false, distance-1, already_seen));
-
-            /*adjacent_edges.forEach(function(edge){
-                let neighbor;
-                highlight_edge(edge, distance);
-                if(node.id == edge.source.node_id){
-                    neighbor = (edge.target.node_id);
-                }
-                else if(node.id == edge.target.node_id){
-                    neighbor = (edge.source.node_id);
-                }
-                if(!already_seen.includes(neighbor)){
-                    highlight_selection(get_node_by_id(neighbor), false, distance-1, already_seen);
-                }
-            });*/
         }
     }
 
+    // input: an edge and one of its endpoints
+    //output: the other edge's endpoint
     function get_neighbor(node_id, edge){
         let neighbor;
         if(node_id == edge.source.node_id){
@@ -191,12 +159,14 @@
         return Number(neighbor);
     }
 
+    // highlights the given node with opacity proportional to the root distance
     function highlight_node(node, distance_to_leaf){
         const opacity = 0.4 + 0.3 * distance_to_leaf;
         node.style['fill'] = "rgba(0, 0, 0, " + opacity + ")";
         //node.style['fill'] = SELECTED_NODE_COLOR;
     }
 
+    // highlights an edge
     function highlight_edge(edge, distance_to_leaf){
         d3.select('#id_' + edge.edge_id).style('stroke', SELECTED_EDGE_COLOR);
     }
@@ -206,16 +176,13 @@
         return d3.select('[id="' + id + '"]').node();
     }
 
+    //input: edge id
+    // output: the edge's data
     function get_edge_by_id(id){
-        //console.log("get edge with id " + id + " id: " + d3.select('.link#id_'+id).data()[0]);
-        //console.log(d3.select('#id_'+id));
         return d3.select('#id_'+id).data()[0];
     }
 
-    function get_outgoing_edges(node_id){
-        return edges.filter(edge => edge.source.node_id == node_id || edge.target.node_id == node_id);
-    }
-
+    // clears the highlighting and all node/edge selection
     function clear_selection(new_selection=false){
         if(new_selection){
             nodes.style('fill', BACKGROUND_NODE_COLOR);
@@ -227,6 +194,9 @@
         }
     }
 
+    // This code is executed everytime the page is zoomed
+    // It dinamically resizes the nodes and the edges
+    // but only if they are visible to reduce computation time
     function zoomed(svg, width, height){
         debug_transf = d3.event.transform;
         svg.attr("transform", d3.event.transform);
@@ -259,7 +229,7 @@
 
         // When the background is clicked, clear the current selection
         d3.select("div#graph").on("click", function(){
-            //clear_selection(false);
+            clear_selection(false);
         });
 
         
@@ -294,7 +264,6 @@
                     .attr("x2", function(d) { return d.target.x; })
                     .attr("y2", function(d) { return d.target.y; })
                     .attr("id", function(d) {return 'id_' + d.edge_id;})
-                    //.attr("id", edge => 'id_' + edge.index)
                     .attr("class", "link");
 
             // for each node in the JSON data, we create an svg circle and give it as attributes the node's id from neo4j
@@ -308,13 +277,12 @@
                     .attr("id", d => d.node_id)
                     .on("click", function(d) {
                         highlight_selection(this);
-                        //d3.event.stopPropagation();
+                        d3.event.stopPropagation(); // only the node is clicked, not the background
                     });
                     //.call(force.drag);
             
-            // fill in neighbors dictionary
-            neighbors_dict = graph.adjacency_list;
-            //console.log(edges.data().filter(x => x.edge_id == 291));
+            // fill in adjacency list
+            adjacency_list = graph.adjacency_list;
 
             // html title attribute
             nodes.append("title").text(function (d) { return d.title; })
