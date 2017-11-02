@@ -45,24 +45,27 @@ def get_graph():
 
     nodes = [] # all nodes
     rels = [] # all relations (edges)
-    neighs_dict = {} # neighboring information
+    adjacency_list = {} # neighboring information
     for record in results:
         nodes.append({"node_id": record["node_id"], "code": record["code"], "title": record["course"], "label": "course"})
-        neighs_dict[record["node_id"]] = set()
+        adjacency_list[record["node_id"]] = set()
 
-    relationships = db.run("MATCH (c1:Course) -[r]->(c2:Course) RETURN ID(c1) as source, ID(c2) as target")
+    relationships = db.run("MATCH (c1:Course) -[r]->(c2:Course) RETURN ID(c1) as source, ID(c2) as target, ID(r) as edge_id")
     for rel in relationships:
         index_c1 = rel['source']
         index_c2 = rel['target']
-        rels.append({"source": index_c1, "target": index_c2})
-        neighs_dict[index_c1].add(index_c2)
-        neighs_dict[index_c2].add(index_c1)
+        edge_id = rel['edge_id']
+        rels.append({"source": index_c1, "target": index_c2, "edge_id": edge_id})
+        #adjacency_list[index_c1].add(index_c2)
+        #adjacency_list[index_c2].add(index_c1)
+        adjacency_list[index_c1].add(edge_id)
+        adjacency_list[index_c2].add(edge_id)
 
     # remove duplicates
-    neighs_dict = {k: list(v) for k, v in neighs_dict.items()}
+    adjacency_list = {k: list(v) for k, v in adjacency_list.items()}
 
 
-    return Response(dumps({"nodes": nodes, "links": rels, "neighbors_dict": neighs_dict}),
+    return Response(dumps({"nodes": nodes, "links": rels, "adjacency_list": adjacency_list}),
                     mimetype="application/json")
 
 # return search bar results
@@ -95,4 +98,5 @@ def get_neighbors():
 
 
 if __name__ == '__main__':
+    #app.run(debug=True, host='192.168.1.111', port=8080)
     app.run(debug=True, port=8080)

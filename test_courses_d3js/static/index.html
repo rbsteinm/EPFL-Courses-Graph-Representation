@@ -128,7 +128,7 @@
     // is_source: true if the node is the selected node (root node)
     // distance: highlight all nodes that are d hops away from the root, for all d <= distance
     // previous_node: the node that led to highlight this node (to avoid highlighting a node twice)
-    function highlight_selection(node, is_source=true, distance=2, previous_node){
+    /*function highlight_selection(node, is_source=true, distance=2, previous_node){
         if(is_source){
             clear_selection(true);
         }
@@ -144,6 +144,51 @@
                 edges.each(x => highlight_edge(x));
             });
         }
+    }*/
+
+
+    function highlight_selection(node, is_source=true, distance=2, already_seen=[]){
+        if(is_source){
+            clear_selection(true);
+        }
+
+        highlight_node(node, distance);
+        already_seen.push(Number(node.id));
+
+        // also highlight neighbors (and the edge that links to each neighbor)
+        if(distance > 0){
+            let adjacent_edges = neighbors_dict[node.id].map(edge_id => get_edge_by_id(edge_id));
+            adjacent_edges.forEach(edge => highlight_edge(edge, distance));
+            let adjacent_nodes = adjacent_edges.map(edge => get_neighbor(node.id, edge));
+            let unvisited_nodes = adjacent_nodes.filter(node_id => !already_seen.includes(node_id));
+            unvisited_nodes.forEach(node_id => already_seen.push(node_id));
+            unvisited_nodes.forEach(node_id =>  highlight_selection(get_node_by_id(node_id), false, distance-1, already_seen));
+
+            /*adjacent_edges.forEach(function(edge){
+                let neighbor;
+                highlight_edge(edge, distance);
+                if(node.id == edge.source.node_id){
+                    neighbor = (edge.target.node_id);
+                }
+                else if(node.id == edge.target.node_id){
+                    neighbor = (edge.source.node_id);
+                }
+                if(!already_seen.includes(neighbor)){
+                    highlight_selection(get_node_by_id(neighbor), false, distance-1, already_seen);
+                }
+            });*/
+        }
+    }
+
+    function get_neighbor(node_id, edge){
+        let neighbor;
+        if(node_id == edge.source.node_id){
+            neighbor = (edge.target.node_id);
+        }
+        else if(node_id == edge.target.node_id){
+            neighbor = (edge.source.node_id);
+        }
+        return Number(neighbor);
     }
 
     function highlight_node(node, distance_to_leaf){
@@ -153,12 +198,18 @@
     }
 
     function highlight_edge(edge, distance_to_leaf){
-        d3.select('#id_' + edge.index).style('stroke', SELECTED_EDGE_COLOR);
+        d3.select('#id_' + edge.edge_id).style('stroke', SELECTED_EDGE_COLOR);
     }
 
     // returns the DOM node object given its node ID
     function get_node_by_id(id){
         return d3.select('[id="' + id + '"]').node();
+    }
+
+    function get_edge_by_id(id){
+        //console.log("get edge with id " + id + " id: " + d3.select('.link#id_'+id).data()[0]);
+        //console.log(d3.select('#id_'+id));
+        return d3.select('#id_'+id).data()[0];
     }
 
     function get_outgoing_edges(node_id){
@@ -242,8 +293,9 @@
                     .attr("y1", function(d) { return d.source.y; })
                     .attr("x2", function(d) { return d.target.x; })
                     .attr("y2", function(d) { return d.target.y; })
-                    .attr("class", "link")
-                    .attr("id", edge => 'id_' + edge.index);
+                    .attr("id", function(d) {return 'id_' + d.edge_id;})
+                    //.attr("id", edge => 'id_' + edge.index)
+                    .attr("class", "link");
 
             // for each node in the JSON data, we create an svg circle and give it as attributes the node's id from neo4j
             nodes = g.selectAll(".node")
@@ -259,12 +311,10 @@
                         //d3.event.stopPropagation();
                     });
                     //.call(force.drag);
-
-            console.log(edges.filter(edge => edge.source.node_id==0));
-            console.log(edges.data().filter(edge => edge.source.node_id==0));
             
             // fill in neighbors dictionary
-            neighbors_dict = graph.neighbors_dict;
+            neighbors_dict = graph.adjacency_list;
+            //console.log(edges.data().filter(x => x.edge_id == 291));
 
             // html title attribute
             nodes.append("title").text(function (d) { return d.title; })
