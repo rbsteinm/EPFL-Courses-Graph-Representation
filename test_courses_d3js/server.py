@@ -36,7 +36,7 @@ def get_edges_and_ajd_list(initial_list, db, edge_type, directional_edges=True):
         if not directional_edges:
             adjacency_list[index_target].add(edge_id)
 
-    adjacency_list = {k: list(v) for k, v in adjacency_list.items()} # remove duplicates
+    adjacency_list = {k: list(v) for k, v in adjacency_list.items()} # turn set to list (set => no duplicates)
     return [adjacency_list, rels]
 
 @app.teardown_appcontext
@@ -59,24 +59,7 @@ def get_graph():
     empty_ajd_list = {} # neighboring information
     for record in results:
         nodes.append({"node_id": record["node_id"], "code": record["code"], "title": record["course"], "label": "course"})
-        empty_ajd_list[record["node_id"]] = set()
-
-    '''relationships = db.run("MATCH (c1:Course)-[r:REQUIRE_OBL]->(c2:Course) RETURN ID(c1) as source, ID(c2) as target, ID(r) as edge_id")
-    length = 0
-    for rel in relationships:
-        length += 1
-        index_c1 = rel['source']
-        index_c2 = rel['target']
-        edge_id = rel['edge_id']
-        rels.append({"source": index_c1, "target": index_c2, "edge_id": edge_id})
-        #adjacency_list[index_c1].add(index_c2)
-        #adjacency_list[index_c2].add(index_c1)
-        adjacency_list[index_c1].add(edge_id)
-        adjacency_list[index_c2].add(edge_id)
-    print(length)
-
-    # remove duplicates
-    adjacency_list = {k: list(v) for k, v in adjacency_list.items()}'''
+        empty_ajd_list[record["node_id"]] = set() # initialize the adjacency list with empty sets
 
     [adjacency_list, rels] = get_edges_and_ajd_list(empty_ajd_list, db, "REQUIRE_OBL", False)
 

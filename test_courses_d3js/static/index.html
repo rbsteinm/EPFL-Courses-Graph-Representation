@@ -222,6 +222,23 @@
 
         let g = svg.append("g");
 
+        svg.append('defs')
+        .append('marker')
+        .attrs({'id':'arrowhead',
+            'viewBox':'-0 -5 10 10',
+            'refX':13,
+            'refY':0,
+            'orient':'auto',
+            'markerWidth':13,
+            'markerHeight':13,
+            'xoverflow':'visible'})
+        .append('svg:path')
+        .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+        .attr('fill', '#999')
+        .style('stroke','none');
+
+
+
         let zoom_handler = d3.zoom().on("zoom", function(){
             zoomed(g, width, height);
         });
@@ -264,6 +281,7 @@
                     .attr("x2", function(d) { return d.target.x; })
                     .attr("y2", function(d) { return d.target.y; })
                     .attr("id", function(d) {return 'id_' + d.edge_id;})
+                    .attr('marker-end','url(#arrowhead)')
                     .attr("class", "link");
 
             // for each node in the JSON data, we create an svg circle and give it as attributes the node's id from neo4j
