@@ -27,16 +27,13 @@ def get_db():
 # output: a list of all the edges and a list of dictionnary, each one being an adjacency list (source noce -> edgeID) for a distinct edge type
 def get_edges_and_ajd_lists(initial_list, db, directional_edges=True):
     adjacency_lists = dict() # will contain all the adjacency lists
-    adjacency_lists['ALL_EDGES'] = initial_list
+    adjacency_lists['ALL_EDGES'] = initial_list # this ajdacency list contains all relations with no distinction on the edge type
     for edge_type in get_edge_types(db):
         adjacency_lists[edge_type] = copy.deepcopy(initial_list)
-    empty_ajd_list = initial_list # neighboring information
     rels = [] # all relations (edges)
-    #relationships = db.run("MATCH (c1:Course)-[r:"+ edge_type + "]->(c2:Course) RETURN ID(c1) as source, ID(c2) as target, ID(r) as edge_id")
     relationships = db.run("MATCH (c1:Course)-[r]->(c2:Course) RETURN ID(c1) as source, ID(c2) as target, ID(r) as edge_id, TYPE(r) as edge_type")
     for rel in relationships:
         rel_type = rel['edge_type']
-        print(rel_type)
         index_source = rel['source']
         index_target = rel['target']
         edge_id = rel['edge_id']
@@ -71,7 +68,6 @@ def get_graph():
     results = db.run("MATCH (c:Course) RETURN ID(c) as node_id, c.code as code, c.title as course") # get all node records from the db in a list
 
     nodes = [] # all nodes
-    #rels = [] # all relations (edges)
     empty_ajd_list = {} # neighboring information
     for record in results:
         nodes.append({"node_id": record["node_id"], "code": record["code"], "title": record["course"], "label": "course"})
