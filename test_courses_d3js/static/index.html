@@ -36,6 +36,10 @@
         stroke-width: 1px;
     }
 
+    .REQUIRE_IND{
+        stroke-dasharray: 3;
+    }
+
     .svg-container {
         display: inline-block;
         position: relative;
@@ -281,8 +285,8 @@
                     .attr("x2", function(d) { return d.target.x; })
                     .attr("y2", function(d) { return d.target.y; })
                     .attr("id", function(d) {return 'id_' + d.edge_id;})
-                    .attr('marker-end','url(#arrowhead)')
-                    .attr("class", "link");
+                    .attr("class", function(d) {return "link " + d.edge_type})
+                    .attr('marker-end','url(#arrowhead)');
 
             // for each node in the JSON data, we create an svg circle and give it as attributes the node's id from neo4j
             nodes = g.selectAll(".node")
@@ -300,7 +304,7 @@
                     //.call(force.drag);
             
             // fill in adjacency list
-            adjacency_list = graph.adjacency_list;
+            adjacency_list = graph.adjacency_lists['ALL_EDGES'];
 
             // html title attribute
             nodes.append("title").text(function (d) { return d.title; })
