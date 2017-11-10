@@ -37,7 +37,7 @@
     }
 
     .REQUIRE_IND{
-        stroke-dasharray: 3;
+        stroke-dasharray: 1;
     }
 
     .svg-container {
@@ -97,7 +97,7 @@
     let nodes;
     let edges;
     let adjacency_list = {};
-    let debug_transf;
+    let timeout_id;
 
     function get_node_size(scale_factor){
         return (5/(Math.sqrt(scale_factor))).toFixed(1);
@@ -126,7 +126,40 @@
         let x1, x2, y1, y2;
         [x1, y1] = get_new_coordinates(edge.source.x ,edge.source.y, transf);
         [x2, y2] = get_new_coordinates(edge.target.x ,edge.target.y, transf);
-        return (x1 > 0 && x1 < width && y1 > 0 && y1 < height) || (x2 > 0 && x2 < width && y2 > 0 && y2 < height);
+        let new_edge = [x1, y1, x2, y2];
+        let left_border = [0, 0, 0, height];
+        let top_border = [0, 0, width, 0];
+        let right_border = [width, 0, width, height];
+        let bottom_border = [0, height, width, height];
+
+        // both endpoints are inside the box
+        if(x1 > 0 && x1 < width && y1 > 0 && y1 < height && x2 > 0 && x2 < width && y2 > 0 && y2 < height){
+            return true;
+        }
+        // the edge intersects at least one of the borders
+        if(line_intersects(new_edge, top_border) || line_intersects(new_edge, left_border) || line_intersects(new_edge, right_border) || line_intersects(new_edge, bottom_border)){
+            return true;
+        }
+        return false;
+
+        //return (x1 > 0 && x1 < width && y1 > 0 && y1 < height) || (x2 > 0 && x2 < width && y2 > 0 && y2 < height);
+    }
+
+    // given 
+    function line_intersects(segment1, segment2) {
+        [p0_x, p0_y, p1_x, p1_y] = segment1;
+        [p2_x, p2_y, p3_x, p3_y] = segment2;
+        var s1_x, s1_y, s2_x, s2_y;
+        s1_x = p1_x - p0_x;
+        s1_y = p1_y - p0_y;
+        s2_x = p3_x - p2_x;
+        s2_y = p3_y - p2_y;
+
+        var s, t;
+        s = (-s1_y * (p0_x - p2_x) + s1_x * (p0_y - p2_y)) / (-s2_x * s1_y + s1_x * s2_y);
+        t = ( s2_x * (p0_y - p2_y) - s2_y * (p0_x - p2_x)) / (-s2_x * s1_y + s1_x * s2_y);
+
+        return (s >= 0 && s <= 1 && t >= 0 && t <= 1);
     }
 
     // BFS search to highlight the given node and its neighbors
@@ -202,13 +235,24 @@
     // It dinamically resizes the nodes and the edges
     // but only if they are visible to reduce computation time
     function zoomed(svg, width, height){
-        debug_transf = d3.event.transform;
         svg.attr("transform", d3.event.transform);
         const radius = get_node_size(d3.event.transform.k);
-        const line_width = get_line_width(d3.event.transform.k);
-        
         nodes.filter(node => node_is_visible(node, width, height, d3.event.transform)).style("r", radius); // update node size
-        edges.filter(edge => edge_is_visible(edge, width, height, d3.event.transform)).style("stroke-width", line_width); // update edges size
+    }
+
+    function zoomBegin(){
+        edges.style('display', 'none');
+        clearTimeout(timeout_id);
+    }
+
+    function zoomEnd(width, height, transform){
+        const line_width = get_line_width(transform.k);
+        timeout_id = setTimeout(function(){
+            edges.filter(edge => edge_is_visible(edge, width, height, transform)).style("stroke-width", line_width); // update edges size
+            edges.style('display', 'block');
+            console.log("okay");
+
+        }, 300);
     }
 
     function display_graph(){
@@ -242,8 +286,12 @@
         .style('stroke','none');
 
 
-
-        let zoom_handler = d3.zoom().on("zoom", function(){
+        let zoom_handler = d3.zoom()
+        .on("start", zoomBegin)
+        .on("end", function(){
+            zoomEnd(width, height, d3.event.transform)
+        })
+        .on("zoom", function(){
             zoomed(g, width, height);
         });
         zoom_handler(svg);
@@ -270,10 +318,10 @@
                 .force("x", d3.forceX())
                 .force("y", d3.forceY());
 
-            for (let i = 10; i > 0; --i){
+            for (let i = 40; i > 0; --i){
                 forceSimulation.tick();
             }
-            //forceSimulation.stop();
+            forceSimulation.stop();
 
 
             // create an SVG line for each link in the JSON data
