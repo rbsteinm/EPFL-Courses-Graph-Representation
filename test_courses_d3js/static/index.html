@@ -100,7 +100,8 @@
     let timeout_id;
 
     function get_node_size(scale_factor){
-        return (5/(Math.sqrt(scale_factor))).toFixed(1);
+        //return (5/(Math.sqrt(scale_factor))).toFixed(1);
+        return (4/scale_factor);
     }
 
     function get_line_width(scale_factor){
@@ -141,11 +142,9 @@
             return true;
         }
         return false;
-
-        //return (x1 > 0 && x1 < width && y1 > 0 && y1 < height) || (x2 > 0 && x2 < width && y2 > 0 && y2 < height);
     }
 
-    // given 
+    // are the two segments intersecting at some point?
     function line_intersects(segment1, segment2) {
         [p0_x, p0_y, p1_x, p1_y] = segment1;
         [p2_x, p2_y, p3_x, p3_y] = segment2;

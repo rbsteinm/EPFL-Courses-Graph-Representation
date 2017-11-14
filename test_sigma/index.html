@@ -1,0 +1,100 @@
+<html>
+<head>
+<style type="text/css">
+  /* sigma.js context : */
+  .sigma-parent {
+      position: relative;
+      border-radius: 4px;
+      -moz-border-radius: 4px;
+      -webkit-border-radius: 4px;
+      background: #222;
+      height: 1000px;
+  }
+  .sigma-expand {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+  }
+  .buttons-container{
+      padding-bottom: 8px;
+      padding-top: 12px;
+  }
+  </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h2 >This is the result ! </h2>
+        I used data I gathered a few months ago (it shows how one of my picture was shared on social networks)   
+        <div class="sigma-parent" id="sigma-example-parent">
+        <div class="sigma-expand" id="sigma-example"></div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/1.2.1/sigma.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/1.2.1/plugins/sigma.parsers.json.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/1.2.1/plugins/sigma.layout.forceAtlas2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/1.2.1/plugins/sigma.parsers.gexf.min.js"></script>
+<script>
+  /*sigma.parsers.json('/graph', {
+    container: 'container',
+    settings: {
+      defaultNodeColor: '#ec5148'
+    }
+  });
+
+  s = new sigma({
+  graph: g,
+  container: 'graph-container',
+  settings: {
+    drawEdges: true
+  }
+});
+
+  s.startForceAtlas2();
+  setTimeout(function() { sigma.instances[1].stopForceAtlas2(); }, 15000);*/
+
+
+  var sigInst = new sigma({
+      container: 'sigma-example',
+      renderer: {
+          type: 'sigma.renderers.def',
+          container: 'sigma-example-parent'
+      },
+      settings:{
+        batchEdgesDrawing: false,
+        canvasEdgesBatchSize: 250,
+        webglEdgesBatchSize: 250, 
+        hideEdgesOnMove: false,
+        //scalingMode: 'inside',
+        defaultLabelColor: '#fff',
+        defaultLabelSize: 14,
+        defaultLabelBGColor: '#fff',
+        defaultLabelHoverColor: '#000',
+        labelThreshold: 10,
+        defaultEdgeType: 'arrow',
+        minNodeSize: 1,
+        maxNodeSize: 5,
+        minEdgeSize: 1,
+        maxEdgeSize: 1,
+        defaultNodeColor: '#ff9999'
+        //touchEnabled: true
+      }
+  });
+
+  sigma.parsers.gexf('data/courses.gexf', sigInst, function() {
+      /*sigInst.startForceAtlas2();
+      setTimeout(function() { sigInst.stopForceAtlas2(); }, 10000);
+      //sigInst.graph.nodes().forEach(n => console.log(n.size));*/  
+      sigInst.refresh();
+      sigInst.graph.nodes().forEach(function(n) {
+        n.label = n.id;
+      });
+  });
+//sigInst.startForceAtlas2();
+//setTimeout(function() { sigInst.stopForceAtlas2(); }, 15000);
+
+</script>
+</body>
+</html>

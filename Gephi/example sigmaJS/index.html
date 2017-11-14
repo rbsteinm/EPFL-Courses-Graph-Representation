@@ -1,0 +1,239 @@
+<html lang="en">
+<head>
+<meta charset="utf-8">
+</head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <h2 >This is the result ! </h2>
+                I used data I gathered a few months ago (it shows how one of my picture was shared on social networks)   
+                <div class="sigma-parent" id="sigma-example-parent">
+                <div class="sigma-expand" id="sigma-example"></div>
+            </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/1.2.1/sigma.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/1.2.1/plugins/sigma.parsers.json.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/1.2.1/plugins/sigma.parsers.gexf.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/1.2.1/plugins/sigma.layout.forceAtlas2.min.js"></script>
+        <!--<script src="js/sigma.parseGexf.js"></script>-->
+        <script type="text/javascript">
+
+            // Add a method to the graph model that returns an
+                // object with every neighbors of a node inside:
+                sigma.classes.graph.addMethod('neighbors', function(nodeId) {
+                var k,
+                    neighbors = {},
+                    index = this.allNeighborsIndex[nodeId] || {};
+
+                for (k in index)
+                  neighbors[k] = this.nodesIndex[k];
+
+                return neighbors;
+                });
+
+
+            
+            function init() {
+                // Instanciate sigma.js and customize rendering :
+                /*var sigInst = sigma.init(document.getElementById('sigma-example')).drawingProperties({
+                    defaultLabelColor: '#fff',
+                    defaultLabelSize: 14,
+                    defaultLabelBGColor: '#fff',
+                    defaultLabelHoverColor: '#000',
+                    labelThreshold: 6,
+                    defaultEdgeType: 'curve'
+                    }).graphProperties({
+                        minNodeSize: 1,
+                        maxNodeSize: 10,
+                        minEdgeSize: 1,
+                        maxEdgeSize: 1
+                    }).mouseProperties({
+                        maxRatio: 32
+                });*/
+
+                var sigInst = new sigma({
+                    container: 'sigma-example',
+                    renderer: {
+                        type: 'sigma.renderers.def',
+                        container: 'sigma-example-parent'
+                    },
+                    settings:{
+                        batchEdgesDrawing: true,
+                        canvasEdgesBatchSize: 250,
+                        webglEdgesBatchSize: 250, 
+                        hideEdgesOnMove: true,
+                        //scalingMode: 'inside',
+                        defaultLabelColor: '#fff',
+                        defaultLabelSize: 14,
+                        defaultLabelBGColor: '#fff',
+                        defaultLabelHoverColor: '#000',
+                        labelThreshold: 6,
+                        defaultEdgeType: 'curve',
+                        minNodeSize: 1,
+                        maxNodeSize: 10,
+                        minEdgeSize: 1,
+                        maxEdgeSize: 1,
+                        //touchEnabled: true
+                    }
+                })
+
+                // Parse a GEXF encoded file to fill the graph
+                // (requires "sigma.parseGexf.js" to be included)
+                //sigInst.parseGexf('data/essai.gexf');
+
+                sigma.parsers.gexf('data/essai.gexf', sigInst, function(){
+                    sigInst.refresh();
+                });
+
+                
+                s = sigInst;
+                // We first need to save the original colors of our
+                // nodes and edges, like this:
+                s.graph.nodes().forEach(function(n) {
+                    n.originalColor = n.color;
+                  });
+                  s.graph.edges().forEach(function(e) {
+                    e.originalColor = e.color;
+                  });
+
+                  // When a node is clicked, we check for each node
+                  // if it is a neighbor of the clicked one. If not,
+                  // we set its color as grey, and else, it takes its
+                  // original color.
+                  // We do the same for the edges, and we only keep
+                  // edges that have both extremities colored.
+                  s.bind('clickNode', function(e) {
+                    var nodeId = e.data.node.id,
+                        toKeep = s.graph.neighbors(nodeId);
+                    toKeep[nodeId] = e.data.node;
+
+                    s.graph.nodes().forEach(function(n) {
+                      if (toKeep[n.id])
+                        n.color = n.originalColor;
+                      else
+                        n.color = '#eee';
+                    });
+
+                    s.graph.edges().forEach(function(e) {
+                      if (toKeep[e.source] && toKeep[e.target])
+                        e.color = e.originalColor;
+                      else
+                        e.color = '#eee';
+                    });
+
+                    // Since the data has been modified, we need to
+                    // call the refresh method to make the colors
+                    // update effective.
+                    s.refresh();
+                  });
+
+                  // When the stage is clicked, we just color each
+                  // node and edge with its original color.
+                  s.bind('clickStage', function(e) {
+                    s.graph.nodes().forEach(function(n) {
+                      n.color = n.originalColor;
+                    });
+
+                    s.graph.edges().forEach(function(e) {
+                      e.color = e.originalColor;
+                    });
+
+                    // Same as in the previous event:
+                    s.refresh();
+                  });
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                //highlights the nodes that is hovered+ its edges
+                //
+                // Bind events :
+                /*var greyColor = '#666';
+                sigInst.bind('clickNode',function(event){
+                    var nodes = event.content;
+                    var neighbors = {};
+                    sigInst.graph.edges().forEach(function(e){
+                        if(nodes.indexOf(e.source)<0 && nodes.indexOf(e.target)<0){
+                            if(!e.attr['grey']){
+                                e.attr['true_color'] = e.color;
+                                e.color = greyColor;
+                                e.attr['grey'] = 1;
+                            }
+                        }else{
+                            e.color = e.attr['grey'] ? e.attr['true_color'] : e.color;
+                            e.attr['grey'] = 0;
+
+                            neighbors[e.source] = 1;
+                            neighbors[e.target] = 1;
+                        }
+                    }).iterNodes(function(n){
+                        if(!neighbors[n.id]){
+                            if(!n.attr['grey']){
+                                n.attr['true_color'] = n.color;
+                                n.color = greyColor;
+                                n.attr['grey'] = 1;
+                            }
+                        }else{
+                            n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
+                            n.attr['grey'] = 0;
+                        }
+                    })
+                    sigInst.refresh();
+                }).bind('outnodes',function(){
+                    sigInst.iterEdges(function(e){
+                        e.color = e.attr['grey'] ? e.attr['true_color'] : e.color;
+                        e.attr['grey'] = 0;
+                    }).iterNodes(function(n){
+                        n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
+                        n.attr['grey'] = 0;
+                    })
+                    sigInst.refresh();
+                });*/
+
+
+            if (document.addEventListener) {
+                document.addEventListener("DOMContentLoaded", init, false);
+            } else {
+                window.onload = init;
+            }
+        </script>
+        <style type="text/css">
+            /* sigma.js context : */
+            .sigma-parent {
+                position: relative;
+                border-radius: 4px;
+                -moz-border-radius: 4px;
+                -webkit-border-radius: 4px;
+                background: #222;
+                height: 1000px;
+            }
+            .sigma-expand {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+            }
+            .buttons-container{
+                padding-bottom: 8px;
+                padding-top: 12px;
+            }
+        </style>
+        <?php include("../php/statcounter.php"); ?>       
+    </body>
+</html>
