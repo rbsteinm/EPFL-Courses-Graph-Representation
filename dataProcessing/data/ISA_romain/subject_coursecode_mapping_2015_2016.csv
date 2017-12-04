@@ -1,0 +1,818 @@
+SubjectName|SubjectID|CourseCode
+Histoire de l'architecture I|1773962|AR-123
+Stéréotomie|1769400055|AR-211
+Introduction aux outils CAO en architecture|1888400347|AR-219
+Théorie de l'architecture III|1776787|AR-221
+Histoire de l'architecture III|1773972|AR-223
+Structures et matériaux I|348210408|AR-239
+Théories de l'urbanisme I|348211982|AR-261
+Théorie et critique du projet BA5 (Viganò)|1769419681|AR-301(a)
+Théorie et critique du projet BA5 (Graf F.)|71470103|AR-301(b)
+Théorie et critique du projet BA5 (Ortelli L.)|1577870692|AR-301(c)
+Théorie et critique du projet BA5 (Fröhlich M. & A.)|1799962043|AR-301(d)
+Figuration expressive|1769410751|AR-312
+Théorie de l'architecture V|1776797|AR-321
+Histoire de l'architecture V|1773982|AR-323
+Construction et durabilité V|837374708|AR-331
+Concevoir des structures|1680235062|AR-337
+Dynamiques spatiales et acteurs du territoire|125910731|AR-351
+Théorie et critique du projet MA1 (Gugger)|71471393|AR-401(b)
+Théorie et critique du projet MA1 (Geers)|1769423594|AR-401(c)
+Théorie et critique du projet MA1 (Weinand)|71471407|AR-401(e)
+Théorie et critique du projet MA1 (Lamunière)|227234245|AR-401(i)
+Théorie et critique du projet MA1 (Müller Inderbitzin)|1889078840|AR-401(r)
+Théorie et critique du projet MA1 (Barros Falcâo de Campos)|1889072595|AR-401(s)
+Théorie et critique du projet MA1 (Zuber)|1889079000|AR-401(t)
+Théorie et critique du projet MA1 (Ménard)|1934635827|AR-401(u)
+Visions et Utopies|1680277058|AR-407
+Modélisation et représentation informatique I|1775032|AR-411
+UE L : Art and architecture: constructing the view I|1906433714|AR-415
+Théorie de l'architecture VII|24175202|AR-421
+Histoire de l'architecture VII|24174877|AR-423
+Histoire du béton|1496923419|AR-425
+Histoire de l'habitation|1687172291|AR-427
+UE B : Critique architecturale|71466583|AR-432
+Théories et techniques du projet de sauvegarde|1680279554|AR-434
+UE R : Introduction au BIM (Building Information Modeling)|1769706560|AR-435
+UE E : Architecture et structures|4151854|AR-438
+UE F : Architecture et réhabilitation|24261148|AR-439
+UE K : Architecture et durabilité : études de performances|1494716829|AR-440
+Confort et architecture: stratégies durables|1781858692|AR-442
+Approches socio-psychanalytiques de l'art|1888401365|AR-443
+Cohérences aventureuses|1888402399|AR-444
+UE O : Béton. Matière de construction|1494718976|AR-447
+Fabrication associative assistée par ordinateur|1889085700|AR-450
+Architecture et construction de la ville I|1771849|AR-451
+Art et histoire des jardins|71466740|AR-453
+Urbanisme et territoires|1496924504|AR-455
+Caractères architecturaux et urbanismes de l'Islam|126727237|AR-457
+Sciences de la ville I|23812659|AR-459
+Habitat et développement urbain|23813560|AR-465
+Les quatre éléments et l'architecture|1769414921|AR-470
+UE J : Territoire et paysage|23815258|AR-471
+UE U : Cartography|1906438210|AR-476
+Sociologie urbaine|1776342|AR-489
+De la structure à l'ornement|1781858447|AR-521
+Superarchitecture / Superactualité|1680262168|AR-524
+Superstudio|1680277127|AR-597
+Enoncé théorique de master|47832968|AR-598
+Projet de master en architecture|132446543|AR-599
+Biologie I|1772025|BIO-103
+Biologie II|1772030|BIO-104
+Cellular biology and biochemistry for engineers|71603711|BIO-105
+Introduction aux sciences du vivant|1657417886|BIO-109(a)
+Introduction aux sciences du vivant|1657417886|BIO-109(b)
+Introduction aux sciences du vivant|1657417886|BIO-109(c)
+Introduction aux sciences du vivant|1657417886|BIO-109(d)
+Introduction aux sciences du vivant|1657417886|BIO-109(e)
+Chimie biologique I (pour SV)|257434376|BIO-111
+Biologie moléculaire|350468544|BIO-201
+Biologie cellulaire et moléculaire I|351053875|BIO-205
+Biological chemistry II (for SV)|1046491990|BIO-212
+Physical biology of the Cell I|1679266975|BIO-243
+Scientific project design in synthetic biology (iGEM)|1771068812|BIO-318
+Modélisation mathématique et computationnelle en biologie|352252328|BIO-341
+Microbiology|260077392|BIO-372
+Génétique et génomique|1584778525|BIO-373
+Physiologie par Systèmes I|350849052|BIO-376
+Stem cell biology and technology|48289169|BIO-447
+Understanding Statistics and Experimental Design|1680039643|BIO-449
+Molecular endocrinology|47947735|BIO-450
+Introduction au droit et à l'éthique en STV|1543013152|BIO-455
+Genomics and bioinformatics|352254973|BIO-463
+Scientific literature analysis in Bioengineering|1771072469|BIO-467
+Scientific literature analysis in Computational molecular biology|1771072563|BIO-468
+Scientific project design in regenerative medicine and diagnostics|1771067819|BIO-469
+Cancer Biology I|47995206|BIO-471
+Immunology (advanced topics)|438961411|BIO-479
+Neurosciences I : molecular neuroscience and neurodegeneration|232289697|BIO-480
+Neurosciences II : cellular mechanisms of brain function|1807233617|BIO-482
+Scientific project design in translational neurosciences|1771071124|BIO-487
+Scientific project design in translational oncology|1771071455|BIO-488
+Scientific literature analysis in Molecular medicine|1771072572|BIO-489
+Scientific project design in integrative neurosciences|1771067486|BIO-493
+Scientific project design in drug discovery|1771067191|BIO-494
+Semester project in life sciences & technology|1771015531|BIO-496
+Lab immersion I|355590267|BIO-501
+Lab immersion II|355590564|BIO-502
+Lab immersion III|355591210|BIO-503
+Lab immersion A out of EPFL|1864673347|BIO-504
+Lab immersion B out of EPFL|1864673356|BIO-505
+Projet de master en sciences et technologies du vivant|132448364|BIO-598(a)
+Projet de master en bioingénierie et biotechnologie|134558590|BIO-599
+Fluid mechanics for SV|132121224|BIOENG-312
+Project in bioengineering and biosciences|352072600|BIOENG-390
+Introduction to cellular and molecular biotechnology|4145120|BIOENG-430
+Pharmaceutical biotechnology|350847112|BIOENG-437
+Biomedical optics|839100255|BIOENG-445
+Scientific literature analysis in Neuroscience|1771072592|BIOENG-451
+Sensorimotor neuroprosthetics|1680039586|BIOENG-486
+Semester project in Bioengineering|1770857585|BIOENG-489
+Project in computational neurosciences|1582863195|BIOENG-490
+Lab methods : animal experimentation|1680530302|BIOENG-511
+Lab methods : bioactive compounds screening|1680530324|BIOENG-512
+Lab methods : biosafety|1680530693|BIOENG-513
+Lab methods : flow cytometry|1680530700|BIOENG-514
+Lab methods : histology|1680535667|BIOENG-516
+Lab methods : proteomics|1680530742|BIOENG-517
+Stage d'ingénieur (master en Bioingénierie)|467191817|BIOENG-596
+Stage d'ingénieur (master en Sciences et technologie du vivant)|4651611|BIOENG-596
+Equilibres et réactivité chimiques|71855072|CH-101
+Atomes, ions, molécules et fonctions|1661374484|CH-102
+Chimie TP I |260079039|CH-108(a)
+Chimie générale avancée|1676846587|CH-160(a)
+Chimie générale avancée|1676846587|CH-160(b)
+Chimie générale avancée|1676846587|CH-160(c)
+Chimie générale avancée|1676846587|CH-160(d)
+Introduction à la chimie organique I|1678982942|CH-162
+Introduction à la chimie organique II|1678983025|CH-163
+Analyse structurale|1772250|CH-201
+Biochimie I|4144900|CH-210
+Chemistry of elements s and p|1772497|CH-221
+Chimie organique, TP|1513577805|CH-230
+Fonctions et réactions organiques II|1773682|CH-233
+Statistical thermodynamics|1769332709|CH-242
+Electrochimie des solutions|1773437|CH-243
+Numerical methods in chemistry|1769329067|CH-250
+Chimie inorganique|1807738465|CH-263
+Méthodes de séparation analytiques|1774837|CH-301
+Chimie analytique expérimentale|230665709|CH-309(a)
+Molecular and cellular biophysic I|1772275|CH-311
+Biochemistry II|350462476|CH-313
+Bioinorganic chemistry|1772432|CH-321
+Chimie physique des interfaces|1772587|CH-341
+Spectroscopy|47987731|CH-343
+Introduction to electronic structure methods|230666083|CH-353
+Methodology in instrumental chromatography|1669225782|CH-405
+Analysis of ancient materials and their degradation|1898535955|CH-406
+Nuclear magnetic resonance|1669227005|CH-409
+Chemistry of small biological molecules|1533900991|CH-415
+Catalysis for energy storage|1769332958|CH-421
+Catalyst design for synthesis|129833984|CH-422
+Inorganic reactivity|129776728|CH-423
+Structure and reactivity|1771718|CH-432
+Total synthesis of natural products|468310629|CH-438
+Photochemistry II|1771488|CH-443
+Electronic spectroscopy|71877719|CH-444
+Applied molecular quantum chemistry|1770678|CH-451
+Computational methods in molecular quantum mechanics|250991626|CH-452
+Physique moléculaire|44378947|CH-462
+Project in molecular sciences|71883318|CH-491
+Interdisciplinary project|1769339854|CH-492
+Projet de master en chimie moléculaire et biologique|132425754|CH-599
+Introduction to chemical engineering I|250986010|ChE-201
+Transport phenomena I|1898529993|ChE-301
+Equilibrium-stage separation processes|130130740|ChE-401
+Chemical engineering of heterogenous reactions|48099118|ChE-403
+Chemical engineering lab & project|4145236|ChE-409
+Principles and applications of systems biology|71898059|ChE-411
+Process development I|1771573|ChE-451
+Project in Biotechnology|1715599381|ChE-460
+Stage d'ingénieur (master en Génie chimique et Biotechnologie)|234597759|ChE-596
+Projet de master en génie chimique et biotechnologie|1593341315|ChE-599
+Mécanique des structures (pour GC)|938058920|CIVIL-223
+Mécanique des milieux continus (pour GC)|231606915|CIVIL-225
+Structures en béton|227318424|CIVIL-234
+Sécurité et fiabilité|229971214|CIVIL-237
+Mécanique des roches et ouvrages souterrains|1932632950|CIVIL-308
+Conception et dimensionnement des structures en bois|414819112|CIVIL-331
+Etude et analyse des systèmes énergétiques|22827171|CIVIL-340
+Transportation systems engineering|348607885|CIVIL-351
+Projet GC|23610182|CIVIL-390
+Geomechanics|1932794331|CIVIL-402
+Géologie de la construction et de l'environnement|1680050992|CIVIL-403
+Voies de circulation|830901136|CIVIL-406
+Hydraulique fluviale et aménagement des cours d'eau|1774027|CIVIL-410
+Barrages et ouvrages hydrauliques annexes|1770632|CIVIL-411
+Ouvrages hydrauliques et aménagements hydroélectriques|1941543671|CIVIL-412
+Dynamique des structures|1773337|CIVIL-420
+Reservoir mechanics for geo-energy and the environment|1932791826|CIVIL-429
+Ponts en béton|1775602|CIVIL-430
+Structures existantes, bases|1889181461|CIVIL-436
+Analyse et gestion de risques|1932629392|CIVIL-438
+Advanced composites in engineering structures|47390229|CIVIL-443
+Modélisation des systèmes énergétiques|1770786181|CIVIL-447
+Villes et transports|4151954|CIVIL-451
+Exploitation ferroviaire|830900311|CIVIL-452
+Gestion de la maintenance des infrastructures|1773822|CIVIL-455
+Fundamentals of Traffic Operations and Control|338340784|CIVIL-457
+Economie des réseaux d'infrastructures|1770793617|CIVIL-458
+UE génie civil: Construction durable|1770649464|CIVIL-474
+Projet de construction|136704168|CIVIL-490
+Projet de systèmes civils|136704309|CIVIL-491
+Laboratoire GC|136703631|CIVIL-492
+Projet interdisciplinaire à option|72259676|CIVIL-493
+Projet ENAC pour mineur IDEAS|1994879246|CIVIL-496
+Advanced methods in computational solid mechanics|455262375|CIVIL-523
+Structures en béton, chapitres choisis|23325791|CIVIL-525
+Structures en métal, chapitres choisis|1776477|CIVIL-526
+Glass structures and facades|1770651047|CIVIL-528
+Matériaux et structures|1774547|CIVIL-532
+Stage d'ingénieur crédité avec le PDM (master en  Génie civil)|652058540|CIVIL-597
+Pré-étude projet de master|46641934|CIVIL-598
+Projet de master en génie civil|134468934|CIVIL-599
+Computer networks|1776067|COM-208
+Modèles stochastiques pour les communications|1774997|COM-300
+Sécurité des réseaux|4151162|COM-301
+Projet en systèmes de communication I|72259583|COM-307
+Traitement quantique de l'information|1702466222|COM-309
+Cryptography and security|1770973|COM-401
+Information theory and coding|1774097|COM-404
+TCP/IP networking|1771764|COM-407
+Satellite communications  systems and networks|24166696|COM-414
+Audio signal processing and virtual acoustics|1790207913|COM-415
+Projet en systèmes de communication II|82805306|COM-416
+Advanced probability and applications|1889230132|COM-417
+Dynamical system theory for engineers|1771018|COM-502
+Optional project in communication systems|231957235|COM-507
+Advanced digital communications|1772065|COM-510
+Software-defined radio: A hands-on course|1776347|COM-511
+Mathematical foundations of signal processing|1678961803|COM-514
+Stage d'ingénieur crédité avec le PDM (master en Systèmes de communication)|652076110|COM-597
+Projet de master en systèmes de communication|132425231|COM-599
+Introduction à la programmation|784637359|CS-107
+Information, calcul, communication|1657719952|CS-110(a)
+Information, calcul, communication|1657719952|CS-110(b)
+Information, calcul, communication|1657719952|CS-110(c)
+Information, calcul, communication|1657719952|CS-110(d)
+Information, computation, communication|1790138559|CS-110(e)
+Information, calcul, communication|1657719952|CS-110(g)
+Programmation|1775692|CS-111(a)
+Programmation|1775692|CS-111(b)
+Programmation I|1775697|CS-111(c)
+Programmation I|1775697|CS-111(g)
+Programmation I|1775697|CS-111(i)
+Programmation II|1775702|CS-112(i)
+Projets en informatique (pour SV)|352067537|CS-116
+Discrete structures|47848061|CS-150
+Systèmes logiques|1776592|CS-171
+Concurrency|1789653698|CS-206
+Programmation orientée système|71645784|CS-207
+Architecture des ordinateurs|4144648|CS-208
+Architecture des systems-on-chip|1790169567|CS-209
+Functional programming|1790138595|CS-210
+Algorithms|2258712|CS-250
+Theory of computation|1704192615|CS-251
+Software engineering|24092923|CS-305
+Introduction to multiprocessor architecture|1921237690|CS-307
+Introduction to computer vision|1771203|CS-310
+Computer language processing|1887888591|CS-320
+Informatique du temps réel|2258520|CS-321
+Projet en informatique I|128676455|CS-398
+Digital education & learning analytics|1790254853|CS-411
+Program parallelization on PC clusters|231957812|CS-425
+Intelligent agents|1771183|CS-430
+Pattern classification and machine learning|1771468|CS-433
+Unsupervised and reinforcement learning in neural networks|1771794|CS-434
+Analytic methods in algorithms and complexity|1888829730|CS-435
+Advanced computer graphics|1770923|CS-440
+Distributed algorithms|1773287|CS-451
+Foundations of software|71840397|CS-452
+Concurrent algorithms|231901032|CS-453
+Advanced multiprocessor architecture|128789807|CS-471
+Design technologies for integrated systems|24164994|CS-472
+Embedded systems|1771058|CS-473
+Microelectronics for systems on chips|71644441|CS-474
+Projet en informatique II|128676975|CS-498
+Principles of computer systems|1501687491|CS-522
+Stage d'ingénieur crédité avec le PDM (master en Informatique)|652061370|CS-595
+Optional project in computer science|231957545|CS-596
+Projet de master en informatique|132427120|CS-599
+Sciences et technologies de l'électricité (automne)|1661986440|EE-100
+Sciences et technologies de l'électricité (automne)|1661986440|EE-106
+Electromagnétisme I : lignes et ondes|1773452|EE-200
+Electronique I|1773492|EE-202
+Electronique I|1773492|EE-202(b)
+Electronique II|1773472|EE-203(b)
+Circuits et systèmes I|348715502|EE-204
+Circuits and systems II|348716744|EE-205
+Measuring systems|1669888598|EE-206
+Electronique|2328456|EE-280
+Initiation à l'électronique|1774172|EE-282
+Systèmes électriques et électroniques I|24508366|EE-295
+Systèmes embarqués microprogrammés|354337707|EE-310
+Circuits intégrés I|1499251995|EE-320
+Circuits et systèmes électroniques I|1772657|EE-331
+Conception de systèmes numériques pour EL|1499334061|EE-334
+Rayonnement et antennes|1776002|EE-345
+Electroacoustique|1499336370|EE-348
+Traitement des signaux|1499250198|EE-350
+Conversion d'énergie|1499248312|EE-360
+Réseaux électriques|1776057|EE-370
+Distribution de l'énergie électrique|1499340075|EE-371
+Machines électriques|1774472|EE-382
+Projet d'électricité|72259375|EE-399
+Analog circuits design I|23996396|EE-420
+HF and VHF circuits and techniques I|24302061|EE-425
+Introduction to VLSI Design|1898331930|EE-428
+Fundamentals of VLSI design|1676565978|EE-429
+Hardware systems modeling I|24102460|EE-432
+Hardware systems modeling|1676566727|EE-434
+Wireless receivers: algorithms and architectures|1499348352|EE-442
+Microwaves|1774062|EE-445
+Hydropower plants : generating and pumping units|1776060937|EE-456
+Transducteurs et entraînements intégrés|1777057|EE-461
+Industrial electronics I|1499350096|EE-465
+Energy storage in power systems: technologies, applications and future needs|1676507646|EE-466
+Multivariable control and coordination systems|1890132722|EE-477
+Lab in Acoustics|1670041923|EE-490(a)
+Lab in EDA based design|1670041994|EE-490(b)
+Lab in Microelectronics|1670042196|EE-490(d)
+Lab in Microwaves|1670042209|EE-490(e)
+Lab on apps development for tablets and smartphones|1685570179|EE-490(g)
+Project in Electrical Energy Systems|1670037881|EE-491(a)
+Project in Information Technologies|1670041842|EE-491(b)
+Project in Micro and Nanoelectronics|1670041858|EE-491(c)
+Lab in Electrical Energy Systems|1670042080|EE-492(c)
+Biomedical signal processing|229720940|EE-512
+Biometrics|1770798|EE-513
+Fundamentals of biosensors and electronic biochips|1670074783|EE-515
+Data analysis and model classification|354987130|EE-516
+Bio-nano-chip design|1776060714|EE-517
+Advanced analog and RF integrated circuits design I|24334799|EE-520
+Test of VLSI systems|47241891|EE-530
+Integrated circuits technology|1776687|EE-532
+Nanoelectronics|2222268|EE-535
+Physical models for micro and nanosystems|40249208|EE-536
+Modeling of emerging electron devices|75309053|EE-537
+Electrical filters|1670063935|EE-539
+Optical communications|1670043473|EE-540
+Audio|350861389|EE-548
+Propagation of acoustic waves|1670084070|EE-549
+Image and video processing|24165904|EE-550
+Automatic speech processing|348760034|EE-554
+Systems and architectures for signal processing|1776060846|EE-555
+Mathematics of data: from theory to computation|1776060814|EE-556
+Wave propagation along transmission lines|24335296|EE-575
+Introduction à la conception de mécanismes spatiaux|127005949|EE-580
+Spacecraft design and system engineering|47244272|EE-584
+Introduction to planetary sciences|241135439|EE-586
+Advanced lab in Electrical Energy Systems|1678500034|EE-588
+Projet en technologies spatiales|72259597|EE-589
+Stage d'ingénieur (master en Génie électrique et électronique)|652078498|EE-596(a)
+Stage d'ingénieur crédité avec le PDM (master en Génie électrique et électronique)|652058942|EE-597
+Advanced lab in Electrical Engineering|1678499905|EE-598
+Projet de master en génie électrique et électronique|132424935|EE-599
+Programmation et conception orientées objets|1776059601|ENG-209
+Méthodes quantitatives I|71544625|ENG-267
+Droit de l'architecte, introduction : contrats et concours|1680257605|ENG-383
+Environmental transport phenomena|47572529|ENG-420
+Fundamentals in Systems Engineering|1899818511|ENG-421
+Chimie des denrées alimentaires|1772492|ENG-433
+Management of industrial production|230672285|ENG-434
+Spatial statistics and analysis|72495962|ENG-440
+Energétique du bâtiment|1773592|ENG-445
+Distributed intelligent systems|231677206|ENG-466
+Organisation, économie et droit de la construction I|2208445|ENG-470
+Project in energy management and sustainability I|862953095|ENG-472(a)
+Études d'impact|1773632|ENG-474
+Introduction to environmental engineering|71544480|ENV-167
+Microbiologie pour l'ingénieur|47564647|ENV-202
+Hydrology for engineer|348608416|ENV-221
+Sciences du sol|71556171|ENV-222
+Informatique pour l'ingénieur|838976279|ENV-270
+Analyse des polluants dans l'environnement|4649823|ENV-300
+Remédiation des sites|71559290|ENV-301
+Génie sanitaire, gestion des eaux et des déchets|231617900|ENV-304
+Localisation par satellites|1774457|ENV-340
+Système d'Information Géographique (SIG)|47565939|ENV-342
+Législation environnementale et droit de la construction|23985449|ENV-367
+Analyse du cycle de vie, écobilan|23985644|ENV-370
+Sanitary engineering in developing countries|231672762|ENV-402
+Water and wastewater treatment|72496701|ENV-405
+Biomineralization: from nature to application|1680357086|ENV-406
+Eco-morphologie fluviale|44989325|ENV-418
+Concepts in ecological engineering|1590321840|ENV-422
+Water resources engineering|47572541|ENV-424
+Fluvial biogeosciences|1889234532|ENV-426
+Analyse exploratoire de données géospatiales|1800382716|ENV-444
+Geomonitoring|348634646|ENV-445
+Environnements de travail et risques professionnels|1499342340|ENV-468
+Systèmes de management environnementaux|24002581|ENV-469
+Projet ENAC|1775782|ENV-494
+Advanced solid waste treatment|47572475|ENV-500
+Analyse des flux de matière|72497223|ENV-501
+TP de bioprocédés environnementaux|71826349|ENV-506
+Fate and behaviour of organic pollutants|348637649|ENV-507
+Ecologie numérique|24004448|ENV-521
+Risques hydrologiques et aménagements|24005195|ENV-524
+Snow physics and hydrology|444523163|ENV-525
+Design de SIG|1576313429|ENV-547
+Sensor orientation|1499350407|ENV-548
+Stage d'ingénieur crédité avec le PDM (master en Gestion de l'énergie et construction durable)|1582864637|ENV-593
+Projet de master en gestion de l'énergie et construction durable|1582851784|ENV-595
+Projet SIE/ENAC|2214296|ENV-597
+Stage d'ingénieur crédité avec le PDM (master en Sciences et ingénierie de l'environnement)|652076651|ENV-598
+Projet de master en sciences et ingénierie de l'environnement|134558496|ENV-599
+Projet de master pour étudiant venant en échange à l'EPFL|90181927|EPFL-401
+Advanced Topics in Nuclear Reactor Materials|161868049|ETH-530
+Nuclear Computations Lab|830854788|ETH-531
+Beyond-design-basis safety|432433317|ETH-532
+Decommissioning of nuclear power plants|1919143539|ETH-533
+Semester Project Nuclear Engineering|161867929|ETH-590
+Introduction to finance (IF master and minor only)|80395102|FIN-401
+Quantitative methods in finance|229988060|FIN-402
+Econometrics|229987786|FIN-403
+Macrofinance|229913760|FIN-406
+Stochastic calculus I|842513489|FIN-408
+Real options and financial structuring|236283202|FIN-410
+Accounting for finance|1776066822|FIN-411
+Advanced derivatives|229988298|FIN-503
+Credit risk|840861451|FIN-504
+Fixed income analysis|840861591|FIN-505
+Advanced topics in financial econometrics|230003664|FIN-521
+Venture capital|842513718|FIN-522
+Global business environment|71966057|FIN-523
+Securitization & the financial crisis|842513650|FIN-524
+Financial big data|1898238663|FIN-525
+Master project in Financial Engineering|132449292|FIN-599
+Investing: a Guide to Doing the Right Thing|1964500347|FIN-614
+Didactique des mathématiques|1803746018|HEP-407
+Relation pédagogique et climat de classe|1803745771|HEP-408
+Science, technologie et société A|1581729904|HUM-114
+Enjeux mondiaux: santé B|1757761712|HUM-125(b)
+Enjeux politiques contemporains A|1580216068|HUM-201
+Pratiques artistiques A|1580488321|HUM-202
+Histoire de l'Asie contemporaine A|1919570518|HUM-203(a)
+Médias, communication et culture|1772997|HUM-204
+Design graphique I|1680357972|HUM-205
+Design industriel I|249353044|HUM-206
+Ethique sociale et politique A|1919567689|HUM-207(a)
+État et droits humains|235424562|HUM-208
+Études musicales A|1954058871|HUM-209
+Psychologie cognitive A|1773002|HUM-213
+Méditerranée: grands textes et mythes fondateurs A|1580215017|HUM-215
+Philosophie des sciences A|900058271|HUM-216
+Musicologie et histoire de la musique B|1581730596|HUM-217
+Psychologie sociale A|1772992|HUM-218
+Science et littérature C|1581731104|HUM-219
+Travail et organisations|405238132|HUM-220
+Histoire des énergies et des transports A|1908341947|HUM-221(a)
+Pratiques artistiques C|1581730988|HUM-222
+Histoire et théorie du cinéma|235424693|HUM-233
+Science et littérature A|1580216381|HUM-241
+Musicologie et histoire de la musique A|1580214404|HUM-242
+Ecologie de la connaissance|1911192181|HUM-245(a)
+Histoire des relations internationales|1580216372|HUM-248(a)
+Elites et pouvoir|1580217054|HUM-252
+Cerveau, esprit et société|405237425|HUM-256
+Actualités et théories économiques|1680358063|HUM-259
+Asian studies|1908362115|HUM-265(a)
+Moyen-Orient contemporain A|1823866136|HUM-267
+Médias sociaux, culture et société|1680358717|HUM-304
+Design graphique III|1680358228|HUM-305
+Design industriel III|249371091|HUM-306
+Croissance et développement durable|1580209507|HUM-308
+Histoire de l'image A|1580213011|HUM-311
+Histoire internationale contemporaine B|1581734542|HUM-312(a)
+Musicologie et histoire de la musique C|1581730851|HUM-313
+Méditerranée: grands textes et mythes fondateurs C|1581730912|HUM-314
+Philosophie, épistémologie et histoire des sciences|1580215162|HUM-315
+Cognitive psychology B|1680358076|HUM-316
+Psychologie sociale C|1581731065|HUM-317
+Sciences et religions A|1803280149|HUM-318
+Professions et carrières|444503507|HUM-320
+Ethique de la recherche scientifique|1580215916|HUM-329
+Histoire des énergies et des transports B|1908418130|HUM-330(a)
+Comportement organisationnel A|80958519|HUM-346
+Entrepreneurship|1580214098|HUM-348
+Introduction au droit de la propriété intellectuelle|1580213986|HUM-352
+Science, technologie et société C|1581734848|HUM-353
+Religions: approches socio-culturelles B|1581734729|HUM-354
+Coopération et développement|1680358144|HUM-355
+Japon contemporain A|1803277152|HUM-357
+Sciences de la mémoire|1680358821|HUM-358
+Technologies, innovations et marchés émergents|1818673603|HUM-366
+Risk and energy|1908419376|HUM-370
+SHS : Projet complet|72260050|HUM-400
+Pratiques artistiques I|1580939449|HUM-401(a)
+Going East I|445435350|HUM-402(a)
+Experimental cognitive psychology I|1580216498|HUM-403(a)
+Culture médiatique I|901865880|HUM-404(a)
+Internet : enjeux sociaux, enjeux mondiaux I|445483403|HUM-405(a)
+Musique, politique, société I|405250632|HUM-406(a)
+Design graphique V|1680359735|HUM-407(a)
+Design industriel V|249749117|HUM-408(a)
+Images de la nature I|1580217350|HUM-409(a)
+Droit et technique I|249735302|HUM-410(a)
+Economie et politique de l'énergie I|1908425640|HUM-411(c)
+Enjeux éthiques de l'ingénieur I|1908428435|HUM-412(c)
+Études musicales I|1954059570|HUM-414(a)
+Géopolitique et politique de la mondialisation I|249730357|HUM-415(a)
+Hommes / Machines I|249730431|HUM-416(a)
+Philosophy, epistemology and history of science I|1580220001|HUM-417(a)
+Histoire de l'image I|1580217244|HUM-418(a)
+Mythes de la Méditerranée ancienne I|1580219781|HUM-419(a)
+Psychologie sociale I|1580220177|HUM-420(a)
+Understanding modern Switzerland I|249735026|HUM-422(a)
+Understanding modern Switzerland II|249735109|HUM-422(b)
+History of globalization I|1803659663|HUM-427(a)
+Science, technologie et société I|1580220255|HUM-428(a)
+Philosophy of life sciences I|1580220027|HUM-429(a)
+How people learn I|1580217043|HUM-432(a)
+Digital humanities I|1695517338|HUM-433(a)
+Chine: la renaissance d'une grande puissance I|1680359353|HUM-434(a)
+Gestion des organisations I|1680360041|HUM-435(a)
+Sciences et religions I|1803284776|HUM-436(a)
+La recherche dans tous ses états I|1803285306|HUM-437(a)
+Histoire de l'art numérique I|1908428897|HUM-438(a)
+Histoire et humanités digitales I|1908418027|HUM-439(a)
+Part 4 : Research project in Area and Cultural Studies|1156258190|HUM-483
+Analyse avancée I|1658044571|MATH-100(a)
+Analyse avancée I|1658044571|MATH-100(b)
+Analyse I|1705590|MATH-101(a)
+Analyse I|1705590|MATH-101(b)
+Analyse I|1705590|MATH-101(c)
+Analyse I|1705590|MATH-101(d)
+Analyse I (allemand)|1748172|MATH-101(de)
+Analyse I|1705590|MATH-101(e)
+Analyse I (anglais)|1657415100|MATH-101(en)
+Analyse I|1705590|MATH-101(f)
+Algèbre linéaire avancée I|1658061639|MATH-110(a)
+Algèbre linéaire avancée I|1658061639|MATH-110(b)
+Algèbre linéaire|1772095|MATH-111(a)
+Algèbre linéaire|1772095|MATH-111(b)
+Algèbre linéaire|1772095|MATH-111(c)
+Algèbre linéaire|1772095|MATH-111(d)
+Algèbre linéaire (allemand)|1657416728|MATH-111(de)
+Algèbre linéaire|1772095|MATH-111(e)
+Algèbre linéaire (anglais)|1657417551|MATH-111(en)
+Algèbre linéaire|1772095|MATH-111(f)
+Algèbre linéaire|1772095|MATH-111(g)
+Géométrie I|1773797|MATH-120
+Géométrie pour architectes I|1769357011|MATH-124
+Mathématiques I|1774642|MATH-184
+Analyse III, IV|2129631|MATH-200
+Analyse III|1772230|MATH-200
+Analysis III|3855141|MATH-201
+Analyse III|1772230|MATH-202(c)
+Analyse III|1772230|MATH-203(a)
+Analyse III|1772230|MATH-203(b)
+Analyse III|1772230|MATH-203(c)
+Analyse III, IV|2129631|MATH-205
+Analyse IV |1772235|MATH-207(b)
+Théorie des groupes|129609800|MATH-211
+Topologie I|24346308|MATH-220
+Espaces métriques et topologiques|1898551900|MATH-220
+Topologie II|24346316|MATH-225
+Probabilités|1775637|MATH-230
+Probabilités et statistique I|1775647|MATH-231
+Probabilités et statistique|1775642|MATH-232
+Probabilités et statistique|1775642|MATH-233
+Probabilités et statistique|1775642|MATH-234(a)
+Probabilités et statistique|1775642|MATH-234(b)
+Statistique|1776377|MATH-240
+Analyse numérique|1179245|MATH-250
+Analyse numérique|1179245|MATH-251(a)
+Analyse numérique|1179245|MATH-251(b)
+Discrete mathematics|1685158711|MATH-260
+Introduction à l'optimisation et à la recherche opérationnelle|1771652313|MATH-265
+Introduction aux équations aux dérivées partielles|1898553613|MATH-300
+Equations différentielles ordinaires|2229035|MATH-301
+Mesure et intégration|24345947|MATH-303
+Algèbre|1772085|MATH-310
+Rings and modules|1898557621|MATH-311
+Introduction à la théorie algébrique des nombres|4148121|MATH-312
+Théorie de Galois|24346085|MATH-317
+Set theory|837370054|MATH-318
+Algèbre de Lie|1802451772|MATH-319
+Introduction aux variétés différentiables|47977389|MATH-322
+Martingales et applications|1774512|MATH-330
+Processus stochastiques appliqués|1585747148|MATH-332
+Modèles linéaires|1583926565|MATH-341
+Time series|129699210|MATH-342
+Introduction to the finite elements method|354383074|MATH-350
+Advanced numerical analysis|1578290162|MATH-351
+Graph theory|128314283|MATH-360
+Logique mathématique|230597543|MATH-381
+Projet de Mathématiques (bachelor)|1802440133|MATH-397
+Advanced analysis I|2348799|MATH-400
+Elliptic partial differential equations|837364272|MATH-406
+Linear PDE's|1802553523|MATH-407
+Differential geometry of framed curves|1898563805|MATH-423
+Théorie du calcul stochastique|1685303560|MATH-431
+Probability theory|837368471|MATH-432
+Lattice models|1898576185|MATH-434
+Robust and nonparametric Statistics|129871669|MATH-441
+Statistical theory|47980922|MATH-442
+Statistique multivariée|4150874|MATH-444
+Risk, rare events and extremes|1685212246|MATH-447
+Numerical approximation of PDE's I|1497044684|MATH-451
+Numerical integration of dynamical systems|230301204|MATH-452
+Numerical Analysis and Computational Mathematics|354984919|MATH-456
+Programming concepts in scientific computing|1497047397|MATH-458
+Numerical methods for conservation laws|1685197312|MATH-459
+Combinatorial optimization|129686166|MATH-460
+Convexity|1898563769|MATH-461
+Mathematical modelling of behavior|129688728|MATH-463
+Geometric graph theory|129687015|MATH-466
+Martingales in financial mathematics|1584194448|MATH-470
+Computational finance|1771017288|MATH-472
+Finite-Dimensional Algebras |1771011730|MATH-488
+Projet de Mathématiques (master)|1807734531|MATH-498
+Projet CSE I|243791097|MATH-591
+Projet CSE II|243791456|MATH-592
+Stage d'ingénieur (master en  Sciences et ingénierie computationnelles)|355561756|MATH-595
+Stage d'ingénieur (master en Ingénierie mathématique)|426521225|MATH-596
+Stage d'ingénieur crédité avec le PDM (master en Ingénierie mathématique)|652077020|MATH-597
+Projet de master en science et ingénierie computationelles|967657884|MATH-598
+Projet de master en mathématiques|132426961|MATH-599
+Construction mécanique I (pour GM)|1927284144|ME-101
+Construction mécanique I (pour MT)|1927284194|ME-106
+Structural mechanics (for MT)|1776023686|ME-231(a)
+Structural mechanics (for SV)|1770844214|ME-231(b)
+Mécanique des structures (pour GM)|126877750|ME-232
+Thermodynamics and energetics I|1771703752|ME-251
+Mechanical design principles|1887887330|ME-302
+Projet de conception|1775757|ME-313
+Control systems + TP|1499247990|ME-321
+Automatique + TP|1578086108|ME-325
+Mécanique vibratoire|1774762|ME-332
+Mécanique des fluides incompressibles|1774677|ME-344
+Méthode des éléments finis|1774797|ME-372
+Projet Génie mécanique I|146861779|ME-401
+Projet Génie mécanique II|1775867|ME-402
+Methods for rapid production and development|1567044774|ME-415
+Fabrication assistée par ordinateur|1773647|ME-416
+Production management|228390459|ME-419
+System Identification|1670080322|ME-421
+Mechanics of composites|1657739114|ME-430
+Advanced Fossil and Renewable Energy Systems|128846720|ME-442
+Aérodynamique|1772075|ME-445
+Two-phase flows and heat transfer|1773402|ME-446
+Projet en énergie|72259536|ME-450
+Advanced energetics|228377622|ME-451
+Hydraulic turbomachines|1777127|ME-453
+Turbomachines thermiques|1777132|ME-455
+Cavitation et phénomènes d'interface|1772335|ME-462
+Flow of dispersed media|1657735730|ME-463
+Instability|1887888382|ME-466
+Turbulence|1887888435|ME-467
+Numerical flow simulation|228388747|ME-474
+Biomechanics of the cardiovascular system|132147064|ME-481
+Biomechanics of the musculoskeletal system|824161299|ME-482
+Commande non linéaire|228381203|ME-523
+Engines and fuel cells|228383796|ME-551
+Stage d'ingénieur crédité avec le PDM (master en  Génie mécanique)|652077693|ME-597
+Projet de master en génie mécanique|132424187|ME-599
+Ressources humaines dans les projets|1776087|MGT-365
+Corporate strategy|352625368|MGT-400
+Strategic marketing & technology commercialization|352632242|MGT-401
+B2B - high-tech marketing|840844976|MGT-402
+Technology policy and the energy transition|1899816746|MGT-408
+D. Thinking: real problems, human-focused solutions|1909733620|MGT-409
+Organizational behavior|1899816322|MGT-412
+Entrepreneurship & new venture strategy (a)|1581027726|MGT-413(a)
+Technology & innovation strategy|1899737319|MGT-414
+Management de projet et analyse du risque|353834062|MGT-427
+Business information systems|1693707617|MGT-429
+Information technology and e-business strategy|47997051|MGT-439
+Principles of microeconomics|352624843|MGT-454
+Negotiation techniques|353945800|MGT-466
+Presentation skills|353946213|MGT-469
+Financial & managerial accounting|229912643|MGT-481
+Principles of finance|1581023265|MGT-482
+Applied probability & stochastic processes|352617902|MGT-484
+Early detection of innovation potential|1543121763|MGT-500
+Entrepreneurship laboratory (e-lab)|840843791|MGT-517
+Operations: economics & strategy|1543121640|MGT-528
+Master project in Management of Technology|132448731|MGT-599
+Systèmes vibratoires|1776627|MICRO-300
+Composants semiconducteurs|4145668|MICRO-312
+Conversion électromécanique II|23939045|MICRO-313
+Ingénierie optique I|400766326|MICRO-321
+Technologie des microstructures I|1776702|MICRO-331
+Méthodes de production|1774827|MICRO-340
+Interfaces in biology and nanoscience|1580272486|MICRO-391
+Selected topics in advanced optics|1776027743|MICRO-420
+Lasers : theory and modern applications|1776024041|MICRO-422
+Scaling laws in micro- and nanosystems|824206674|MICRO-430
+Microstructures technology II|1776047660|MICRO-431
+Microelectronics|71603578|MICRO-432
+Assemblage et robotique TP|1771905|MICRO-442
+Bases de la robotique|824210739|MICRO-450
+Mobile robots|1776107|MICRO-454
+Applied machine learning|47233600|MICRO-455
+Project in neuroprosthetics|1582861537|MICRO-486
+Projet microtechnique I|1775907|MICRO-498
+Projet microtechnique II|1775912|MICRO-499
+Image processing I|47994028|MICRO-511
+Flexible bioelectronics|1658221961|MICRO-514
+Optical detectors|1776050537|MICRO-523
+Nanotechnology|1659463240|MICRO-530
+BioMEMS|23996074|MICRO-560
+Biomicroscopy I|47830388|MICRO-561
+Projet en technologies biomédicales|229613299|MICRO-563
+Seminar in physiology and instrumentation|1676570902|MICRO-568
+Stage d'ingénieur crédité avec le PDM (master en  Microtechnique)|652078044|MICRO-597
+Projet de master en microtechnique|132424568|MICRO-599
+Introduction à la science des matériaux (sem. automne)|72257890|MSE-100(b)
+Milieux continus|1774972|MSE-203
+Thermodynamics for materials science|838974819|MSE-204
+Matériaux microtechniques : polymères et céramiques|1888084194|MSE-208
+Propriétés fonctionnelles des matériaux|352055084|MSE-210
+Métaux et alliages + TP|1771705517|MSE-236
+Matériaux II|1774567|MSE-270
+Theory of materials : from structures to properties |1888393325|MSE-300
+Surfaces and interfaces|838978162|MSE-304
+Déformations des matériaux|1771712588|MSE-310
+Elaboration des céramiques et des colloïdes +TP|838976977|MSE-326
+Composites polymères + TP|838976529|MSE-340
+Introduction à la microscopie + TP|838977426|MSE-352
+Technologie et mise en oeuvre des polymères + TP|838978869|MSE-360
+Projet Matériaux|838979534|MSE-390
+Materials Science|24429568|MSE-403
+Cementitious materials (advanced)|1774522|MSE-420
+Fundamentals of solid-state materials|1888395138|MSE-423
+Fracture of materials|1888395622|MSE-424
+Soft matter|1888395338|MSE-425
+Life cycle engineering of polymers|840801900|MSE-430
+Polymer chemistry and macromolecular engineering|1771538|MSE-437
+Composites technology|71630664|MSE-440
+Electrochemistry for materials technology|1771714545|MSE-441
+Modelling problem solving, computing and visualisation I|1928513209|MSE-443(a)
+Electron microscopy: advanced methods|128342116|MSE-450
+Powder technology|71630770|MSE-462
+Thin film fabrication processes|1773427|MSE-465
+Seminar series on advances in materials|71629360|MSE-470
+Biomaterials (pour MX)|1702138731|MSE-471
+Matériaux pierreux et conservation du patrimoine bâti|352059962|MSE-472
+Advanced nanomaterials|229734640|MSE-477
+Introduction to nanomaterials|229734572|MSE-479
+Tribology|840814050|MSE-485
+Research project in materials I|352059100|MSE-490(a)
+Research project in materials II|352059163|MSE-490(b)
+Specialisation project in materials|1888402628|MSE-490(c)
+Stage d'ingénieur crédité avec le PDM (master en  Science et génie des matériaux)|652078287|MSE-597
+Projet de master en science et génie des matériaux|132428658|MSE-599
+Physique avancée I|1659017558|PHYS-100
+Physique générale I|1775427|PHYS-101(a)
+Physique générale I|1775427|PHYS-101(b)
+Physique générale I|1775427|PHYS-101(c)
+Physique générale I|1775427|PHYS-101(d)
+Physique générale I (allemand)|2207995|PHYS-101(de)
+Physique générale I|1775427|PHYS-101(e)
+Physique générale I (anglais)|784634759|PHYS-101(en)
+Physique générale I|1775427|PHYS-101(f)
+Physique générale I|1775427|PHYS-101(g)
+Physique générale I|1775427|PHYS-101(h)
+Physique générale I|1775427|PHYS-101(i)
+Laboratoire de physique (métrologie) Ia|1659025202|PHYS-104
+General physics II|1888788429|PHYS-114
+Physique du bâtiment I|1775332|PHYS-115
+Physique III|1775477|PHYS-200
+Physique générale III|1775452|PHYS-201(a)
+Physique générale III|1775452|PHYS-201(b)
+Physique générale III|1775452|PHYS-201(c)
+General physics III|359060026|PHYS-201(e)
+Physique du bâtiment III|1775342|PHYS-217
+Biophysics II|431474304|PHYS-302
+Physics of materials|1803204353|PHYS-307
+Physique du solide I|1775372|PHYS-309
+Physique nucléaire et corpusculaire I|1775497|PHYS-311
+Physique quantique I|1775507|PHYS-313
+Physique statistique I|1775532|PHYS-315
+Optique II|1775157|PHYS-318
+Laboratoire de physique IIIa|1659048310|PHYS-319
+Electrodynamique classique|1773442|PHYS-324
+Physique du bâtiment V|1775352|PHYS-335
+Astrophysics III : Stellar and galactic dynamics|230678232|PHYS-401
+Computer simulation of physical systems I|128848626|PHYS-403
+Experimental methods in physics I|128690863|PHYS-405
+Frontiers in nanosciences|243429820|PHYS-407
+Physics of atoms, nuclei and elementary particles|138587084|PHYS-411
+Particules élémentaires I|1775212|PHYS-415
+Physique du solide III|1775382|PHYS-419
+Laboratoire de physique IVa|1684920459|PHYS-421
+Laboratoire de physique IVb|1684920421|PHYS-422
+Plasma physics II|127857132|PHYS-423
+Quantum physics III|1775517|PHYS-425
+Relativity and cosmology I|128851969|PHYS-427
+Relativistic quantum fields I|128847590|PHYS-431
+Semiconductor physics and fundamentals of electronic devices|1913487410|PHYS-433
+Statistical physics III|128851781|PHYS-435
+Statistical physics of biomacromolecules|128851631|PHYS-441
+Neutronics|128851000|PHYS-443
+Nuclear fusion and plasma physics|129286243|PHYS-445
+Reactor Experiments|129285391|PHYS-446
+Reactor Technology|128852199|PHYS-447
+Introduction to particle accelerators|24375105|PHYS-448
+Radiation protection & radiation applications|1771693280|PHYS-450
+Quantum electrodynamics and quantum optics|1771690442|PHYS-453
+Medical radiation physics |1803668078|PHYS-455
+Metrology I|1771714259|PHYS-458
+Projet de master en physique|132425627|PHYS-500(a)
+Projet de master en génie nucléaire|266851392|PHYS-501(a)
+Projet de master en physique|132425627|PHYS-502(a)
+Stage d'ingénieur (master en Génie nucléaire)|652059419|PHYS-595
+Stage d'ingénieur (master en Ingénierie physique)|354383690|PHYS-596
+Algèbre linéaire (pour CMS)|85594280|PREPA-001
+Analyse I, II (pour CMS)|71644560|PREPA-003
+Analyse I, II (pour CMS)|71644560|PREPA-005
+Application des mathématiques (CMS)|1771829|PREPA-007
+Biologie (pour CMS)|29870604|PREPA-009
+Chimie (pour CMS)|1772417|PREPA-011
+Géométrie analytique (pour CMS)|1773787|PREPA-013
+Géométrie descriptive (pour CMS)|1773792|PREPA-015
+Informatique (pour CMS)|1774102|PREPA-017
+Physique (pour CMS)|1775277|PREPA-021

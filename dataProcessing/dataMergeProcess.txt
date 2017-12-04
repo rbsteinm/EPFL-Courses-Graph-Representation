@@ -1,0 +1,3 @@
+1. join  with course code, join over subject ids and fill null course codes in kshitij's isa_subject_id... file
+	to test if it's matching properly, join subjects table, using subjectid
+2. course_info.csv (scraped): no subject ID (string comparison) try to fill remaining nulls

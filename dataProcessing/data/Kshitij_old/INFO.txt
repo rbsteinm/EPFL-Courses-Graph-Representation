@@ -1,0 +1,3 @@
+inference 1: comes from the description of the course
+inference 2: comes from Wikipedia
+edges_CS: only the computer science courses
