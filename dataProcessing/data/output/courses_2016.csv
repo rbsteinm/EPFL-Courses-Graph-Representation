@@ -1,0 +1,765 @@
+Id,SubjectName,AssociatedCourseCodes
+1179245,Analyse numérique,MATH-150; MATH-250; MATH-251(a); MATH-251(b); MATH-251(c); MATH-251(d)
+1705590,Analyse I,MATH-100; MATH-100(a); MATH-100(b); MATH-101(a); MATH-101(b); MATH-101(c); MATH-101(d); MATH-101(e); MATH-101(f); MATH-101(g); MATH-102; MATH-103
+1748172,Analyse I (allemand),MATH-101(de); MATH-104
+1770632,Barrages et ouvrages hydrauliques annexes,CIVIL-411
+1770678,Applied molecular quantum chemistry,CH-451
+1770798,Biometrics,EE-513; EE-591; UNIL-402
+1770923,Advanced computer graphics,CS-440
+1770973,Cryptography and security,COM-401
+1771018,Dynamical system theory for engineers,COM-502
+1771058,Embedded systems,CS-473
+1771183,Intelligent agents,CS-430
+1771203,Introduction to computer vision,CS-310
+1771468,Pattern classification and machine learning,CS-433
+1771488,Photochemistry II,CH-443
+1771538,Polymer chemistry and macromolecular engineering,CH-437; MSE-437
+1771573,Process development I,ChE-451
+1771718,Structure and reactivity,CH-432
+1771764,TCP/IP networking,COM-407
+1771794,Unsupervised and reinforcement learning in neural networks,CS-434
+1771829,Application des mathématiques (CMS),PREPA-007; PREPA-008
+1771849,Architecture et construction de la ville I,AR-451
+1771905,Assemblage et robotique TP,MICRO-442
+1772025,Biologie I,BIO-103
+1772030,Biologie II,BIO-104
+1772065,Advanced digital communications,COM-510
+1772075,Aérodynamique,ME-441; ME-445
+1772085,Algèbre,MATH-310
+1772095,Algèbre linéaire,MATH-111(a); MATH-111(b); MATH-111(c); MATH-111(d); MATH-111(e); MATH-111(f); MATH-111(g)
+1772230,Analyse III,MATH-200; MATH-201; MATH-202; MATH-202(c); MATH-203(a); MATH-203(b); MATH-203(c)
+1772235,Analyse IV ,MATH-205; MATH-206; MATH-207(a); MATH-207(b); MATH-207(c); MATH-207(d)
+1772250,Analyse structurale,CH-201
+1772275,Molecular and cellular biophysic I,CH-311
+1772335,Cavitation et phénomènes d'interface,ME-447; ME-462
+1772417,Chimie (pour CMS),PREPA-011; PREPA-012
+1772432,Bioinorganic chemistry,CH-321
+1772492,Chimie des denrées alimentaires,ENG-433
+1772497,Chemistry of elements s and p,CH-221
+1772587,Chimie physique des interfaces,CH-341
+1772657,Circuits et systèmes électroniques I,EE-331
+1772992,Psychologie sociale A,HUM-218
+1772997,"Médias, communication et culture",HUM-204
+1773002,Psychologie cognitive A,HUM-213
+1773287,Distributed algorithms,CS-451
+1773337,Dynamique des structures,CIVIL-420
+1773402,Two-phase flows and heat transfer,ME-446
+1773427,Thin film fabrication processes,MSE-465
+1773437,Electrochimie des solutions,CH-243
+1773442,Electrodynamique classique,PHYS-324
+1773452,Electromagnétisme I : lignes et ondes,EE-200
+1773472,Electronique II,EE-203; EE-203(A); EE-203(B); EE-203(a); EE-203(b); EE-291
+1773492,Electronique I,EE-202; EE-202(A); EE-202(B); EE-202(a); EE-202(b); EE-290
+1773592,Energétique du bâtiment,ENG-445
+1773632,Etudes d'impact,ENG-474
+1773647,Fabrication assistée par ordinateur,ME-416
+1773682,Fonctions et réactions organiques II,CH-232; CH-233
+1773787,Géométrie analytique (pour CMS),PREPA-013; PREPA-014
+1773792,Géométrie descriptive (pour CMS),PREPA-015; PREPA-016
+1773797,Géométrie I,MATH-120; MATH-124
+1773822,Gestion de la maintenance des infrastructures,CIVIL-455
+1773962,Histoire de l'architecture I,AR-123
+1773972,Histoire de l'architecture III,AR-223
+1773982,Histoire de l'architecture V,AR-323
+1774027,Hydraulique fluviale et aménagement de cours d'eau,CIVIL-410
+1774062,Microwaves,EE-445
+1774097,Information theory and coding,COM-404
+1774102,Informatique (pour CMS),PREPA-017; PREPA-018
+1774172,Initiation à l'électronique,EE-282; EE-294
+1774457,Localisation par satellites,ENV-340
+1774472,Machines électriques (pour GM),EE-361; EE-382; EE-393
+1774512,Martingales et applications,MATH-330
+1774522,Cementitious materials (advanced),MSE-420
+1774547,Matériaux et structures,CIVIL-532
+1774567,Matériaux II,MSE-172; MSE-270
+1774642,Mathématiques I,MATH-180; MATH-181; MATH-184
+1774677,Mécanique des fluides incompressibles,ME-344
+1774762,Mécanique vibratoire,ME-332
+1774797,Méthode des éléments finis,ME-372
+1774827,Méthodes de production,MICRO-340
+1774837,Méthodes de séparation analytiques,CH-301
+1774972,Milieux continus,MSE-203
+1774997,Modèles stochastiques pour les communications,COM-300
+1775032,Modélisation et représentation informatique I,AR-411
+1775157,Optique II,PHYS-318
+1775212,Particules élémentaires I,PHYS-415
+1775277,Physique (pour CMS),PREPA-021; PREPA-022
+1775332,Physique du bâtiment I,AR-133; PHYS-115
+1775342,Physique du bâtiment III,AR-233; PHYS-217
+1775352,Physique du bâtiment V,AR-333; PHYS-335
+1775372,Physique du solide I,PHYS-309
+1775382,Physique du solide III,PHYS-419
+1775427,Physique générale I,(PHYS-101(a)); (PHYS-101(b)); (PHYS-101(c)); (PHYS-101(d)); (PHYS-101(e)); (PHYS-101(f)); (PHYS-101(g)); (PHYS-101(h)); (PHYS-101(i)); PHYS-101(a); PHYS-101(b); PHYS-101(c); PHYS-101(d); PHYS-101(e); PHYS-101(f); PHYS-101(g); PHYS-101(h); PHYS-101(i); PHYS-102; PHYS-205
+1775452,Physique générale III,PHYS-201(a); PHYS-201(b); PHYS-201(c); PHYS-201(d); PHYS-201(e)
+1775477,Physique III,PHYS-200
+1775497,Physique nucléaire et corpusculaire I,PHYS-311
+1775507,Physique quantique I,PHYS-313
+1775517,Quantum physics III,PHYS-425
+1775532,Physique statistique I,PHYS-315
+1775602,Ponts en béton,CIVIL-430
+1775637,Probabilités,MATH-230
+1775642,Probabilités et statistique,MATH-131; MATH-232; MATH-233; MATH-234(a); MATH-234(b); MATH-234(c); MATH-234(d)
+1775647,Probabilités et statistique I,MATH-231
+1775692,Programmation,CS-111(a); CS-111(b); CS-111(d); CS-111(f); CS-115
+1775697,Programmation I,CS-111; CS-111(c); CS-111(e); CS-111(g); CS-111(i)
+1775702,Programmation II,CS-112(c); CS-112(e); CS-112(g); CS-112(i); CS-113
+1775757,Projet de conception,ME-313
+1775782,Projet ENAC,CIVIL-494; CIVIL-495; ENV-494; PENS-490
+1775867,Projet Génie mécanique II,ME-402; ME-501
+1775907,Projet microtechnique I,MICRO-498
+1775912,Projet microtechnique II,MICRO-499
+1776002,Rayonnement et antennes,EE-345
+1776057,Réseaux électriques,EE-370
+1776067,Computer networks,COM-208
+1776087,Ressources humaines dans les projets,MGT-365
+1776107,Mobile robots,MICRO-452; MICRO-454; MICRO-552
+1776342,Sociologie urbaine,AR-489
+1776347,Software-defined radio: a hands-on course,COM-511
+1776377,Statistique,MATH-240
+1776477,"Structures en métal, chapitres choisis",CIVIL-526
+1776592,Systèmes logiques,CS-171; CS-172; EE-110
+1776627,Systèmes vibratoires,MICRO-300
+1776687,Integrated circuits technology,EE-531; EE-532
+1776702,Technologie des microstructures I,MICRO-331
+1776787,Théorie de l'architecture III,AR-221
+1776797,Théorie de l'architecture V,AR-321
+1777057,Transducteurs et entraînements intégrés,EE-461; MICRO-569
+1777127,Hydraulic turbomachines,ME-453
+1777132,Turbomachines thermiques,ME-455
+2207995,Physique générale I (allemand),PHYS-101(de); PHYS-103
+2208445,"Organisation, économie et droit de la construction I",ENG-470
+2214296,Projet SIE/ENAC,ENV-597
+2222268,Nanoelectronics,EE-535
+2229035,Equations différentielles ordinaires,MATH-301
+2258520,Informatique du temps réel,CS-321
+2258712,Algorithms,CS-250
+2328456,Electronique,EE-280; EE-292
+2348799,Advanced analysis I,MATH-400
+3855141,Analysis III,MATH-201
+4144648,Architecture des ordinateurs,CS-208
+4144900,Biochimie I,CH-111; CH-210; CH-210(a)
+4145120,Introduction to cellular and molecular biotechnology,BIOENG-331; BIOENG-430
+4145236,Chemical engineering lab & project,ChE-409
+4145668,Composants semiconducteurs,MICRO-312
+4148121,Introduction à la théorie algébrique des nombres,MATH-312
+4150874,Statistique multivariée,MATH-444
+4151162,Sécurité des réseaux,COM-301; CS-323
+4151854,UE E : Architecture et structures,AR-438
+4151954,Villes et transports,CIVIL-451
+4649823,Analyse des polluants dans l'environnement,ENV-300
+4651611,Stage d'ingénieur (master en Sciences et technologie du vivant),BIO-591; BIOENG-596
+22827171,Etude et analyse des systèmes énergétiques,CIVIL-340
+23325791,"Structures en béton, chapitres choisis",CIVIL-525
+23610182,Projet GC,CIVIL-390
+23812659,Sciences de la ville I,AR-459
+23813560,Habitat et développement urbain,AR-465
+23815258,UE J : Territoire et paysage,AR-471
+23939045,Conversion électromécanique II,MICRO-313
+23985449,Législation environnementale et droit de la construction,ENV-367
+23985644,"Analyse du cycle de vie, écobilan",ENV-370
+23996074,BioMEMS,MICRO-560
+23996396,Analog circuits design I,EE-420
+24002581,Systèmes de management environnementaux,ENV-469
+24004448,Ecologie numérique,ENV-521
+24005195,Risques hydrologiques et aménagements,ENV-524; ME-453
+24092923,Software engineering,CS-305
+24102460,Hardware systems modeling I,EE-432
+24164994,Design technologies for integrated systems,CS-471; CS-472
+24165904,Image and video processing,EE-550
+24166696,Satellite communications  systems and networks,COM-414
+24174877,Histoire de l'architecture VII,AR-423
+24175202,Théorie de l'architecture VII,AR-421
+24261148,UE F : Architecture et réhabilitation,AR-439
+24302061,HF and VHF circuits and techniques I,EE-425
+24334799,Advanced analog and RF integrated circuits design I,EE-520
+24335296,Wave propagation along transmission lines,EE-572; EE-575
+24345947,Mesure et intégration,MATH-303
+24346085,Théorie de Galois,MATH-317
+24346308,Topologie I,MATH-220
+24346316,Topologie II,MATH-225
+24375105,Introduction to particle accelerators,PHYS-448
+24429568,Materials Science,BIO-313; MSE-403
+24508366,Systèmes électriques et électroniques I,EE-295
+29870604,Biologie (pour CMS),PREPA-009; PREPA-010
+40249208,Physical models for micro and nanosystems,EE-536
+44378947,Physique moléculaire,CH-462
+44989325,Eco-morphologie fluviale,CIVIL-418; ENV-418
+46641934,Pré-étude projet de master,CIVIL-598
+47233600,Applied machine learning,MICRO-455; MICRO-550
+47241891,Test of VLSI systems,EE-530
+47244272,Spacecraft design and system engineering,EE-584
+47390229,Advanced composites in engineering structures,CIVIL-443
+47564647,Microbiologie pour l'ingénieur,ENV-202
+47565939,Système d'Information Géographique (SIG),ENV-342
+47572475,Advanced solid waste treatment,ENV-500
+47572529,Environmental transport phenomena,ENG-420
+47572541,Water resources engineering,ENV-424
+47830388,Biomicroscopy I,BIOENG-561; MICRO-561
+47832968,Enoncé théorique de master,AR-598
+47848061,Discrete structures,CS-150
+47947735,Molecular endocrinology,BIO-450
+47977389,Introduction aux variétés différentiables,MATH-322
+47980922,Statistical theory,MATH-442
+47987731,Spectroscopy,CH-343
+47994028,Image processing I,MICRO-511
+47995206,Cancer Biology I,BIO-471
+47997051,Information technology and e-business strategy,MGT-439
+48099118,Chemical engineering of heterogenous reactions,ChE-403
+48289169,Stem cell biology and technology,BIO-447
+71466583,UE B : Critique architecturale,AR-426; AR-432
+71466740,Art et histoire des jardins,AR-453; AR-454
+71470103,Théorie et critique du projet BA5 (Graf F.),AR-301(b)
+71471393,Théorie et critique du projet MA1 (Gugger),AR-401(b)
+71471407,Théorie et critique du projet MA1 (Weinand),AR-401(e)
+71544480,Introduction to environmental engineering,ENV-167
+71544625,Méthodes quantitatives I,ENG-267
+71556171,Sciences du sol,ENV-222
+71559290,Remédiation des sites,ENV-301
+71603578,Microelectronics,MICRO-432
+71603711,Cellular biology and biochemistry for engineers,BIO-105
+71629360,Seminar series on advances in materials,MSE-470
+71630664,Composites technology,MSE-440
+71630770,Powder technology,MSE-462
+71644441,Microelectronics for systems on chips,CS-474
+71645784,Programmation orientée système,CS-207
+71826349,TP de bioprocédés environnementaux,ENV-506
+71840397,Foundations of software,CS-452
+71855072,Equilibres et réactivité chimiques,CH-101
+71877719,Electronic spectroscopy,CH-444
+71883318,Project in molecular sciences,CH-491
+71898059,Principles and applications of systems biology,ChE-411
+71966057,Global business environment,FIN-523; MGT-452
+72257890,Introduction à la science des matériaux (automne),MSE-100; MSE-100(a); MSE-100(b)
+72259375,Projet d'électricité,EE-399
+72259536,Projet en énergie,ME-450
+72259583,Projet en systèmes de communication I,COM-307
+72259597,Projet en technologies spatiales,EE-589
+72259676,Projet interdisciplinaire à option,CIVIL-493
+72260050,SHS : Projet complet,HUM-400
+72495962,Spatial statistics and analysis,ENG-440
+72496701,Water and wastewater treatment,ENV-405
+72497223,Analyse des flux de matière,ENV-501
+75309053,Modeling of emerging electron devices,EE-537
+80395102,Introduction to finance (IF master and minor only),FIN-401; MGT-480
+80958519,Comportement organisationnel A,HUM-346; MGT-465
+82805306,Projet en systèmes de communication II,COM-416
+85594280,Algèbre linéaire (pour CMS),PREPA-001; PREPA-002
+90181927,Projet de master pour étudiant venant en échange à l'EPFL,EPFL-401
+125910731,Dynamiques spatiales et acteurs du territoire,AR-351
+126727237,Caractères architecturaux et urbanismes de l'Islam,AR-457
+126877750,Mécanique des structures (pour GM),ME-231; ME-232
+127005949,Conception de mécanismes spatiaux : introduction,EE-580
+127857132,Plasma physics II,PHYS-423
+128314283,Graph theory,MATH-360
+128342116,Electron microscopy: advanced methods,(MSE-450); MSE-450
+128676455,Projet en informatique I,CS-398
+128676975,Projet en informatique II,CS-498
+128690863,Experimental methods in physics I,PHYS-405
+128789807,Advanced multiprocessor architecture,CS-471
+128846720,Advanced Fossil and Renewable Energy Systems,ME-442
+128847590,Relativistic quantum fields I,PHYS-431
+128848626,Computer simulation of physical systems I,PHYS-403
+128851000,Neutronics,PHYS-443
+128851631,Statistical physics of biomacromolecules,PHYS-441
+128851781,Statistical physics III,PHYS-435
+128851969,Relativity and cosmology I,PHYS-427
+128852199,Reactor Technology,PHYS-447
+129285391,Reactor Experiments,PHYS-446
+129286243,Nuclear fusion and plasma physics,PHYS-445
+129609800,Théorie des groupes,MATH-211; MATH-314
+129686166,Combinatorial optimization,MATH-460
+129687015,Geometric graph theory,MATH-461; MATH-466
+129688728,Mathematical modelling of behavior,MATH-463
+129699210,Time series,MATH-342; MATH-445
+129776728,Inorganic reactivity,CH-423
+129833984,Catalyst design for synthesis,CH-422
+129871669,Robust and nonparametric statistics,MATH-441
+130130740,Equilibrium-stage separation processes,ChE-306; ChE-401
+132121224,Fluid mechanics for SV,BIOENG-312
+132147064,Biomechanics of the cardiovascular system,ME-481
+132424187,Projet de master en génie mécanique,ME-599
+132424568,Projet de master en microtechnique,MICRO-599
+132424935,Projet de master en génie électrique et électronique,EE-599; EE-599(a)
+132425231,Projet de master en systèmes de communication,COM-509; COM-599
+132425627,Projet de master en physique,PHYS-500(a); PHYS-500(b); PHYS-502(a); PHYS-502(b); PHYS-599(b)
+132425754,Projet de master en chimie moléculaire et biologique,CH-599
+132426961,Projet de master en mathématiques,MATH-599
+132427120,Projet de master en informatique,CS-599
+132428658,Projet de master en science et génie des matériaux,MSE-599; MSE-599(a); MSE-599(b)
+132446543,Projet de master en architecture,AR-599
+132448364,Projet de master en sciences et technologies du vivant,BIO-598; BIO-598(a); BIO-598(b)
+132448731,Projet de master en management de la technologie,MGT-599
+132449292,Projet de master en ingénierie financière,FIN-599
+134468934,Projet de master en génie civil,CIVIL-599
+134558496,Projet de master en sciences et ingénierie de l'environnement,ENV-599
+134558590,Projet de master en bioingénierie et biotechnologie,BIO-599
+136703631,Laboratoire GC,CIVIL-492
+136704168,Projet de construction,CIVIL-490
+136704309,Projet de systèmes civils,CIVIL-491
+138587084,"Physics of atoms, nuclei and elementary particles",PHYS-411
+146861779,Projet Génie mécanique I,ME-401
+161867929,Semester Project Nuclear Engineering,ETH-590
+161868049,Advanced Topics in Nuclear Reactor Materials,ETH-530; PHYS-456
+227234245,Théorie et critique du projet MA1 (Lamunière),AR-401(i)
+227318424,Structures en béton,CIVIL-234
+228377622,Advanced energetics,ME-451
+228381203,Commande non linéaire,ME-523
+228383796,Engines and fuel cells,ME-551
+228388747,Numerical flow simulation,ME-474
+228390459,Production management,ME-419
+229613299,Projet en technologies biomédicales,MICRO-563; MICRO-563(a); MICRO-563(b)
+229720940,Biomedical signal processing,EE-512
+229734572,Introduction to nanomaterials,MSE-479
+229734640,Advanced nanomaterials,MSE-477
+229912643,Financial & managerial accounting,MGT-481
+229913760,Macrofinance,FIN-406
+229971214,Sécurité et fiabilité,CIVIL-237; CIVIL-337
+229987786,Econometrics,FIN-403
+229988060,Quantitative methods in finance,FIN-402
+229988298,Advanced derivatives,FIN-503
+230003664,Advanced topics in financial econometrics,FIN-521
+230301204,Numerical integration of dynamical systems,MATH-452
+230597543,Logique mathématique,MATH-381; MATH-382
+230665709,Chimie analytique expérimentale,CH-309(a); CH-309(b)
+230666083,Introduction to electronic structure methods,CH-353
+230672285,Management of industrial production,ENG-434
+230678232,Astrophysics III : Stellar and galactic dynamics,PHYS-401
+231606915,Mécanique des milieux continus (pour GC),CIVIL-125; CIVIL-225
+231617900,"Génie sanitaire, gestion des eaux et des déchets",ENV-304
+231672762,Sanitary engineering in developing countries,ENV-402
+231677206,Distributed intelligent systems,ENG-466; ENG-466(a)
+231901032,Concurrent algorithms,CS-453
+231957235,Optional project in communication systems,COM-507
+231957545,Optional project in computer science,CS-596; CS-597
+231957812,Program parallelization on PC clusters,CS-425
+232289697,Neurosciences I : molecular neuroscience and neurodegeneration,BIO-480
+234597759,Stage d'ingénieur (master en Génie chimique et Biotechnologie),ChE-596
+235424562,État et droits humains,HUM-208
+235424693,Histoire et théorie du cinéma,HUM-233
+236283202,Real options and financial structuring,FIN-410
+241135439,Introduction to planetary sciences,EE-586
+243429820,Frontiers in nanosciences,PHYS-407
+243791097,Projet CSE I,MATH-591
+243791456,Projet CSE II,MATH-592
+249353044,Design industriel I,HUM-206
+249371091,Design industriel III,HUM-306
+249730357,Géopolitique et politique de la mondialisation I,HUM-415(a)
+249730431,Hommes / Machines I,HUM-416(a)
+249735026,Understanding modern Switzerland I,HUM-422(A); HUM-422(a)
+249735109,Understanding modern Switzerland II,HUM-422(B); HUM-422(b)
+249735302,Droit et technique I,HUM-410(a)
+249749117,Design industriel V,HUM-408(a)
+250986010,Introduction to chemical engineering I,ChE-201
+250991626,Computational methods in molecular quantum mechanics,CH-452
+257434376,Chimie biologique I (pour SV),BIO-111
+260077392,Microbiology,BIO-372
+260079039,Chimie TP I ,CH-108(a)
+266851392,Projet de master en génie nucléaire,PHYS-501(a); PHYS-501(b); PHYS-598
+338340784,Fundamentals of traffic operations and control,CIVIL-457
+348210408,Structures et matériaux I,AR-239
+348211982,Théorie de l'urbanisme I,AR-260; AR-261
+348607885,Transportation systems engineering,CIVIL-351
+348608416,Hydrology for engineer,ENV-221
+348634646,Geomonitoring,ENV-445
+348637649,Fate and behaviour of organic pollutants,ENV-507
+348715502,Circuits et systèmes I,EE-204
+348716744,Circuits and systems II,EE-205
+348760034,Automatic speech processing,EE-554
+350462476,Biochemistry II,CH-313
+350468544,Biologie moléculaire,BIO-201
+350847112,Pharmaceutical biotechnology,BIOENG-437
+350849052,Physiologie par systèmes I,BIO-376
+350861389,Audio,EE-548
+351053875,Biologie cellulaire et moléculaire I,BIO-100; BIO-205
+352055084,Propriétés fonctionnelles des matériaux,MSE-210
+352059100,Research project in materials I,MSE-490(a)
+352059163,Research project in materials II,MSE-490(b)
+352059962,Matériaux pierreux et conservation du patrimoine bâti,MSE-472
+352067537,Projets en informatique (pour SV),CS-116
+352072600,Project in bioengineering and biosciences,BIOENG-390
+352252328,Modélisation mathématique et computationnelle en biologie,BIO-341
+352254973,Genomics and bioinformatics,BIO-463
+352617902,Applied probability & stochastic processes,COM-419; MGT-484
+352624843,Principles of microeconomics,MGT-454
+352625368,Corporate strategy,MGT-400
+352632242,Strategic marketing & technology commercialization,MGT-401
+353834062,Management de projet et analyse du risque,MGT-427
+353945800,Negotiation techniques,MGT-466
+353946213,Presentation skills,MGT-469
+354337707,Systèmes embarqués microprogrammés,EE-310
+354383074,Introduction to the finite elements method,MATH-350
+354383690,Stage d'ingénieur (master en Ingénierie physique),PHYS-596
+354984919,Numerical Analysis and Computational Mathematics,MATH-456
+354987130,Data analysis and model classification,EE-516
+355561756,Stage d'ingénieur (master en  Sciences et ingénierie computationnelles),MATH-595
+355590267,Lab immersion I,BIO-501
+355590564,Lab immersion II,BIO-502
+355591210,Lab immersion III,BIO-503
+359060026,General physics III,PHYS-201(b); PHYS-201(d); PHYS-201(e)
+400766326,Ingénierie optique I,MICRO-321
+405237425,"Cerveau, esprit et société",HUM-106; HUM-256
+405238132,Travail et organisations,HUM-220
+405250632,"Musique, politique, société I",HUM-406(a)
+414819112,Dimensionnement des constructions en bois,CIVIL-331
+426521225,Stage d'ingénieur (master en Ingénierie mathématique),MATH-596
+431474304,Biophysics II,PHYS-302
+432433317,Beyond-design-basis safety,ETH-532
+438961411,Immunology (advanced topics),BIO-479
+444503507,Professions et carrières,HUM-320
+444523163,Snow physics and hydrology,ENV-525
+445435350,Going East I,HUM-402(a)
+445483403,"Internet : enjeux sociaux, enjeux mondiaux I",HUM-405(a)
+455262375,Advanced methods in computational solid mechanics,CIVIL-523
+467191817,Stage d'ingénieur (master en Bioingénierie),BIO-590; BIO-596; BIOENG-596
+468310629,Total synthesis of natural products,CH-438
+652058540,Stage d'ingénieur crédité avec le PDM (master en  Génie civil),CIVIL-597
+652058942,Stage d'ingénieur crédité avec le PDM (master en Génie électrique et électronique),EE-596; EE-597; EE-597(a)
+652059419,Stage d'ingénieur (master en Génie nucléaire),PHYS-595
+652061370,Stage d'ingénieur crédité avec le PDM (master en Informatique),CS-595
+652076110,Stage d'ingénieur crédité avec le PDM (master en Systèmes de communication),COM-595; COM-597
+652076651,Stage d'ingénieur crédité avec le PDM (master en Sciences et ingénierie de l'environnement),ENV-598
+652077020,Stage d'ingénieur crédité avec le PDM (master en Ingénierie mathématique),MATH-596; MATH-597
+652077693,Stage d'ingénieur crédité avec le PDM (master en  Génie mécanique),ME-597
+652078044,Stage d'ingénieur crédité avec le PDM (master en  Microtechnique),MICRO-597
+652078287,Stage d'ingénieur crédité avec le PDM (master en  Science et génie des matériaux),MSE-597
+652078498,Stage d'ingénieur (master en Génie électrique et électronique),EE-596(a)
+784634759,Physique générale I (anglais),PHYS-101(en); PHYS-111
+784637359,Introduction à la programmation,CS-106; CS-107; CS-118
+824161299,Biomechanics of the musculoskeletal system,ME-482
+824206674,Scaling laws in micro- and nanosystems,MICRO-430
+824210739,Bases de la robotique,MICRO-450
+830854788,Nuclear Computations Lab,ETH-531; PHYS-457
+830900311,Exploitation ferroviaire,CIVIL-452
+830901136,Voies de circulation,CIVIL-406
+837364272,Elliptic partial differential equations,MATH-406
+837368471,Probability theory,MATH-432
+837370054,Set theory,MATH-318
+837374708,Construction et durabilité V,AR-331
+838974819,Thermodynamics for materials science,MSE-204
+838976279,Informatique pour l'ingénieur,ENV-270
+838976529,Composites polymères + TP,MSE-340
+838976977,Elaboration des céramiques et des colloïdes +TP,MSE-326
+838977426,Introduction à la microscopie + TP,MSE-352
+838978162,Surfaces and interfaces,MSE-304
+838978869,Technologie et mise en oeuvre des polymères + TP,MSE-360
+838979534,Projet matériaux,MSE-390
+839100255,Biomedical optics,BIOENG-445
+840801900,Life cycle engineering of polymers,MSE-430
+840814050,Tribology,MSE-485
+840843791,Entrepreneurship laboratory (e-lab),MGT-517
+840844976,B2B - high-tech marketing,MGT-402
+840861451,Credit risk,FIN-504
+840861591,Fixed income analysis,FIN-505
+842513489,Stochastic calculus I,FIN-408
+842513650,Securitization & the financial crisis,FIN-524
+842513718,Venture capital,FIN-522
+862953095,Project in energy management and sustainability I,ENG-472(a)
+900058271,Philosophie des sciences A,HUM-216; HUM-238
+901865880,Culture médiatique I,HUM-404(a)
+938058920,Mécanique des structures (pour GC),CIVIL-223
+967657884,Projet de master en science et ingénierie computationelles,MATH-598
+1046491990,Biological chemistry II (for SV),BIO-212
+1156258190,Part 4 : Research project in Area and Cultural Studies,HUM-483; HUM-484
+1494716829,UE K : Architecture et durabilité : études de performances,AR-440
+1494718976,UE O : Béton. Matière de construction,AR-447
+1496923419,Histoire du béton,AR-425
+1496924504,Urbanisme et territoires,AR-455
+1497044684,Numerical approximation of PDE's I,MATH-451
+1497047397,Programming concepts in scientific computing,MATH-458
+1499247990,Control systems + TP,ME-321; ME-325
+1499248312,Conversion d'énergie,EE-360
+1499250198,Traitement des signaux,EE-350
+1499251995,Circuits intégrés I,EE-320
+1499334061,Conception de systèmes numériques pour EL,EE-334
+1499336370,Electroacoustique,EE-348
+1499340075,Distribution de l'énergie électrique,EE-371
+1499342340,"Environnements de travail, risques professionnels",ENV-468
+1499348352,Wireless receivers: algorithms and architectures,EE-442
+1499350096,Industrial electronics I,EE-465
+1499350407,Sensor orientation,ENV-541; ENV-548
+1501687491,Principles of computer systems,CS-522
+1513577805,"Chimie organique, TP",CH-230
+1533900991,Chemistry of small biological molecules,CH-415
+1543013152,Introduction au droit et à l'éthique en STV,BIO-455
+1543121640,Operations: economics & strategy,MGT-528
+1543121763,Early detection of innovation potential,MGT-500
+1567044774,Methods for rapid production and development,ME-415
+1576313429,Design de SIG,ENV-547
+1577870692,Théorie et critique du projet BA5 (Ortelli L.),AR-301(c)
+1578086108,Automatique + TP,ME-321; ME-325
+1578290162,Advanced numerical analysis,MATH-351
+1580209507,Croissance et développement durable,HUM-308
+1580213011,Histoire de l'image A,HUM-311
+1580213986,Introduction au droit de la propriété intellectuelle,HUM-352
+1580214098,Entrepreneurship,HUM-348
+1580214404,Musicologie et histoire de la musique A,HUM-242
+1580215017,Méditerranée: grands textes et mythes fondateurs A,HUM-215
+1580215162,"Philosophie, épistémologie et histoire des sciences",HUM-315
+1580215916,Ethique de la recherche scientifique,HUM-329
+1580216068,Enjeux politiques contemporains A,HUM-201
+1580216372,Histoire des relations internationales,HUM-248(a)
+1580216381,Science et littérature A,HUM-241
+1580216498,Experimental cognitive psychology I,HUM-403(a)
+1580217043,How people learn I,HUM-432(a)
+1580217054,Elites et pouvoir,HUM-252
+1580217244,Histoire de l'image I,HUM-418(a)
+1580217350,Images de la nature I,HUM-409(a)
+1580219781,Mythes de la Méditerranée ancienne I,HUM-419(a)
+1580220001,"Philosophy, epistemology and history of science I",HUM-417(a)
+1580220027,Philosophy of life sciences I,HUM-429(a)
+1580220177,Psychologie sociale I,HUM-420(a)
+1580220255,"Science, technologie et société I",HUM-428(a)
+1580272486,Interfaces in biology and nanoscience,MICRO-391
+1580488321,Pratiques artistiques A,HUM-202
+1580939449,Pratiques artistiques I,HUM-401(a)
+1581023265,Principles of finance,MGT-482
+1581027726,Entrepreneurship & new venture strategy (a),MGT-413(a)
+1581729904,"Science, technologie et société A",HUM-114
+1581730596,Musicologie et histoire de la musique B,HUM-217
+1581730851,Musicologie et histoire de la musique C,HUM-313
+1581730912,Méditerranée: grands textes et mythes fondateurs C,HUM-314
+1581730988,Pratiques artistiques C,HUM-222
+1581731065,Psychologie sociale C,HUM-317
+1581731104,Science et littérature C,HUM-219
+1581734542,Histoire internationale contemporaine B,HUM-312(a)
+1581734729,Religions: approches socio-culturelles B,HUM-354
+1581734848,"Science, technologie et société C",HUM-353
+1582851784,Projet de master en gestion de l'énergie et construction durable,ENV-595
+1582861537,Project in neuroprosthetics,MICRO-486
+1582863195,Project in computational neurosciences,BIOENG-490; BIOENG-490(a); BIOENG-490(b)
+1582864637,Stage d'ingénieur crédité avec le PDM (master en Gestion de l'énergie et construction durable),ENV-593
+1583926565,Modèles linéaires,MATH-341
+1584194448,Martingales in financial mathematics,MATH-470
+1584778525,Génétique et génomique,BIO-373
+1585747148,Processus stochastiques appliqués,MATH-332
+1590321840,Concepts in ecological engineering,ENV-422
+1593341315,Projet de master en génie chimique et biotechnologie,ChE-599
+1657415100,Analyse I (anglais),MATH-101(en)
+1657416728,Algèbre linéaire (allemand),MATH-111(de)
+1657417551,Algèbre linéaire (anglais),MATH-111(en)
+1657417886,Introduction aux sciences du vivant,BIO-109(a); BIO-109(b); BIO-109(c); BIO-109(d); BIO-109(e)
+1657719952,"Information, calcul, communication",CS-110(a); CS-110(b); CS-110(c); CS-110(d); CS-110(e); CS-110(f); CS-110(g)
+1657735730,Flow of dispersed media,ME-463
+1657739114,Mechanics of composites,ME-430
+1658044571,Analyse avancée I,MATH-100(a); MATH-100(b)
+1658061639,Algèbre linéaire avancée I,MATH-110(a); MATH-110(b)
+1658221961,Flexible bioelectronics,MICRO-514
+1659017558,Physique avancée I,PHYS-100
+1659025202,Laboratoire de physique (métrologie) Ia,PHYS-104
+1659048310,Laboratoire de physique IIIa,PHYS-319
+1659463240,Nanotechnology,MICRO-530
+1661374484,"Atomes, ions, molécules et fonctions",CH-102
+1661986440,Sciences et technologies de l'électricité (automne),EE-100; EE-106
+1669225782,Methodology in instrumental chromatography,CH-405
+1669227005,Nuclear magnetic resonance,CH-409
+1669888598,Measuring systems,EE-206
+1670037881,Project in electrical energy systems,EE-491(a)
+1670041842,Project in information technologies,EE-491(b)
+1670041858,Project in micro and nanoelectronics,EE-491(c)
+1670041923,Lab in acoustics,EE-490(a)
+1670041994,Lab in EDA based design,EE-490(b)
+1670042080,Lab in electrical energy systems,EE-490(c); EE-492(c)
+1670042196,Lab in microelectronics,EE-490(d)
+1670042209,Lab in microwaves,EE-490(e)
+1670043473,Optical communications,EE-540
+1670063935,Electrical filters,EE-539
+1670074783,Fundamentals of biosensors and electronic biochips,EE-515
+1670080322,System identification,ME-421
+1670084070,Propagation of acoustic waves,EE-549
+1676507646,"Energy storage in power systems: technologies, applications and future needs",EE-466
+1676565978,Fundamentals of VLSI design,EE-429
+1676566727,Hardware systems modeling,EE-434
+1676570902,Seminar in physiology and instrumentation,MICRO-568
+1676846587,Chimie générale avancée,CH-160; CH-160(a); CH-160(b); CH-160(c); CH-160(d)
+1678499905,Advanced lab in electrical engineering,EE-598
+1678500034,Advanced lab in electrical energy systems,EE-588
+1678961803,Mathematical foundations of signal processing,COM-514
+1678982942,Introduction à la chimie organique I,CH-162
+1678983025,Introduction à la chimie organique II,CH-163
+1679266975,Physical biology of the Cell I,BIO-243
+1680039586,Sensorimotor neuroprosthetics,BIOENG-486
+1680039643,Understanding Statistics and Experimental Design,BIO-449
+1680050992,Géologie de la construction et de l'environnement,CIVIL-403
+1680235062,Concevoir des structures,AR-337
+1680257605,"Droit de l'architecte, introduction : contrats et concours",ENG-383
+1680262168,Superarchitecture / Superactualité,AR-524
+1680277058,Visions et Utopies,AR-407
+1680277127,Superstudio,AR-597
+1680279554,Théories et techniques du projet de sauvegarde,AR-434
+1680357086,Biomineralization: from nature to application,ENV-406
+1680357972,Design graphique I,HUM-205
+1680358063,Actualités et théories économiques,HUM-259
+1680358076,Cognitive psychology B,HUM-316
+1680358144,Coopération et développement,HUM-355
+1680358228,Design graphique III,HUM-305
+1680358717,"Médias sociaux, culture et société",HUM-304
+1680358821,Sciences de la mémoire,HUM-358
+1680359353,Chine: la renaissance d'une grande puissance I,HUM-434(a)
+1680359735,Design graphique V,HUM-407(a)
+1680360041,Gestion des organisations I,HUM-435(a)
+1680530302,Lab methods : animal experimentation,BIOENG-511
+1680530324,Lab methods : bioactive compounds screening,BIOENG-512
+1680530693,Lab methods : biosafety,BIOENG-513
+1680530700,Lab methods : flow cytometry,BIOENG-514
+1680530742,Lab methods : proteomics,BIOENG-517
+1680535667,Lab methods : histology,BIOENG-516
+1684920421,Laboratoire de physique IVb,PHYS-422
+1684920459,Laboratoire de physique IVa,PHYS-421
+1685158711,Discrete mathematics,MATH-260
+1685197312,Numerical methods for conservation laws,MATH-459
+1685212246,"Risk, rare events and extremes",MATH-447
+1685303560,Théorie du calcul stochastique,MATH-431
+1685570179,Lab on app development for tablets and smartphones,EE-490(g)
+1687172291,Histoire de l'habitation,AR-427
+1693707617,Business information systems,MGT-429
+1695517338,Digital humanities I,HUM-433(a)
+1702138731,Biomaterials (pour MX),MSE-471
+1702466222,Traitement quantique de l'information,COM-309; PHYS-329(a); PHYS-329(b)
+1704192615,Theory of computation,CS-251
+1715599381,Project in Biotechnology,ChE-460
+1757761712,Enjeux mondiaux: santé B,HUM-125(b)
+1769329067,Numerical methods in chemistry,CH-250
+1769332709,Statistical thermodynamics,CH-242; CH-242(a)
+1769332958,Catalysis for energy storage,CH-421
+1769339854,Interdisciplinary project,CH-492
+1769357011,Géométrie pour architectes I,MATH-124
+1769400055,Stéréotomie,AR-211
+1769410751,Figuration expressive,AR-312
+1769414921,Les quatre éléments et l'architecture,AR-470
+1769419681,Théorie et critique du projet BA5 (Viganò),AR-301(a)
+1769423594,Théorie et critique du projet MA1 (Geers),AR-401(c)
+1769706560,UE R : Introduction au BIM (Building Information Modeling),AR-435
+1770649464,UE génie civil: Construction durable,CIVIL-474
+1770651047,Glass structures and facades,CIVIL-528
+1770786181,Modélisation des systèmes énergétiques,CIVIL-447
+1770793617,Economie des réseaux d'infrastructures,CIVIL-458
+1770844214,Structural mechanics (for SV),ME-231(b)
+1770857585,Semester project in Bioengineering,BIOENG-489
+1771011730,Finite-Dimensional Algebras ,MATH-488
+1771015531,Semester project in life sciences & technology,BIO-496
+1771017288,Computational finance,FIN-472; MATH-472; MATH-501
+1771067191,Scientific project design in drug discovery,BIO-494
+1771067486,Scientific project design in integrative neurosciences,BIO-493
+1771067819,Scientific project design in regenerative medicine and diagnostics,BIO-469
+1771068812,Scientific project design in synthetic biology (iGEM),BIO-318
+1771071124,Scientific project design in translational neurosciences,BIO-487
+1771071455,Scientific project design in translational oncology,BIO-488
+1771072469,Scientific literature analysis in Bioengineering,BIO-467
+1771072563,Scientific literature analysis in Computational molecular biology,BIO-468
+1771072572,Scientific literature analysis in Molecular medicine,BIO-489
+1771072592,Scientific literature analysis in Neuroscience,BIOENG-451
+1771652313,Introduction à l'optimisation et à la recherche opérationnelle,MATH-265
+1771690442,Quantum electrodynamics and quantum optics,PHYS-453
+1771693280,Radiation protection & radiation applications,PHYS-450
+1771703752,Thermodynamics and energetics I,ME-251
+1771705517,Métaux et alliages + TP,MSE-236
+1771712588,Déformations des matériaux,MSE-310
+1771714259,Metrology I,PHYS-458
+1771714545,Electrochemistry for materials technology,MSE-441
+1776023686,Structural mechanics (for MT),ME-231(a)
+1776024041,Lasers: theory and modern applications,MICRO-422
+1776027743,Selected topics in advanced optics,MICRO-420
+1776047660,Microstructures technology II,MICRO-431
+1776050537,Optical detectors,MICRO-523
+1776059601,Programmation et conception orientées objets,ENG-209
+1776060714,Bio-nano-chip design,EE-517
+1776060814,Mathematics of data: from theory to computation,EE-556
+1776060846,Systems and architectures for signal processing,EE-555
+1776060937, ,EE-456
+1776066822,Accounting for finance,FIN-411
+1781858447,De la structure à l'ornement,AR-521
+1781858692,Confort et architecture: stratégies durables,AR-442
+1789653698,Concurrency,CS-206
+1790138559,"Information, computation, communication",CS-110(e)
+1790138595,Functional programming,CS-210
+1790169567,Architecture des systems-on-chip,CS-209
+1790207913,Audio signal processing and virtual acoustics,COM-415
+1790254853,Digital education & learning analytics,CS-411; CS-446
+1799962043,Théorie et critique du projet BA5 (Fröhlich M. & A.),AR-301(d)
+1800382716,Analyse exploratoire de données géospatiales,ENV-444
+1802440133,Projet de Mathématiques (bachelor),MATH-397
+1802451772,Algèbre de Lie,MATH-319
+1802553523,Linear PDE's,MATH-407; MATH-489
+1803204353,Physics of materials,PHYS-307
+1803277152,Japon contemporain A,HUM-357
+1803280149,Sciences et religions A,HUM-318
+1803284776,Sciences et religions I,HUM-436(a)
+1803285306,La recherche dans tous ses états I,HUM-437(a)
+1803659663,History of globalization I,HUM-427(a)
+1803668078,Introduction to medical radiation physics,PHYS-455
+1803745771,Relation pédagogique et climat de classe,HEP-408
+1803746018,Didactique des mathématiques,HEP-407
+1807233617,Neurosciences II : cellular mechanisms of brain function,BIO-482
+1807734531,Projet de Mathématiques (master),MATH-498
+1807738465,Chimie inorganique,CH-263
+1818673603,"Technologies, innovations et marchés émergents",HUM-366
+1823866136,Moyen-Orient contemporain A,HUM-267
+1864673347,Lab immersion A out of EPFL,BIO-504; BIO-506
+1864673356,Lab immersion B out of EPFL,BIO-505; BIO-507
+1887887330,Mechanical design principles,ME-302
+1887888382,Instability,ME-466
+1887888435,Turbulence,ME-467
+1887888591,Computer language processing,CS-320
+1888084194,Matériaux microtechniques : polymères et céramiques,MSE-208
+1888393325,Theory of materials : from structures to properties ,MSE-300
+1888395138,Fundamentals of solid-state materials,MSE-423
+1888395338,Soft matter,MSE-425
+1888395622,Fracture of materials,MSE-424
+1888400347,Introduction aux outils CAO en architecture,AR-219
+1888401365,Approches socio-psychanalytiques de l'art,AR-443
+1888402399,Cohérences aventureuses,AR-444
+1888402628,Specialisation project in materials,MSE-490(c)
+1888788429,General physics II,PHYS-114
+1888829730,Analytic methods in algorithms and complexity,CS-435
+1889072595,Théorie et critique du projet MA1 (Barros Falcâo de Campos),AR-401(s)
+1889078840,Théorie et critique du projet MA1 (Müller Inderbitzin),AR-401(r)
+1889079000,Théorie et critique du projet MA1 (Zuber),AR-401(t)
+1889085700,Fabrication associative assistée par ordinateur,AR-450
+1889181461,"Structures existantes, bases",CIVIL-436
+1889230132,Advanced probability and applications,COM-417
+1889234532,Fluvial biogeosciences,ENV-426
+1890132722,Multivariable control and coordination systems,EE-477
+1898238663,Financial big data,FIN-525
+1898331930,Introduction to VLSI Design,EE-428
+1898529993,Transport phenomena I,ChE-301
+1898535955,Analysis of ancient materials and their degradation,CH-406
+1898551900,Espaces métriques et topologiques,MATH-220
+1898553613,Introduction aux équations aux dérivées partielles,MATH-300
+1898557621,Rings and modules,MATH-311
+1898563769,Convexity,MATH-461
+1898563805,Differential geometry of framed curves,MATH-423
+1898576185,Lattice models,MATH-434
+1899737319,Technology & innovation strategy,MGT-414
+1899816322,Organizational behavior,MGT-412
+1899816746,Technology policy and the energy transition,MGT-408
+1899818511,Fundamentals in Systems Engineering,ENG-421
+1906433714,UE L : Art and architecture: constructing the view I,AR-415
+1906438210,UE U : Cartography,AR-476
+1908341947,Histoire des énergies et des transports A,HUM-221(a)
+1908362115,Asian studies,HUM-265(a)
+1908418027,Histoire et humanités digitales I,HUM-439(a)
+1908418130,Histoire des énergies et des transports B,HUM-330(a)
+1908419376,Risk and energy,HUM-370
+1908425640,Economie et politique de l'énergie I,HUM-411(c)
+1908428435,Enjeux éthiques de l'ingénieur I,HUM-412(c)
+1908428897,Histoire de l'art numérique I,HUM-438(a)
+1909733620,"D. Thinking: real problems, human-focused solutions",MGT-409
+1911192181,Ecologie de la connaissance,HUM-245(a)
+1913487410,Semiconductor physics and fundamentals of electronic devices,PHYS-433
+1919143539,Decommissioning of nuclear power plants,ETH-533
+1919567689,Ethique sociale et politique A,HUM-207(a)
+1919570518,Histoire de l'Asie contemporaine A,HUM-203(a)
+1921237690,Introduction to multiprocessor architecture,CS-307
+1927284144,Construction mécanique I (pour GM),ME-101
+1927284194,Construction mécanique I (pour MT),ME-106
+1928513209,"Modelling problem solving, computing and visualisation I",MSE-443(a)
+1932629392,Analyse et gestion de risques,CIVIL-438
+1932632950,Mécanique des roches et ouvrages souterrains,CIVIL-308
+1932791826,Reservoir mechanics for geo-energy and the environment,CIVIL-429
+1932794331,Geomechanics,CIVIL-402
+1934635827,Théorie et critique du projet MA1 (Ménard),AR-401(u)
+1941543671,Ouvrages hydrauliques et aménagements hydroélectriques,CIVIL-412
+1954058871,Études musicales A,HUM-209
+1954059570,Études musicales I,HUM-414(a)
+1964500347,Investing: a Guide to Doing the Right Thing,FIN-506; FIN-614
+1994879246,Projet ENAC pour mineur IDEAS,CIVIL-496; PENS-494
