@@ -33,7 +33,7 @@
     .link {
         stroke: rgba(125, 125, 125, .8);
         /*stroke-opacity: .8;*/
-        stroke-width: 1px;
+        stroke-width: 10px;
         position: absolute;
     }
 
@@ -61,7 +61,7 @@
 
     .node{
         fill: rgba(125, 125, 125, 1);
-        r: 10;
+        r: 100;
         position:absolute;
         /*stroke: #222;
         stroke-width: 1.5px;*/
@@ -180,7 +180,7 @@
 
         // also highlight neighbors (and the edge that links to each neighbor)
         if(distance > 0){
-            if(!adjacency_list[node_id]) return;
+            if(!    adjacency_list[node_id]) return;
             let adjacent_edges = adjacency_list[node_id].map(edge_id => get_edge_by_id(edge_id));
             adjacent_edges.forEach(edge => highlight_edge(edge, distance));
             let unvisited_nodes = adjacent_edges.map(edge => get_neighbor(node_id, edge)).filter(nid => !already_seen.includes(nid));
@@ -321,7 +321,7 @@
             clear_selection(false);
         });
 
-        gexf.fetch('/data/data.gexf', function(graph) {
+        gexf.fetch('/data/data2.gexf', function(graph) {
 
             nodes = g.selectAll(".node")
                 .data(graph.nodes).enter()
@@ -329,7 +329,7 @@
                 .attr("cx", function(d) { return d.viz.position.x; })
                 .attr("cy", function(d) { return d.viz.position.y; })
                 .attr("class", "node unselected_node")
-                .attr("r", 10)
+                //.attr("radius", 100)
                 .attr("id", d => 'id_' + d.id)
                 .attr("title", d => d.attributes.subjectname)
                 .on("click", function(d) {
