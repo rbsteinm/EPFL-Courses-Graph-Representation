@@ -80,6 +80,7 @@
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="http://d3js.org/d3.v4.min.js" type="text/javascript"></script>
 <script src="https://d3js.org/d3-selection-multi.v0.4.min.js"></script>
+<script src="/libraries/gexf-parser.min.js"></script>
 <!--<script src="https://1.jsconsole.com/js/remote.js?70fb9ec0-cab3-4775-9ab5-9daa813b0e48"></script>-->
 
 <script type="text/javascript">
@@ -169,19 +170,22 @@
     // distance: highlight all nodes that are d hops away from the root, for all d <= distance
     // already_seen: the nodes that were already visited and highlightd by the algorithm (to avoid highlighting a node twice)
     function highlight_selection(node, is_source=true, distance=2, already_seen=[]){
+        let node_id = node_id_to_int(node.id);
+
         if(is_source){
             clear_selection(true);
-            already_seen.push(Number(node.id));
+            already_seen.push(Number(node_id));
         }
         highlight_node(node, distance);
 
         // also highlight neighbors (and the edge that links to each neighbor)
         if(distance > 0){
-            let adjacent_edges = adjacency_list[node.id].map(edge_id => get_edge_by_id(edge_id));
+            if(!adjacency_list[node_id]) return;
+            let adjacent_edges = adjacency_list[node_id].map(edge_id => get_edge_by_id(edge_id));
             adjacent_edges.forEach(edge => highlight_edge(edge, distance));
-            let unvisited_nodes = adjacent_edges.map(edge => get_neighbor(node.id, edge)).filter(node_id => !already_seen.includes(node_id));
-            unvisited_nodes.forEach(node_id => already_seen.push(node_id));
-            unvisited_nodes.forEach(node_id =>  highlight_selection(get_node_by_id(node_id), false, distance-1, already_seen));
+            let unvisited_nodes = adjacent_edges.map(edge => get_neighbor(node_id, edge)).filter(nid => !already_seen.includes(nid));
+            unvisited_nodes.forEach(nid => already_seen.push(nid));
+            unvisited_nodes.forEach(nid =>  highlight_selection(get_node_by_id(nid), false, distance-1, already_seen));
         }
     }
 
@@ -189,30 +193,37 @@
     //output: the other edge's endpoint
     function get_neighbor(node_id, edge){
         let neighbor;
-        if(node_id == edge.source.node_id){
-            neighbor = (edge.target.node_id);
+        if(node_id == edge.source){
+            neighbor = (edge.target);
         }
-        else if(node_id == edge.target.node_id){
-            neighbor = (edge.source.node_id);
+        else if(node_id == edge.target){
+            neighbor = (edge.source);
         }
-        return Number(neighbor);
+        return Number(node_id_to_int(neighbor));
     }
 
     // highlights the given node with opacity proportional to the root distance
     function highlight_node(node, distance_to_leaf){
         const opacity = 0.4 + 0.3 * distance_to_leaf;
-        node.style['fill'] = "rgba(0, 0, 0, " + opacity + ")";
+        d3.select('circle#id_'+node.id).style('fill', "rgba(0, 0, 0, " + opacity + ")");
+        //node.style['fill'] = "rgba(0, 0, 0, " + opacity + ")";
         //node.style['fill'] = SELECTED_NODE_COLOR;
     }
 
     // highlights an edge
     function highlight_edge(edge, distance_to_leaf){
-        d3.select('#id_' + edge.edge_id).style('stroke', SELECTED_EDGE_COLOR);
+        d3.select('#id_' + edge.id).style('stroke', SELECTED_EDGE_COLOR);
     }
 
     // returns the DOM node object given its node ID
     function get_node_by_id(id){
-        return d3.select('[id="' + id + '"]').node();
+        return d3.select('#id_'+id).data()[0];
+    }
+
+    // IDs in d3.js must contain at least one letter
+    // this function converts id_15 to 15
+    function node_id_to_int(id){
+        return id.replace( /^\D+/g, ''); // replace all leading non-digits with nothing
     }
 
     //input: edge id
@@ -223,6 +234,7 @@
 
     // clears the highlighting and all node/edge selection
     function clear_selection(new_selection=false){
+        console.log('clear selection')
         if(new_selection){
             nodes.style('fill', BACKGROUND_NODE_COLOR);
             edges.style('stroke', BACKGROUND_EDGE_COLOR);
@@ -309,72 +321,46 @@
             clear_selection(false);
         });
 
-        
-        d3.json("/graph", function(error, graph) {
-            if (error) return;
+        gexf.fetch('/data/data.gexf', function(graph) {
 
-            let forceSimulation = d3.forceSimulation();
-            forceSimulation.nodes(graph.nodes);
-            let link_force = d3.forceLink(graph.links).distance(100).strength(1).iterations(10);//.id(function(d){return d.source})
-            let charge_force = d3.forceManyBody().strength(-20);
-            let center_force = d3.forceCenter(width / 2, height / 2);
-
-            forceSimulation
-                .force("charge_force", charge_force)
-                .force("center_force", center_force)
-                .force("links",link_force)
-                .force("x", d3.forceX())
-                .force("y", d3.forceY());
-
-            for (let i = 40; i > 0; --i){
-                forceSimulation.tick();
-            }
-            forceSimulation.stop();
+            nodes = g.selectAll(".node")
+                .data(graph.nodes).enter()
+                .append("circle")
+                .attr("cx", function(d) { return d.viz.position.x; })
+                .attr("cy", function(d) { return d.viz.position.y; })
+                .attr("class", "node unselected_node")
+                .attr("r", 10)
+                .attr("id", d => 'id_' + d.id)
+                .attr("title", d => d.attributes.subjectname)
+                .on("click", function(d) {
+                    highlight_selection(d);
+                    d3.event.stopPropagation(); // only the node is clicked, not the background
+                })
+                //.append("title").text(function (d) { return d.attributes.subjectname;});
 
 
             // create an SVG line for each link in the JSON data
             edges = g.selectAll(".link")
-                    .data(graph.links).enter()
-                    .append("line")
-                    .attr("x1", function(d) { return d.source.x; })
-                    .attr("y1", function(d) { return d.source.y; })
-                    .attr("x2", function(d) { return d.target.x; })
-                    .attr("y2", function(d) { return d.target.y; })
-                    .attr("id", function(d) {return 'id_' + d.edge_id;})
-                    .attr("class", function(d) {return "link " + d.edge_type})
-                    .attr('marker-end','url(#arrowhead)');
+                .data(graph.edges).enter()
+                .append("line")
+                .attr("x1", function(d) {return graph.nodes.filter(node => node.id == d.source)[0].viz.position.x;})
+                .attr("y1", function(d) {return graph.nodes.filter(node => node.id == d.source)[0].viz.position.y;})
+                .attr("x2", function(d) {return graph.nodes.filter(node => node.id == d.target)[0].viz.position.x;})
+                .attr("y2", function(d) {return graph.nodes.filter(node => node.id == d.target)[0].viz.position.y;})
+                .attr("id", function(d) {return 'id_' + d.id;})
+                .attr("class", function(d) {return "link " + d.type})
+                .attr('marker-end','url(#arrowhead)');
 
-            // for each node in the JSON data, we create an svg circle and give it as attributes the node's id from neo4j
-            nodes = g.selectAll(".node")
-                    .data(graph.nodes).enter()
-                    .append("circle")
-                    .attr("cx", function(d) { return d.x; })
-                    .attr("cy", function(d) { return d.y; })
-                    .attr("class", "node unselected_node")
-                    .attr("r", 10)
-                    .attr("id", d => d.node_id)
-                    .on("click", function(d) {
-                        highlight_selection(this);
-                        d3.event.stopPropagation(); // only the node is clicked, not the background
-                    });
-                    //.call(force.drag);
-            
-            // fill in adjacency list
-            adjacency_list = graph.adjacency_lists['ALL_EDGES'];
-
-            // html title attribute
-            nodes.append("title").text(function (d) { return d.title; })
-
-            // force feed algo ticks
-            forceSimulation.on("tick", function() {
-                edges.attr("x1", function(d) { return d.source.x; })
-                        .attr("y1", function(d) { return d.source.y; })
-                        .attr("x2", function(d) { return d.target.x; })
-                        .attr("y2", function(d) { return d.target.y; });
-                nodes.attr("cx", function(d) { return d.x; })
-                        .attr("cy", function(d) { return d.y; });
+            // fill the adjacency list
+            edges.each(function(e){
+                if(!adjacency_list[e.source]) adjacency_list[e.source] = [];
+                adjacency_list[e.source].push(e.id);
             });
+
         });
+
+        // html title attribute
+        //nodes.append("title").text(function (d) { return d.attributes.subjectname;})
     }
     display_graph();
 </script>
