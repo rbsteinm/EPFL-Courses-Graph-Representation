@@ -9,6 +9,8 @@ TODO:
 - infopanel
 - dashed lines (import type of edges)
 - take radius into account is node_is_visible function
+- don't update edges when a node is clicked
+- batch drawing edges: drawing only edge outgoing from visible nodes is wrong. Draw all visible edges
 
 
 
@@ -119,6 +121,7 @@ DONE
     window.edges = {};
     let adjacency_list = {};
     let timeout_id;
+    let MOVING = false;
 
 
     // define width/height as the svg container dimensions
@@ -391,25 +394,66 @@ DONE
     }
 
     function zoomBegin(){
-        //console.log("zoom begin: " + d3.event.which);
+        MOVING = true;
+        console.log("zoom begin: " + d3.event.which);
         //edges.style('display', 'none');
-        clearTimeout(timeout_id);
+        //clearTimeout(timeout_id);
+        if(timeout_id){
+            console.log('stopped timer')
+            timeout_id.stop();
+        }
+            
+        console.log(timeout_id)
     }
 
     function zoomEnd(width, height, transform){
+        MOVING = false;
         const line_width = get_line_width(transform.k);
-        //console.log("zoom end");
-        timeout_id = setTimeout(function(){
+        console.log("zoom end");
+        let batch_number = 0;
+        let source_nodes =  d3.selectAll('.node').filter(n => node_is_visible(n, width, height, transform)).data();
+        timeout_id = d3.timer(function(){
+            //console.log(source_nodes)
+            if(source_nodes.length == 0){
+                batch_number += 1;
+                return;
+            }
+            let nid = source_nodes.pop().id;
+            let batch = adjacency_list[nid] ? adjacency_list[nid].map(eid => edges[eid]) : [];
+            draw_edge_batch(batch, batch_number, line_width);
+            batch_number += 1;
+            if(MOVING){
+                console.log('interrupt drawing');
+                return;
+            }
             // try to batch display the edges
-            /*nodes.filter(n => node_is_visible(n, width, height, transform)).each(function(node){
-                adjacency_list[node].style("stroke-width", line_width).style('display', 'block');
-                console.log('batch end')
+            /*d3.selectAll('.node').filter(n => node_is_visible(n, width, height, transform)).each(function(node){
+                if(adjacency_list[node.id]){
+                    let batch = adjacency_list[node.id].map(eid => edges[eid]);
+                    if(MOVING){
+                        console.log('interrupt drawing');
+                        return;
+                    }
+                    draw_edge_batch(batch, batch_number, line_width);
+                    batch_number += 1;
+                }
             });*/
-            d3.selectAll('.link').filter(edge => edge_is_visible(edge, width, height, transform)).style("stroke-width", line_width); // update edges size
-            d3.selectAll('.link').style('display', 'block');
+            //d3.selectAll('.link').filter(edge => edge_is_visible(edge, width, height, transform)).style("stroke-width", line_width); // update edges size
+            //d3.selectAll('.link').style('display', 'block'); // all links are visible again
 
-        }, 300);
+        }, 0);
     }
+
+    function draw_edge_batch(batch, batch_number, line_width){
+        g.selectAll('.link')
+            .data(batch, function(e){return e.id;})
+            .style('stroke-width', 0)
+            .transition().delay(batch_number * 0).duration(0)
+            .style("stroke-width", line_width)
+            .style('display', 'block');
+    }
+
+
 </script>
 
 <script type="text/javascript">
