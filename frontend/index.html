@@ -11,6 +11,7 @@ TODO:
 - take radius into account is node_is_visible function
 - don't update edges when a node is clicked
 - batch drawing edges: drawing only edge outgoing from visible nodes is wrong. Draw all visible edges
+- constrain zoom (for ex. stop when all nodes are visible)
 
 
 
@@ -114,13 +115,14 @@ DONE
     const SELECTED_EDGE_COLOR = "rgba(0, 0, 0, 0.8)";
     const BACKGROUND_NODE_COLOR = "rgba(125, 125, 125, 0.2)";
     const BACKGROUND_EDGE_COLOR = "rgba(125, 125, 125, 0.2)";
+    const BATCH_SIZE = 50;
 
     let nodes = {};
     let edges = {};
     window.nodes = {};
     window.edges = {};
     let adjacency_list = {};
-    let timeout_id;
+    let drawing_timer;
     let MOVING = false;
 
 
@@ -324,9 +326,6 @@ DONE
 
         // also highlight neighbors (and the edge that links to each neighbor)
         if(distance > 0){
-            console.log(node_id)
-            console.log(adjacency_list[node_id])
-            console.log(adjacency_list)
             if(!adjacency_list[node_id]) return;
             let adjacent_edges = adjacency_list[node_id].map(edge_id => get_edge_by_id(edge_id));
             adjacent_edges.forEach(edge => highlight_edge(edge, distance));
@@ -396,46 +395,36 @@ DONE
     // this function is called at the beginning of any zoom or drag event
     // it interrupts any ongoing drawing of edges
     function zoomBegin(){
-        //console.log("zoom begin: " + d3.event.which);
-        if(timeout_id){
+        // Stop the timer if a zoom/drag occurs
+        if(drawing_timer){
             console.log('stopped timer')
-            timeout_id.stop();
+            drawing_timer.stop();
         }
     }
 
     // this function is called at the end of any zoom or drag event
     // it launches the redrawing of visible edges
-    // the edges are drawn by batches: the method iterates over
-    // each visible node and draws its outgoing edges
+    // the visible edges are drawn by batches of size BATCH_SIZE
     function zoomEnd(width, height, transform){
-        const line_width = get_line_width(transform.k);
-        //console.log("zoom end");
+        const line_width = get_line_width(transform.k);;
         let batch_number = 0;
-        let batch_size = 40;
-        //let source_nodes =  d3.selectAll('.node').filter(n => node_is_visible(n, width, height, transform)).data();
         let visible_edges = d3.selectAll('.link').filter(edge => edge_is_visible(edge, width, height, transform)).data();
-        timeout_id = d3.timer(function(){
-            /*if(source_nodes.length == 0){
-                batch_number += 1;
-                return;
-            }
-            let nid = source_nodes.pop().id;
-            let batch = adjacency_list[nid] ? adjacency_list[nid].map(eid => edges[eid]) : [];*/
-            //let index_first = batch_size*batch_number;
-            //let index_last = batch_size*(batch_number+1) >
-            //let batch = visible_edges.slice(batch_size*batch_number, batch_size*(batch_number+1))
-            let batch = visible_edges.splice(0, Math.min(batch_size, visible_edges.length));
+        // this timer calls its parameter function over and over again until it is stopped
+        drawing_timer = d3.timer(function(){
+            let batch = visible_edges.splice(0, Math.min(BATCH_SIZE, visible_edges.length));
             draw_edge_batch(batch, line_width);
             batch_number += 1;
+            // stop the timer if all edges have been drawn
             if(visible_edges.length == 0){
                 console.log('drawing complete');
-                timeout_id.stop();
+                drawing_timer.stop();
             }
         }, 0);
     }
 
-    // this function draws a set of edges
+    // this function draws a single batch of edges
     // batch: an array of edge IDs to draw
+    // line_width: the stroke width of the edges
     function draw_edge_batch(batch, line_width){
         g.selectAll('.link')
             .data(batch, function(e){return e.id;})
