@@ -393,62 +393,54 @@ DONE
         d3.selectAll('.node').filter(node => node_is_visible(node, width, height, d3.event.transform)).style("r", radius); // update node size
     }
 
+    // this function is called at the beginning of any zoom or drag event
+    // it interrupts any ongoing drawing of edges
     function zoomBegin(){
-        MOVING = true;
-        console.log("zoom begin: " + d3.event.which);
-        //edges.style('display', 'none');
-        //clearTimeout(timeout_id);
+        //console.log("zoom begin: " + d3.event.which);
         if(timeout_id){
             console.log('stopped timer')
             timeout_id.stop();
         }
-            
-        console.log(timeout_id)
     }
 
+    // this function is called at the end of any zoom or drag event
+    // it launches the redrawing of visible edges
+    // the edges are drawn by batches: the method iterates over
+    // each visible node and draws its outgoing edges
     function zoomEnd(width, height, transform){
-        MOVING = false;
         const line_width = get_line_width(transform.k);
-        console.log("zoom end");
+        //console.log("zoom end");
         let batch_number = 0;
-        let source_nodes =  d3.selectAll('.node').filter(n => node_is_visible(n, width, height, transform)).data();
+        let batch_size = 40;
+        //let source_nodes =  d3.selectAll('.node').filter(n => node_is_visible(n, width, height, transform)).data();
+        let visible_edges = d3.selectAll('.link').filter(edge => edge_is_visible(edge, width, height, transform)).data();
         timeout_id = d3.timer(function(){
-            //console.log(source_nodes)
-            if(source_nodes.length == 0){
+            /*if(source_nodes.length == 0){
                 batch_number += 1;
                 return;
             }
             let nid = source_nodes.pop().id;
-            let batch = adjacency_list[nid] ? adjacency_list[nid].map(eid => edges[eid]) : [];
-            draw_edge_batch(batch, batch_number, line_width);
+            let batch = adjacency_list[nid] ? adjacency_list[nid].map(eid => edges[eid]) : [];*/
+            //let index_first = batch_size*batch_number;
+            //let index_last = batch_size*(batch_number+1) >
+            //let batch = visible_edges.slice(batch_size*batch_number, batch_size*(batch_number+1))
+            let batch = visible_edges.splice(0, Math.min(batch_size, visible_edges.length));
+            draw_edge_batch(batch, line_width);
             batch_number += 1;
-            if(MOVING){
-                console.log('interrupt drawing');
-                return;
+            if(visible_edges.length == 0){
+                console.log('drawing complete');
+                timeout_id.stop();
             }
-            // try to batch display the edges
-            /*d3.selectAll('.node').filter(n => node_is_visible(n, width, height, transform)).each(function(node){
-                if(adjacency_list[node.id]){
-                    let batch = adjacency_list[node.id].map(eid => edges[eid]);
-                    if(MOVING){
-                        console.log('interrupt drawing');
-                        return;
-                    }
-                    draw_edge_batch(batch, batch_number, line_width);
-                    batch_number += 1;
-                }
-            });*/
-            //d3.selectAll('.link').filter(edge => edge_is_visible(edge, width, height, transform)).style("stroke-width", line_width); // update edges size
-            //d3.selectAll('.link').style('display', 'block'); // all links are visible again
-
         }, 0);
     }
 
-    function draw_edge_batch(batch, batch_number, line_width){
+    // this function draws a set of edges
+    // batch: an array of edge IDs to draw
+    function draw_edge_batch(batch, line_width){
         g.selectAll('.link')
             .data(batch, function(e){return e.id;})
             .style('stroke-width', 0)
-            .transition().delay(batch_number * 0).duration(0)
+            .transition().duration(0)
             .style("stroke-width", line_width)
             .style('display', 'block');
     }
