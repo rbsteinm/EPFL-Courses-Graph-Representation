@@ -7,6 +7,13 @@ TODO:
 - nodes "clustering" (supernodes)
 - display titles above nodes
 - infopanel
+- dashed lines (import type of edges)
+- take radius into account is node_is_visible function
+
+
+
+DONE
+- zindex of node should be higher that those of edges to avoid misclicks on edges
 
 -->
 <head>
@@ -42,9 +49,9 @@ TODO:
 <style type="text/css">
     .link {
         stroke: rgba(125, 125, 125, .8);
-        /*stroke-opacity: .8;*/
         stroke-width: 10px;
         position: absolute;
+        pointer-events: none;
     }
 
     .REQUIRE_IND{
@@ -73,8 +80,6 @@ TODO:
         fill: rgba(125, 125, 125, 1);
         r: 100;
         position:absolute;
-        /*stroke: #222;
-        stroke-width: 1.5px;*/
     }
 
     .selected_node{
@@ -167,10 +172,10 @@ TODO:
         clear_selection(false);
     });
 
-    function import_data(path, callback){
+    function import_data(path, display_callback){
         var graph = gexf.fetch(path);
-        //gexf.fetch(path, function(graph){
-            // import nodes data
+
+        // import nodes data
         graph.nodes.forEach(function(n){
             nodes['nid_' + n.id] = {
                 'x': n.viz.position.x,
@@ -194,14 +199,13 @@ TODO:
         });
 
         // fill the adjacency list
-         // fill the adjacency list
         Object.values(edges).forEach(function(e){
             if(!adjacency_list[e.source]) adjacency_list[e.source] = [];
             adjacency_list[(e.source)].push(e.id);
         });
-        //});
+
         // display the data when loading is done
-        callback();
+        display_callback();
     }
 
     function display_graph(){
@@ -237,58 +241,6 @@ TODO:
 
     // load and display
     import_data('/data/data2.gexf', function(){display_graph();});
-
-
-    /*gexf.fetch('/data/data2.gexf', function(graph) {
-
-        nodes = g.selectAll(".node")
-            .data(graph.nodes).enter()
-            .append("circle")
-            .attr("cx", function(d) { return d.viz.position.x; })
-            .attr("cy", function(d) { return d.viz.position.y; })
-            .attr("class", "node unselected_node")
-            //.attr("radius", 100)
-            .attr("id", d => 'id_' + d.id)
-            .attr("title", d => d.attributes.subjectname)
-            .on("click", function(d) {
-                highlight_selection(d);
-                d3.event.stopPropagation(); // only the node is clicked, not the background
-            })
-            //.append("title").text(function (d) { return d.attributes.subjectname;});
-
-
-        // create an SVG line for each link in the JSON data
-        edges = g.selectAll(".link")
-            .data(graph.edges).enter()
-            .append("line")
-            .attr("x1", function(d) {return graph.nodes.filter(node => node.id == d.source)[0].viz.position.x;})
-            .attr("y1", function(d) {return graph.nodes.filter(node => node.id == d.source)[0].viz.position.y;})
-            .attr("x2", function(d) {return graph.nodes.filter(node => node.id == d.target)[0].viz.position.x;})
-            .attr("y2", function(d) {return graph.nodes.filter(node => node.id == d.target)[0].viz.position.y;})
-            .attr("id", function(d) {return 'id_' + d.id;})
-            .attr("class", function(d) {return "link"})
-            .attr('marker-end','url(#arrowhead)');
-
-        edges = d3.selectAll('.link');
-
-
-
-        // fill the adjacency list
-        edges.each(function(e){
-            if(!adjacency_list[e.source]) adjacency_list[e.source] = [];
-            adjacency_list[e.source].push(e.id);
-        });
-
-
-    });*/
-
-    // html title attribute
-    //nodes.append("title").text(function (d) { return d.attributes.subjectname;})
-
-
-
-
-
 
 
 
