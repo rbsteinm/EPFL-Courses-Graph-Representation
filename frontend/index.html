@@ -121,14 +121,9 @@ DONE
     let timeout_id;
 
 
-    // _________________________________________ IMPORT AND DISPLAY
-
     // define width/height as the svg container dimensions
     const width = document.getElementsByClassName('svg-container')[0].clientWidth;
     const height = document.getElementsByClassName('svg-container')[0].clientHeight;
-    let radius;
-    let line_width;
-    let matrix;
 
     let svg = d3.select("div#graph").append("svg")
         .attr("width", "100%")
@@ -153,6 +148,7 @@ DONE
     .style('stroke','none');
 
 
+    // handle zoom events on the svg
     let zoom_handler = d3.zoom()
 
     .on("start", function(){
@@ -164,7 +160,7 @@ DONE
     .on("zoom", function(){
         return zoomed(g, width, height);
     });
-    //zoom_handler(svg);
+
     svg.call(zoom_handler);
 
     // When the background is clicked, clear the current selection
@@ -172,6 +168,10 @@ DONE
         clear_selection(false);
     });
 
+
+    // this function imports the data from a .gexf file
+    // the advantage of gexf file is that we can use Gephi's algorithm to have a nice pre-defined layout
+    // a callback function displays the data once it's loaded
     function import_data(path, display_callback){
         var graph = gexf.fetch(path);
 
@@ -344,15 +344,12 @@ DONE
             neighbor = (edge.source);
         }
         return neighbor;
-        //return Number(node_id_to_int(neighbor));
     }
 
     // highlights the given node with opacity proportional to the root distance
     function highlight_node(node, distance_to_leaf){
         const opacity = 0.4 + 0.3 * distance_to_leaf;
         d3.select('circle#'+node.id).style('fill', "rgba(0, 0, 0, " + opacity + ")");
-        //node.style['fill'] = "rgba(0, 0, 0, " + opacity + ")";
-        //node.style['fill'] = SELECTED_NODE_COLOR;
     }
 
     // highlights an edge
@@ -365,12 +362,6 @@ DONE
         return d3.select('#'+id).data()[0];
     }
 
-    // IDs in d3.js must contain at least one letter
-    // this function converts id_15 to 15
-    function node_id_to_int(id){
-        return id.replace( /^\D+/g, ''); // replace all leading non-digits with nothing
-    }
-
     //input: edge id
     // output: the edge's data
     function get_edge_by_id(id){
@@ -379,7 +370,6 @@ DONE
 
     // clears the highlighting and all node/edge selection
     function clear_selection(new_selection=false){
-        //console.log('clear selection')
         if(new_selection){
             d3.selectAll('.node').style('fill', BACKGROUND_NODE_COLOR);
             d3.selectAll('.link').style('stroke', BACKGROUND_EDGE_COLOR);
