@@ -1,4 +1,14 @@
 <html>
+<!--
+TODO:
+- batch drawing edges
+    - interrupt drawing between the batches if a move has been made
+- fade in the edges when you draw them
+- nodes "clustering" (supernodes)
+- display titles above nodes
+- infopanel
+
+-->
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--<link rel="stylesheet" href="http://neo4j-contrib.github.io/developer-resources/language-guides/assets/css/main.css">-->
@@ -98,10 +108,189 @@
     const BACKGROUND_NODE_COLOR = "rgba(125, 125, 125, 0.2)";
     const BACKGROUND_EDGE_COLOR = "rgba(125, 125, 125, 0.2)";
 
-    let nodes;
-    let edges;
+    let nodes = {};
+    let edges = {};
+    window.nodes = {};
+    window.edges = {};
     let adjacency_list = {};
     let timeout_id;
+
+
+    // _________________________________________ IMPORT AND DISPLAY
+
+    // define width/height as the svg container dimensions
+    const width = document.getElementsByClassName('svg-container')[0].clientWidth;
+    const height = document.getElementsByClassName('svg-container')[0].clientHeight;
+    let radius;
+    let line_width;
+    let matrix;
+
+    let svg = d3.select("div#graph").append("svg")
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .classed("svg-content", true);
+
+    let g = svg.append("g");
+
+    svg.append('defs')
+    .append('marker')
+    .attrs({'id':'arrowhead',
+        'viewBox':'-0 -5 10 10',
+        'refX':23,
+        'refY':0,
+        'orient':'auto',
+        'markerWidth':7,
+        'markerHeight':7,
+        'xoverflow':'visible'})
+    .append('svg:path')
+    .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+    .attr('fill', '#999')
+    .style('stroke','none');
+
+
+    let zoom_handler = d3.zoom()
+
+    .on("start", function(){
+        return zoomBegin();
+    })
+    .on("end", function(){
+        return zoomEnd(width, height, d3.event.transform);
+    })
+    .on("zoom", function(){
+        return zoomed(g, width, height);
+    });
+    //zoom_handler(svg);
+    svg.call(zoom_handler);
+
+    // When the background is clicked, clear the current selection
+    d3.select("div#graph").on("click", function(){
+        clear_selection(false);
+    });
+
+    function import_data(path, callback){
+        var graph = gexf.fetch(path);
+        //gexf.fetch(path, function(graph){
+            // import nodes data
+        graph.nodes.forEach(function(n){
+            nodes['nid_' + n.id] = {
+                'x': n.viz.position.x,
+                'y': n.viz.position.y,
+                'title': n.attributes.subjectname,
+                'id': 'nid_' + n.id
+            };
+        });
+
+        // import edges data
+        graph.edges.forEach(function(e){
+            edges['eid_' + e.id] = {
+                'source': 'nid_' + e.source,
+                'target': 'nid_' + e.target,
+                'x1': graph.nodes.filter(node => node.id == e.source)[0].viz.position.x,
+                'y1': graph.nodes.filter(node => node.id == e.source)[0].viz.position.y,
+                'x2': graph.nodes.filter(node => node.id == e.target)[0].viz.position.x,
+                'y2': graph.nodes.filter(node => node.id == e.target)[0].viz.position.y,
+                'id': 'eid_' + e.id
+            }
+        });
+
+        // fill the adjacency list
+         // fill the adjacency list
+        Object.values(edges).forEach(function(e){
+            if(!adjacency_list[e.source]) adjacency_list[e.source] = [];
+            adjacency_list[(e.source)].push(e.id);
+        });
+        //});
+        // display the data when loading is done
+        callback();
+    }
+
+    function display_graph(){
+        g.selectAll(".node")
+            .data(Object.values(nodes)).enter()
+            .append("circle")
+            .attr("cx", function(d) {return d.x;})
+            .attr("cy", function(d) {return d.y;})
+            .attr("class", "node unselected_node")
+            //.attr("radius", 100)
+            .attr("id", d => d.id)
+            .attr("title", d => d.subjectname)
+            .on("click", function(d) {
+                highlight_selection(d);
+                d3.event.stopPropagation(); // only the node is clicked, not the background
+            });
+            //.append("title").text(function (d) { return d.attributes.subjectname;});
+
+
+        // create an SVG line for each link in the JSON data
+        g.selectAll(".link")
+            .data(Object.values(edges)).enter()
+            .append("line")
+            .attr("x1", function(d) {return d.x1;})
+            .attr("y1", function(d) {return d.y1;})
+            .attr("x2", function(d) {return d.x2;})
+            .attr("y2", function(d) {return d.y2;})
+            .attr("id", function(d) {return d.id;})
+            .attr("class", function(d) {return "link"})
+            .attr('marker-end','url(#arrowhead)');
+    }
+
+
+    // load and display
+    import_data('/data/data2.gexf', function(){display_graph();});
+
+
+    /*gexf.fetch('/data/data2.gexf', function(graph) {
+
+        nodes = g.selectAll(".node")
+            .data(graph.nodes).enter()
+            .append("circle")
+            .attr("cx", function(d) { return d.viz.position.x; })
+            .attr("cy", function(d) { return d.viz.position.y; })
+            .attr("class", "node unselected_node")
+            //.attr("radius", 100)
+            .attr("id", d => 'id_' + d.id)
+            .attr("title", d => d.attributes.subjectname)
+            .on("click", function(d) {
+                highlight_selection(d);
+                d3.event.stopPropagation(); // only the node is clicked, not the background
+            })
+            //.append("title").text(function (d) { return d.attributes.subjectname;});
+
+
+        // create an SVG line for each link in the JSON data
+        edges = g.selectAll(".link")
+            .data(graph.edges).enter()
+            .append("line")
+            .attr("x1", function(d) {return graph.nodes.filter(node => node.id == d.source)[0].viz.position.x;})
+            .attr("y1", function(d) {return graph.nodes.filter(node => node.id == d.source)[0].viz.position.y;})
+            .attr("x2", function(d) {return graph.nodes.filter(node => node.id == d.target)[0].viz.position.x;})
+            .attr("y2", function(d) {return graph.nodes.filter(node => node.id == d.target)[0].viz.position.y;})
+            .attr("id", function(d) {return 'id_' + d.id;})
+            .attr("class", function(d) {return "link"})
+            .attr('marker-end','url(#arrowhead)');
+
+        edges = d3.selectAll('.link');
+
+
+
+        // fill the adjacency list
+        edges.each(function(e){
+            if(!adjacency_list[e.source]) adjacency_list[e.source] = [];
+            adjacency_list[e.source].push(e.id);
+        });
+
+
+    });*/
+
+    // html title attribute
+    //nodes.append("title").text(function (d) { return d.attributes.subjectname;})
+
+
+
+
+
+
+
 
     function get_node_size(scale_factor){
         //return (5/(Math.sqrt(scale_factor))).toFixed(1);
@@ -129,8 +318,8 @@
     // does this edge appear on the screen with the current scale/translate values?
     function edge_is_visible(edge, width, height, transf){
         let x1, x2, y1, y2;
-        [x1, y1] = get_new_coordinates(edge.source.x ,edge.source.y, transf);
-        [x2, y2] = get_new_coordinates(edge.target.x ,edge.target.y, transf);
+        [x1, y1] = get_new_coordinates(edge.x1 ,edge.y1, transf);
+        [x2, y2] = get_new_coordinates(edge.x2 ,edge.y2, transf);
         let new_edge = [x1, y1, x2, y2];
         let left_border = [0, 0, 0, height];
         let top_border = [0, 0, width, 0];
@@ -170,17 +359,20 @@
     // distance: highlight all nodes that are d hops away from the root, for all d <= distance
     // already_seen: the nodes that were already visited and highlightd by the algorithm (to avoid highlighting a node twice)
     function highlight_selection(node, is_source=true, distance=2, already_seen=[]){
-        let node_id = node_id_to_int(node.id);
+        let node_id = node.id;
 
         if(is_source){
             clear_selection(true);
-            already_seen.push(Number(node_id));
+            already_seen.push(node_id);
         }
         highlight_node(node, distance);
 
         // also highlight neighbors (and the edge that links to each neighbor)
         if(distance > 0){
-            if(!    adjacency_list[node_id]) return;
+            console.log(node_id)
+            console.log(adjacency_list[node_id])
+            console.log(adjacency_list)
+            if(!adjacency_list[node_id]) return;
             let adjacent_edges = adjacency_list[node_id].map(edge_id => get_edge_by_id(edge_id));
             adjacent_edges.forEach(edge => highlight_edge(edge, distance));
             let unvisited_nodes = adjacent_edges.map(edge => get_neighbor(node_id, edge)).filter(nid => !already_seen.includes(nid));
@@ -199,25 +391,26 @@
         else if(node_id == edge.target){
             neighbor = (edge.source);
         }
-        return Number(node_id_to_int(neighbor));
+        return neighbor;
+        //return Number(node_id_to_int(neighbor));
     }
 
     // highlights the given node with opacity proportional to the root distance
     function highlight_node(node, distance_to_leaf){
         const opacity = 0.4 + 0.3 * distance_to_leaf;
-        d3.select('circle#id_'+node.id).style('fill', "rgba(0, 0, 0, " + opacity + ")");
+        d3.select('circle#'+node.id).style('fill', "rgba(0, 0, 0, " + opacity + ")");
         //node.style['fill'] = "rgba(0, 0, 0, " + opacity + ")";
         //node.style['fill'] = SELECTED_NODE_COLOR;
     }
 
     // highlights an edge
     function highlight_edge(edge, distance_to_leaf){
-        d3.select('#id_' + edge.id).style('stroke', SELECTED_EDGE_COLOR);
+        d3.select('#' + edge.id).style('stroke', SELECTED_EDGE_COLOR);
     }
 
     // returns the DOM node object given its node ID
     function get_node_by_id(id){
-        return d3.select('#id_'+id).data()[0];
+        return d3.select('#'+id).data()[0];
     }
 
     // IDs in d3.js must contain at least one letter
@@ -229,19 +422,19 @@
     //input: edge id
     // output: the edge's data
     function get_edge_by_id(id){
-        return d3.select('#id_'+id).data()[0];
+        return d3.select('#'+id).data()[0];
     }
 
     // clears the highlighting and all node/edge selection
     function clear_selection(new_selection=false){
-        console.log('clear selection')
+        //console.log('clear selection')
         if(new_selection){
-            nodes.style('fill', BACKGROUND_NODE_COLOR);
-            edges.style('stroke', BACKGROUND_EDGE_COLOR);
+            d3.selectAll('.node').style('fill', BACKGROUND_NODE_COLOR);
+            d3.selectAll('.link').style('stroke', BACKGROUND_EDGE_COLOR);
         }
         else{
-            nodes.style('fill', NODE_COLOR);
-            edges.style('stroke', EDGE_COLOR); 
+            d3.selectAll('.node').style('fill', NODE_COLOR);
+            d3.selectAll('.link').style('stroke', EDGE_COLOR); 
         }
     }
 
@@ -249,120 +442,32 @@
     // It dinamically resizes the nodes and the edges
     // but only if they are visible to reduce computation time
     function zoomed(svg, width, height){
-        edges.style('display', 'none');
+        d3.selectAll('.link').style('display', 'none');
         svg.attr("transform", d3.event.transform);
         const radius = get_node_size(d3.event.transform.k);
-        nodes.filter(node => node_is_visible(node, width, height, d3.event.transform)).style("r", radius); // update node size
+        d3.selectAll('.node').filter(node => node_is_visible(node, width, height, d3.event.transform)).style("r", radius); // update node size
     }
 
     function zoomBegin(){
-        console.log("zoom begin: " + d3.event.which);
+        //console.log("zoom begin: " + d3.event.which);
         //edges.style('display', 'none');
         clearTimeout(timeout_id);
     }
 
     function zoomEnd(width, height, transform){
         const line_width = get_line_width(transform.k);
-        console.log("zoom end");
+        //console.log("zoom end");
         timeout_id = setTimeout(function(){
-            edges.filter(edge => edge_is_visible(edge, width, height, transform)).style("stroke-width", line_width); // update edges size
-            edges.style('display', 'block');
+            // try to batch display the edges
+            /*nodes.filter(n => node_is_visible(n, width, height, transform)).each(function(node){
+                adjacency_list[node].style("stroke-width", line_width).style('display', 'block');
+                console.log('batch end')
+            });*/
+            d3.selectAll('.link').filter(edge => edge_is_visible(edge, width, height, transform)).style("stroke-width", line_width); // update edges size
+            d3.selectAll('.link').style('display', 'block');
 
         }, 300);
     }
-
-    function display_graph(){
-        // define width/height as the svg container dimensions
-        const width = document.getElementsByClassName('svg-container')[0].clientWidth;
-        const height = document.getElementsByClassName('svg-container')[0].clientHeight;
-        let radius;
-        let line_width;
-        let matrix;
-
-        let svg = d3.select("div#graph").append("svg")
-            .attr("width", "100%")
-            .attr("height", "100%")
-            .classed("svg-content", true);
-
-        let g = svg.append("g");
-
-        svg.append('defs')
-        .append('marker')
-        .attrs({'id':'arrowhead',
-            'viewBox':'-0 -5 10 10',
-            'refX':23,
-            'refY':0,
-            'orient':'auto',
-            'markerWidth':7,
-            'markerHeight':7,
-            'xoverflow':'visible'})
-        .append('svg:path')
-        .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
-        .attr('fill', '#999')
-        .style('stroke','none');
-
-
-        let zoom_handler = d3.zoom()
-
-        .on("start", function(){
-            return zoomBegin();
-        })
-        .on("end", function(){
-            return zoomEnd(width, height, d3.event.transform);
-        })
-        .on("zoom", function(){
-            return zoomed(g, width, height);
-        });
-        //zoom_handler(svg);
-        svg.call(zoom_handler);
-
-        // When the background is clicked, clear the current selection
-        d3.select("div#graph").on("click", function(){
-            clear_selection(false);
-        });
-
-        gexf.fetch('/data/data2.gexf', function(graph) {
-
-            nodes = g.selectAll(".node")
-                .data(graph.nodes).enter()
-                .append("circle")
-                .attr("cx", function(d) { return d.viz.position.x; })
-                .attr("cy", function(d) { return d.viz.position.y; })
-                .attr("class", "node unselected_node")
-                //.attr("radius", 100)
-                .attr("id", d => 'id_' + d.id)
-                .attr("title", d => d.attributes.subjectname)
-                .on("click", function(d) {
-                    highlight_selection(d);
-                    d3.event.stopPropagation(); // only the node is clicked, not the background
-                })
-                //.append("title").text(function (d) { return d.attributes.subjectname;});
-
-
-            // create an SVG line for each link in the JSON data
-            edges = g.selectAll(".link")
-                .data(graph.edges).enter()
-                .append("line")
-                .attr("x1", function(d) {return graph.nodes.filter(node => node.id == d.source)[0].viz.position.x;})
-                .attr("y1", function(d) {return graph.nodes.filter(node => node.id == d.source)[0].viz.position.y;})
-                .attr("x2", function(d) {return graph.nodes.filter(node => node.id == d.target)[0].viz.position.x;})
-                .attr("y2", function(d) {return graph.nodes.filter(node => node.id == d.target)[0].viz.position.y;})
-                .attr("id", function(d) {return 'id_' + d.id;})
-                .attr("class", function(d) {return "link " + d.type})
-                .attr('marker-end','url(#arrowhead)');
-
-            // fill the adjacency list
-            edges.each(function(e){
-                if(!adjacency_list[e.source]) adjacency_list[e.source] = [];
-                adjacency_list[e.source].push(e.id);
-            });
-
-        });
-
-        // html title attribute
-        //nodes.append("title").text(function (d) { return d.attributes.subjectname;})
-    }
-    display_graph();
 </script>
 
 <script type="text/javascript">
