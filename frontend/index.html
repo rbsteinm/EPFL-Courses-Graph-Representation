@@ -84,6 +84,12 @@ DONE batch drawing edges
         position:absolute;
     }
 
+    .node_title{
+        font-family: sans-serif;
+        font-size: 16px;
+        fill: black;
+    }
+
     .selected_node{
         fill: black;
         r: 4;
@@ -115,6 +121,7 @@ DONE batch drawing edges
     const BACKGROUND_NODE_COLOR = "rgba(125, 125, 125, 0.2)";
     const BACKGROUND_EDGE_COLOR = "rgba(125, 125, 125, 0.2)";
     const BATCH_SIZE = 50;
+    const SHOW_LABELS_THRESHOLD = 0.5;
 
     let nodes = {};
     let edges = {};
@@ -124,6 +131,7 @@ DONE batch drawing edges
     let drawing_timer;
     let previous_transform;
     let drawing_complete = true;
+    let show_labels = true;
 
 
     // define width/height as the svg container dimensions
@@ -225,6 +233,7 @@ DONE batch drawing edges
             .attr("id", d => d.id)
             .attr("title", d => d.subjectname)
             .on("click", function(d) {
+                console.log(d)
                 highlight_selection(d);
                 event.stopPropagation(); // only the node is clicked, not the background
             });
@@ -241,10 +250,19 @@ DONE batch drawing edges
             .attr("y2", function(d) {return d.y2;})
             .attr("id", function(d) {return d.id;})
             .attr("class", function(d) {
-                console.log(d.label)
                 return (d.type == 'baseline') ? 'link': 'link indicative_link';
             })
             .attr('marker-end','url(#arrowhead)');
+
+        // add text above nodes
+        g.selectAll("text")
+            .data(Object.values(nodes))
+            .enter()
+            .append('text')
+            .attr('x', function(d){return d.x})
+            .attr('y', function(d){return d.y})
+            .attr('class', 'node_title')
+            .text(function(d){ return d.title});
     }
 
 
@@ -407,12 +425,36 @@ DONE batch drawing edges
             console.log('stopped timer')
             drawing_timer.stop();
         }
+        // hide node labels
+        g.selectAll('.node_title').style('display', 'none');
     }
 
     // this function is called at the end of any zoom or drag event
     // it launches the redrawing of visible edges
     // the visible edges are drawn by batches of size BATCH_SIZE
     function zoomEnd(width, height, transform){
+        update_graph(width, height, transform);
+        show_node_labels(transform);
+    }
+
+    // this function draws a single batch of edges
+    // batch: an array of edge IDs to draw
+    // line_width: the stroke width of the edges
+    function draw_edge_batch(batch, line_width){
+        g.selectAll('.link')
+            .data(batch, function(e){return e.id;})
+            //.style('stroke-width', 0)
+            //.transition().duration(200)
+            .style("stroke-width", line_width)
+            .style('display', 'block');
+    }
+
+    
+    // this function updates the graph after any zoom or drag
+    // it launches the redrawing of visible edges
+    // the visible edges are drawn by batches of size BATCH_SIZE
+    function update_graph(width, height, transform){
+        console.log(transform)
         // if the graph did not move, no need tn redraw everything
         // this allows to avoid redrawing when a node is clicked
         // also need to check if the rendering was finished, if not redraw anyway
@@ -438,16 +480,12 @@ DONE batch drawing edges
         previous_transform = {...transform};
     }
 
-    // this function draws a single batch of edges
-    // batch: an array of edge IDs to draw
-    // line_width: the stroke width of the edges
-    function draw_edge_batch(batch, line_width){
-        g.selectAll('.link')
-            .data(batch, function(e){return e.id;})
-            .style('stroke-width', 0)
-            .transition().duration(0)
-            .style("stroke-width", line_width)
-            .style('display', 'block');
+    // shows the labels of the nodes if the zoom threshold is reached
+    // TODO only show labels of visible nodes
+    function show_node_labels(transform){
+        if(transform.k > SHOW_LABELS_THRESHOLD){
+            d3.selectAll('.node_title').style('display', 'block');
+        }
     }
 
 
