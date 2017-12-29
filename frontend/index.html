@@ -22,17 +22,17 @@ DONE batch drawing edges
 </head>
 
 <body>
-<form role="search" class="navbar-form" id="search">
+<!--<form role="search" class="navbar-form" id="search">
     <div class="form-group">
         <input type="text" placeholder="Search for courses" class="form-control" name="search">
     </div>
     <button class="btn btn-default" type="submit">Search</button>
-</form>
+</form>-->
 
 
 <div id="graph" class = "svg-container"></div>
 
-<table id="results" class="table table-striped table-hover">
+<!--<table id="results" class="table table-striped table-hover">
     <thead>
     <tr>
         <th>Course</th>
@@ -41,11 +41,14 @@ DONE batch drawing edges
     </thead>
     <tbody>
     </tbody>
-</table>
+</table>-->
 
 
 
 <style type="text/css">
+    body{
+        margin: 0px;
+    }
     .link {
         stroke: rgba(125, 125, 125, .8);
         stroke-width: 10px;
@@ -53,7 +56,7 @@ DONE batch drawing edges
         pointer-events: none;
     }
 
-    .REQUIRE_IND{
+    .indicative_link{
         stroke-dasharray: 5;
     }
 
@@ -61,10 +64,10 @@ DONE batch drawing edges
         display: inline-block;
         position: relative;
         width: 100%;
-        height: 85% ;
+        height: 100% ;
         vertical-align: top;
         overflow: hidden;
-        border: 1px solid black;
+        /*border: 1px solid black;*/
     }
     .svg-content {
         display: inline-block;
@@ -238,7 +241,7 @@ DONE batch drawing edges
             .attr("id", function(d) {return d.id;})
             .attr("class", function(d) {
                 console.log(d.label)
-                return (d.type == 'baseline') ? 'link': 'link REQUIRE_IND';
+                return (d.type == 'baseline') ? 'link': 'link indicative_link';
             })
             .attr('marker-end','url(#arrowhead)');
     }
@@ -269,7 +272,7 @@ DONE batch drawing edges
     function node_is_visible(node, width, height, transf){
         let x, y;
         //let radius = parseInt(g.select('#'+node.id).style('r'));
-        // hardcode radius for performance reasons
+        // hardcode radius approximation for performance reasons
         let radius = 100;
         [x, y] = get_new_coordinates(node.x, node.y, transf);
         return (x+radius) > 0 && (x-radius) < width && (y+radius) > 0 && (y-radius) < height;
