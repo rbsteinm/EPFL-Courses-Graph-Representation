@@ -6,6 +6,7 @@ TODO display titles above nodes
 TODO nodes "clustering" (supernodes)
 TODO infopanel
 TODO constrain zoom (for ex. stop when all nodes are visible)
+TODO re-implement search function
 
 
 DONE take radius into account in node_is_visible function
@@ -17,7 +18,6 @@ DONE batch drawing edges
 -->
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--<link rel="stylesheet" href="http://neo4j-contrib.github.io/developer-resources/language-guides/assets/css/main.css">-->
     <title>EPFL courses</title>
 </head>
 
@@ -54,7 +54,7 @@ DONE batch drawing edges
     }
 
     .REQUIRE_IND{
-        stroke-dasharray: 1;
+        stroke-dasharray: 5;
     }
 
     .svg-container {
@@ -195,7 +195,8 @@ DONE batch drawing edges
                 'y1': graph.nodes.filter(node => node.id == e.source)[0].viz.position.y,
                 'x2': graph.nodes.filter(node => node.id == e.target)[0].viz.position.x,
                 'y2': graph.nodes.filter(node => node.id == e.target)[0].viz.position.y,
-                'id': 'eid_' + e.id
+                'id': 'eid_' + e.id,
+                'type': e.label
             }
         });
 
@@ -235,13 +236,16 @@ DONE batch drawing edges
             .attr("x2", function(d) {return d.x2;})
             .attr("y2", function(d) {return d.y2;})
             .attr("id", function(d) {return d.id;})
-            .attr("class", function(d) {return "link"})
+            .attr("class", function(d) {
+                console.log(d.label)
+                return (d.type == 'baseline') ? 'link': 'link REQUIRE_IND';
+            })
             .attr('marker-end','url(#arrowhead)');
     }
 
 
     // load and display
-    import_data('/data/data2.gexf', function(){display_graph();});
+    import_data('/data/data4.gexf', function(){display_graph();});
 
 
 
@@ -264,7 +268,9 @@ DONE batch drawing edges
     // does this node appear on the screen with the current scale/translate values?
     function node_is_visible(node, width, height, transf){
         let x, y;
-        let radius = parseInt(g.select('#'+node.id).style('r'));
+        //let radius = parseInt(g.select('#'+node.id).style('r'));
+        // hardcode radius for performance reasons
+        let radius = 100;
         [x, y] = get_new_coordinates(node.x, node.y, transf);
         return (x+radius) > 0 && (x-radius) < width && (y+radius) > 0 && (y-radius) < height;
     }
