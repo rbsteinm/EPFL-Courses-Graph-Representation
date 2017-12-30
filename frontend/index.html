@@ -1,6 +1,7 @@
 <html>
 <!--
-TODO only display titles of visible nodes
+TODO adaptive labels font size
+DONE only display titles of visible nodes
 TODO nodes "clustering" (supernodes)
 TODO infopanel
 TODO constrain zoom (for ex. stop when all nodes are visible)
@@ -435,32 +436,6 @@ DONE batch drawing edges
     // the visible edges are drawn by batches of size BATCH_SIZE
     function zoomEnd(width, height, transform){
         update_graph(width, height, transform);
-
-        // test
-        d3.selectAll('.node').filter(node => node_is_visible(node, width, height, d3.event.transform)).style('fill', 'red');
-        d3.selectAll('.node').filter(node => !node_is_visible(node, width, height, d3.event.transform)).style('fill', 'black');
-
-        let visible_nodes = d3.selectAll('.node').filter(node => node_is_visible(node, width, height, d3.event.transform)).data();
-        let visible_titles = d3.selectAll('.node_title')
-            .data(visible_nodes, function(d){return d.id;})
-            .style('fill', 'red');
-
-        console.log(visible_nodes.length);
-        console.log(visible_titles.size());
-
-
-        /*let visible_titles_ids = d3.selectAll('.node')
-            .filter(node => node_is_visible(node, width, height, d3.event.transform)).data()
-            .map(node => 'title_' + node.id);
-        console.log(visible_titles_ids.length);
-        g.selectAll('.node_title')
-            .data(visible_titles_ids, function(d){return d;})
-            .style('fill', 'red');*/
-
-        /*visible_titles_ids.forEach(function(d){
-            g.select('#'+d).style('fill', 'red');
-        });*/
-
         show_node_labels(transform);
     }
 
@@ -507,10 +482,19 @@ DONE batch drawing edges
     }
 
     // shows the labels of the nodes if the zoom threshold is reached
-    // TODO only show labels of visible nodes
+    // only shows labels of visible nodes
     function show_node_labels(transform){
+        // is the zoom threshold reached?
         if(transform.k > SHOW_LABELS_THRESHOLD){
-            d3.selectAll('.node_title').style('display', 'block');
+            // filter out the nodes that do not appear on the screen
+            let visible_nodes = d3.selectAll('.node')
+            .filter(node => node_is_visible(node, width, height, d3.event.transform))
+            .data();
+
+            // display the label for each visible node
+            d3.selectAll('.node_title')
+                .data(visible_nodes, function(d){return d.id;})
+                .style('display', 'block');
         }
     }
 
