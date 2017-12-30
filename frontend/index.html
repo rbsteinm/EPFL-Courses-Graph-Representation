@@ -1,12 +1,14 @@
 <html>
 <!--
-TODO display titles above nodes
+TODO only display titles of visible nodes
 TODO nodes "clustering" (supernodes)
 TODO infopanel
 TODO constrain zoom (for ex. stop when all nodes are visible)
 TODO re-implement search function
+TODO when a node is selected and there's a redraw, first redraw the selected edges
 
 
+DONE display titles above nodes
 DONE don't update edges when a node is clicked
 DONE dashed lines (import type of edges)
 DONE take radius into account in node_is_visible function
@@ -88,6 +90,7 @@ DONE batch drawing edges
         font-family: sans-serif;
         font-size: 16px;
         fill: black;
+        /*pointer-events: none;*/
     }
 
     .selected_node{
@@ -229,15 +232,12 @@ DONE batch drawing edges
             .attr("cx", function(d) {return d.x;})
             .attr("cy", function(d) {return d.y;})
             .attr("class", "node unselected_node")
-            //.attr("radius", 100)
             .attr("id", d => d.id)
-            .attr("title", d => d.subjectname)
             .on("click", function(d) {
                 console.log(d)
                 highlight_selection(d);
                 event.stopPropagation(); // only the node is clicked, not the background
             });
-            //.append("title").text(function (d) { return d.attributes.subjectname;});
 
 
         // create an SVG line for each link in the JSON data
@@ -256,11 +256,12 @@ DONE batch drawing edges
 
         // add text above nodes
         g.selectAll("text")
-            .data(Object.values(nodes))
+            .data(Object.values(nodes), function(d){return d.id;})
             .enter()
             .append('text')
             .attr('x', function(d){return d.x})
             .attr('y', function(d){return d.y})
+            .attr('id', function(d){return 'title_' + d.id;})
             .attr('class', 'node_title')
             .text(function(d){ return d.title});
     }
@@ -434,6 +435,32 @@ DONE batch drawing edges
     // the visible edges are drawn by batches of size BATCH_SIZE
     function zoomEnd(width, height, transform){
         update_graph(width, height, transform);
+
+        // test
+        d3.selectAll('.node').filter(node => node_is_visible(node, width, height, d3.event.transform)).style('fill', 'red');
+        d3.selectAll('.node').filter(node => !node_is_visible(node, width, height, d3.event.transform)).style('fill', 'black');
+
+        let visible_nodes = d3.selectAll('.node').filter(node => node_is_visible(node, width, height, d3.event.transform)).data();
+        let visible_titles = d3.selectAll('.node_title')
+            .data(visible_nodes, function(d){return d.id;})
+            .style('fill', 'red');
+
+        console.log(visible_nodes.length);
+        console.log(visible_titles.size());
+
+
+        /*let visible_titles_ids = d3.selectAll('.node')
+            .filter(node => node_is_visible(node, width, height, d3.event.transform)).data()
+            .map(node => 'title_' + node.id);
+        console.log(visible_titles_ids.length);
+        g.selectAll('.node_title')
+            .data(visible_titles_ids, function(d){return d;})
+            .style('fill', 'red');*/
+
+        /*visible_titles_ids.forEach(function(d){
+            g.select('#'+d).style('fill', 'red');
+        });*/
+
         show_node_labels(transform);
     }
 
@@ -454,7 +481,6 @@ DONE batch drawing edges
     // it launches the redrawing of visible edges
     // the visible edges are drawn by batches of size BATCH_SIZE
     function update_graph(width, height, transform){
-        console.log(transform)
         // if the graph did not move, no need tn redraw everything
         // this allows to avoid redrawing when a node is clicked
         // also need to check if the rendering was finished, if not redraw anyway
@@ -487,6 +513,8 @@ DONE batch drawing edges
             d3.selectAll('.node_title').style('display', 'block');
         }
     }
+
+
 
 
 </script>
