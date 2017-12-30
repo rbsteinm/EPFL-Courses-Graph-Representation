@@ -1,9 +1,9 @@
 <html>
 <!--
+TODO infopanel
 TODO re-implement search function
 TODO rethink the colors and design
 TODO nodes "clustering" (supernodes)
-TODO infopanel
 TODO constrain zoom (for ex. stop when all nodes are visible)
 TODO when a node is selected and there's a redraw, first redraw the selected edges
 
@@ -130,6 +130,7 @@ DONE batch drawing edges
     const SHOW_LABELS_THRESHOLD = 0.5;
     const NODE_SIZE = 13;
     const FONT_SIZE = 12;
+    const ZOOM_CONSTRAIN = [0.05, 2.5];
 
     let nodes = {};
     let edges = {};
@@ -174,16 +175,16 @@ DONE batch drawing edges
 
     // handle zoom events on the svg
     let zoom_handler = d3.zoom()
-
-    .on("start", function(){
-        return zoomBegin();
-    })
-    .on("end", function(){
-        return zoomEnd(width, height, d3.event.transform);
-    })
-    .on("zoom", function(){
-        return zoomed(g, width, height);
-    });
+        .scaleExtent(ZOOM_CONSTRAIN)
+        .on("start", function(){
+            return zoomBegin();
+        })
+        .on("end", function(){
+            return zoomEnd(width, height, d3.event.transform);
+        })
+        .on("zoom", function(){
+            return zoomed(g, width, height);
+        });
 
     svg.call(zoom_handler);
 
@@ -426,6 +427,7 @@ DONE batch drawing edges
     function zoomed(svg, width, height){
         d3.selectAll('.link').style('display', 'none');
         svg.attr("transform", d3.event.transform);
+        console.log(d3.event.transform);
         const radius = get_node_size(d3.event.transform.k);
         d3.selectAll('.node').filter(node => node_is_visible(node, width, height, d3.event.transform)).style("r", radius); // update node size
     }
