@@ -113,20 +113,23 @@ DONE batch drawing edges
 
 <script type="text/javascript">
 
-    const MAX_SCALE_FACTOR = 30.0;
+    /*const MAX_SCALE_FACTOR = 30.0;
     const MIN_SCALE_FACTOR = 0.1;
     const MAX_RADIUS = 20;
     const MIN_RADIUS = 1;
     const MAX_LINE_WIDTH = 10;
-    const MIN_LINE_WIDTH = 0.1;
+    const MIN_LINE_WIDTH = 0.1;*/
     const NODE_COLOR = "rgba(125, 125, 125, 1)";
     const EDGE_COLOR = "rgba(125, 125, 125, 0.8)";
     const SELECTED_NODE_COLOR = "rgba(0, 0, 0, 1)";
     const SELECTED_EDGE_COLOR = "rgba(0, 0, 0, 0.8)";
     const BACKGROUND_NODE_COLOR = "rgba(125, 125, 125, 0.2)";
     const BACKGROUND_EDGE_COLOR = "rgba(125, 125, 125, 0.2)";
+
     const BATCH_SIZE = 50;
     const SHOW_LABELS_THRESHOLD = 0.5;
+    const NODE_SIZE = 13;
+    const FONT_SIZE = 12;
 
     let nodes = {};
     let edges = {};
@@ -155,10 +158,13 @@ DONE batch drawing edges
     .attrs({'id':'arrowhead',
         'viewBox':'-0 -5 10 10',
         'refX':23,
+        //'refX': 2.3 * NODE_SIZE,
         'refY':0,
         'orient':'auto',
-        'markerWidth':7,
-        'markerHeight':7,
+        'markerWidth':0.7 * NODE_SIZE,
+        'markerHeight':0.7 * NODE_SIZE,
+        //'markerWidth':7,
+        //'markerHeight':7,
         'xoverflow':'visible'})
     .append('svg:path')
     .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
@@ -276,7 +282,7 @@ DONE batch drawing edges
 
     function get_node_size(scale_factor){
         //return (5/(Math.sqrt(scale_factor))).toFixed(1);
-        return (10/scale_factor);
+        return (NODE_SIZE/scale_factor);
     }
 
     function get_line_width(scale_factor){
@@ -284,7 +290,7 @@ DONE batch drawing edges
     }
 
     function get_label_font_size(scale_factor){
-        return (12/scale_factor);
+        return (FONT_SIZE/scale_factor);
     }
 
     // returns the coordinates after a transformation (zoom, pan)
