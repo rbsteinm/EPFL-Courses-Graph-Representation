@@ -7,6 +7,7 @@ TODO nodes "clustering" (supernodes)
 TODO when a node is selected and there's a redraw, first redraw the selected edges
 
 
+DONE hide arrowheads when unzoom threshold is reached for cleaner display
 DONE constrain zoom (for ex. stop when all nodes are visible)
 DONE adaptive labels font size
 DONE only display titles of visible nodes
@@ -112,12 +113,6 @@ DONE batch drawing edges
 
 <script type="text/javascript">
 
-    /*const MAX_SCALE_FACTOR = 30.0;
-    const MIN_SCALE_FACTOR = 0.1;
-    const MAX_RADIUS = 20;
-    const MIN_RADIUS = 1;
-    const MAX_LINE_WIDTH = 10;
-    const MIN_LINE_WIDTH = 0.1;*/
     const NODE_COLOR = "rgba(125, 125, 125, 1)";
     const EDGE_COLOR = "rgba(125, 125, 125, 0.8)";
     const SELECTED_NODE_COLOR = "rgba(0, 0, 0, 1)";
@@ -131,6 +126,7 @@ DONE batch drawing edges
     const MAX_NODE_SIZE = 75;
     const FONT_SIZE = 12;
     const ZOOM_CONSTRAIN = [0.05, 2.5];
+    const HIDE_ARROWHEADS_THRESHOLD = 0.25;
 
     let nodes = {};
     let edges = {};
@@ -141,6 +137,7 @@ DONE batch drawing edges
     let previous_transform;
     let drawing_complete = true;
     let show_labels = true;
+    let arrowheads_visible = true;
 
 
     // define width/height as the svg container dimensions
@@ -445,6 +442,7 @@ DONE batch drawing edges
     function zoomEnd(width, height, transform){
         update_graph(width, height, transform);
         show_node_labels(transform);
+        show_hide_arrowheads(transform);
     }
 
     // this function draws a single batch of edges
@@ -505,6 +503,20 @@ DONE batch drawing edges
                 .data(visible_nodes, function(d){return d.id;})
                 .style('display', 'block')
                 .style('font-size', font_size);
+        }
+    }
+
+    function show_hide_arrowheads(transform){
+        console.log(transform.k);
+        if(transform.k < HIDE_ARROWHEADS_THRESHOLD && arrowheads_visible){
+            g.selectAll('.link').attr('marker-end','none');
+            arrowheads_visible = false;
+            console.log('hide arrowheads');
+        }
+        else if(transform.k >= HIDE_ARROWHEADS_THRESHOLD && !arrowheads_visible){
+            g.selectAll('.link').attr('marker-end','url(#arrowhead)');
+            arrowheads_visible = true;
+            console.log('show arrowheads');
         }
     }
 
