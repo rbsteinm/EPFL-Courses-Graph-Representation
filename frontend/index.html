@@ -1,14 +1,15 @@
 <html>
 <!--
-TODO adaptive labels font size
-DONE only display titles of visible nodes
+TODO re-implement search function
+TODO rethink the colors and design
 TODO nodes "clustering" (supernodes)
 TODO infopanel
 TODO constrain zoom (for ex. stop when all nodes are visible)
-TODO re-implement search function
 TODO when a node is selected and there's a redraw, first redraw the selected edges
 
 
+DONE adaptive labels font size
+DONE only display titles of visible nodes
 DONE display titles above nodes
 DONE don't update edges when a node is clicked
 DONE dashed lines (import type of edges)
@@ -91,7 +92,7 @@ DONE batch drawing edges
         font-family: sans-serif;
         font-size: 16px;
         fill: black;
-        /*pointer-events: none;*/
+        pointer-events: none;
     }
 
     .selected_node{
@@ -260,8 +261,8 @@ DONE batch drawing edges
             .data(Object.values(nodes), function(d){return d.id;})
             .enter()
             .append('text')
-            .attr('x', function(d){return d.x})
-            .attr('y', function(d){return d.y})
+            .attr('x', function(d){return d.x;})
+            .attr('y', function(d){return d.y-10;})
             .attr('id', function(d){return 'title_' + d.id;})
             .attr('class', 'node_title')
             .text(function(d){ return d.title});
@@ -280,6 +281,10 @@ DONE batch drawing edges
 
     function get_line_width(scale_factor){
         return (1.0/((scale_factor))).toFixed(2);
+    }
+
+    function get_label_font_size(scale_factor){
+        return (12/scale_factor);
     }
 
     // returns the coordinates after a transformation (zoom, pan)
@@ -486,6 +491,7 @@ DONE batch drawing edges
     function show_node_labels(transform){
         // is the zoom threshold reached?
         if(transform.k > SHOW_LABELS_THRESHOLD){
+            let font_size = get_label_font_size(transform.k);
             // filter out the nodes that do not appear on the screen
             let visible_nodes = d3.selectAll('.node')
             .filter(node => node_is_visible(node, width, height, d3.event.transform))
@@ -494,7 +500,8 @@ DONE batch drawing edges
             // display the label for each visible node
             d3.selectAll('.node_title')
                 .data(visible_nodes, function(d){return d.id;})
-                .style('display', 'block');
+                .style('display', 'block')
+                .style('font-size', font_size);
         }
     }
 
