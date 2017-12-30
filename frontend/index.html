@@ -119,6 +119,8 @@ DONE batch drawing edges
         border: 2px black solid;
         border-radius: 10px;
         padding: 10px;
+        opacity: 0;
+        pointer-events: none;
     }
     </style>
 
@@ -147,6 +149,7 @@ DONE batch drawing edges
 
     let nodes = {};
     let edges = {};
+    let course_descriptions = {};
     window.nodes = {};
     window.edges = {};
     let adjacency_list = {};
@@ -246,6 +249,8 @@ DONE batch drawing edges
         display_callback();
     }
 
+    // this function creates a circle for each course and an edge for each relationship
+    // it is called as a callback of the import_data method
     function display_graph(){
         g.selectAll(".node")
             .data(Object.values(nodes)).enter()
@@ -288,9 +293,22 @@ DONE batch drawing edges
             .text(function(d){ return d.title});
     }
 
+    function import_descriptions(){
+        // Peace Agreements data
+        d3.tsv("./data/descriptions.csv")
+            .row(function(row){
+                course_descriptions['nid_' + row.SubjectID] = row.Summary_EN; 
+            })
+            .get(function(err, rows) {
+                if (err) return console.error(err);
+            });
+    }
+
 
     // load and display
     import_data('/data/data4.gexf', function(){display_graph();});
+    import_descriptions();
+    console.log(course_descriptions)
 
 
 
@@ -529,7 +547,6 @@ DONE batch drawing edges
     // at a certain unzooming threshold, the arrowheads are hidden
     // to avoid the graph to be messy
     function show_hide_arrowheads(transform){
-        console.log(transform.k);
         if(transform.k < HIDE_ARROWHEADS_THRESHOLD && arrowheads_visible){
             g.selectAll('.link').attr('marker-end','none');
             arrowheads_visible = false;
@@ -557,6 +574,7 @@ DONE batch drawing edges
     function node_to_string(nid){
         let result = '';
         result += '<div>' + nodes[nid].title + '</div>';
+        result += '<div>' + course_descriptions[nid] + '</div>';
         return result;
     }
 
