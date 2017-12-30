@@ -4,10 +4,10 @@ TODO infopanel
 TODO re-implement search function
 TODO rethink the colors and design
 TODO nodes "clustering" (supernodes)
-TODO constrain zoom (for ex. stop when all nodes are visible)
 TODO when a node is selected and there's a redraw, first redraw the selected edges
 
 
+DONE constrain zoom (for ex. stop when all nodes are visible)
 DONE adaptive labels font size
 DONE only display titles of visible nodes
 DONE display titles above nodes
@@ -71,7 +71,6 @@ DONE batch drawing edges
         height: 100% ;
         vertical-align: top;
         overflow: hidden;
-        /*border: 1px solid black;*/
     }
     .svg-content {
         display: inline-block;
@@ -92,7 +91,7 @@ DONE batch drawing edges
         font-family: sans-serif;
         font-size: 16px;
         fill: black;
-        pointer-events: none;
+        /*pointer-events: none;*/
     }
 
     .selected_node{
@@ -129,6 +128,7 @@ DONE batch drawing edges
     const BATCH_SIZE = 50;
     const SHOW_LABELS_THRESHOLD = 0.5;
     const NODE_SIZE = 13;
+    const MAX_NODE_SIZE = 75;
     const FONT_SIZE = 12;
     const ZOOM_CONSTRAIN = [0.05, 2.5];
 
@@ -159,13 +159,10 @@ DONE batch drawing edges
     .attrs({'id':'arrowhead',
         'viewBox':'-0 -5 10 10',
         'refX':23,
-        //'refX': 2.3 * NODE_SIZE,
         'refY':0,
         'orient':'auto',
         'markerWidth':0.7 * NODE_SIZE,
         'markerHeight':0.7 * NODE_SIZE,
-        //'markerWidth':7,
-        //'markerHeight':7,
         'xoverflow':'visible'})
     .append('svg:path')
     .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
@@ -243,7 +240,6 @@ DONE batch drawing edges
             .attr("class", "node unselected_node")
             .attr("id", d => d.id)
             .on("click", function(d) {
-                console.log(d)
                 highlight_selection(d);
                 event.stopPropagation(); // only the node is clicked, not the background
             });
@@ -283,7 +279,7 @@ DONE batch drawing edges
 
     function get_node_size(scale_factor){
         //return (5/(Math.sqrt(scale_factor))).toFixed(1);
-        return (NODE_SIZE/scale_factor);
+        return Math.min(MAX_NODE_SIZE, (NODE_SIZE/scale_factor));
     }
 
     function get_line_width(scale_factor){
@@ -427,7 +423,6 @@ DONE batch drawing edges
     function zoomed(svg, width, height){
         d3.selectAll('.link').style('display', 'none');
         svg.attr("transform", d3.event.transform);
-        console.log(d3.event.transform);
         const radius = get_node_size(d3.event.transform.k);
         d3.selectAll('.node').filter(node => node_is_visible(node, width, height, d3.event.transform)).style("r", radius); // update node size
     }
