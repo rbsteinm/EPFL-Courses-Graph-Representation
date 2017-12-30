@@ -210,7 +210,7 @@ SubjectID	Summary_EN
 352067537	We introduce and put into practice principles of collaborative software development in C++ using industry-standard tools.A specific case from life sciences is proposed and student teams define and implement a solution, and make it evolve throughout the semester.
 1776592	In this course the students learn how to analyze and design digital systems. Starting from boolean algebra and simple combinational circuits the students are guided towards semi-complex sequential circuits consisting of several finite state machines that interact with each other.
 1789653698	The course introduces parallel programming models, algorithms, and data structures, map-reduce frameworks and their use for data analysis, as well as shared-memory concurrency.
-71645784	NULL
+71645784	No description
 4144648	The course introduces the students to the basic notionsof computer architecture and, in particular, to thechoices of the Instruction Set Architecture and to thememory hierarchy of modern systems.
 1790169567	The course continues the introduction of students to the basic concepts of Computer Architecture (inputs/outputs, interrupts, and exceptions). It also addresses the issue of Instruction Level Parallelism (pipelines, etc.) and the problems related to the memory hierarchy of multiprocessors.
 2258712	The students learn the theory and practice of basic concepts and techniques in algorithms. The course covers mathematical induction, techniques for analyzing algorithms, elementary data structures, major algorithmic paradigms such as dynamic programming, sorting and searching, and graph algorithms.
@@ -241,7 +241,7 @@ SubjectID	Summary_EN
 1773492	Student is able to design basic electronics. This objective takes advantage of the knowledge of modern electronic components. The student acquire theoretical and physical approaches of phenomena and practical aspects of design limitations and measurements of electronics fonctions.
 1773472	The course introduces the fundamentals of semicondutor devices: PN diodes, bipolar and MOS transistors.  Topics covered include: PN junctions, bipolar transistors, device operations, current sources, polarisation circuits and AC responses
 348715502	This course provides an introduction to the theory and analysis methods of electrical circuits.
-348716744	NULL
+348716744	No description
 1669888598	Measuring physical quantities lies at the heart of how engineers and scientists interact with the world around us. This course introduces most common approaches to measuring and reporting quantities such as temperature, humidity, force, acceleration, strain etc. using modern types of sensors.
 2328456	Introduction to simple models of the main components of basic electronics. Analytical study of the basic circuits with operational amplifier. Introduction to elementary logic circuits. Description of the principle of Analog &lt;-&gt; Digital Conversion.
 1774172	Introduction to simple models of the main components of basic electronics. Analytical study of the basic circuits with operational amplifier. Introduction to elementary logic circuits. Description of the principle of Analog &lt;-&gt; Digital Conversion.
@@ -261,7 +261,7 @@ SubjectID	Summary_EN
 23996396	The student will be able to design analog integrated circuits (and the analog parts of VLSI circuits). He will master the device structures and the basic circuits used in bipolar and MOS technologies, as well as the basic principles underlying their correct layout.
 24302061	Master the design of circuits and systems at high frequency (HF) and very high frequency (VHF) (1 MHz-6GHz). This lecture is particularly oriented towards circuit aspects of modern communications systems.
 1898331930	The course objective is to introduce the fundamental principles of VLSI circuit design, to examine the basic building blocks of large-scale digital integrated circuits, and to provide hands-on design experience with professional design (EDA) platforms.
-1676565978	NULL
+1676565978	No description
 24102460	Creation and use of models in digital hardware design from the RTL design with the VHDL language to the more abstract system level as required for designing modern systems-on-chip. The SystemVerilog and SystemC languages and the principles of functional verification will be introduced.
 1676566727	This course addresses the main aspects of the modeling of digital and mixed-signal hardware components and systems using the VHDL and the VHDL-AMS modeling languages.
 1499348352	The students will learn about the basic principles of wireless communication systems, including transmission and modulation schemes as well as the basic components and algorithms of a wireless receiver. They develop an understanding for the wireless channel and the performance and limitations.
@@ -613,7 +613,7 @@ SubjectID	Summary_EN
 1888084194	Introduction to processing-structure-property relationships in ceramics, plastics and composite materials, providing the foundation for materials and process selection in the manufacture of microengineering components.
 352055084	The main objective of this course is to present the concepts allowing the understanding of the fundamental principles that enable to predict the properties of the materials. The goal is that with these concepts, one will be able to realize material design and/or to understand novel materials.
 1771705517	Introduction to metals and alloys used in engineering, and to the relationships between their processing, their microstructure and their mechanical behaviour, taught with focus on the three main engineering metal alloy systems, namely alloys of aluminium, copper, and iron.
-1774567	NULL
+1774567	No description
 1888393325	Macroscopic properties of solids are addressed using symmetry arguments, tensors, thermodynamics, and simple phenomenological models.
 838978162	This lecture introduces the basic concepts used to describe the atomic or molecular structure of surfaces and interfaces and the underlying thermodynamic concepts. The influence of interfaces on the properties of materials is also discussed.
 1771712588	Introduction to deformation mechanisms in inorganic materials: elasticity, plasticity and creep.

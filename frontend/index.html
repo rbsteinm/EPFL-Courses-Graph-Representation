@@ -59,7 +59,7 @@ DONE batch drawing edges
     }
     .link {
         stroke: rgba(125, 125, 125, .8);
-        stroke-width: 10px;
+        stroke-width: 1px;
         position: absolute;
         pointer-events: none;
     }
@@ -87,13 +87,13 @@ DONE batch drawing edges
 
     .node{
         fill: rgba(125, 125, 125, 1);
-        r: 100;
+        r: 13;
         position:absolute;
     }
 
     .node_title{
         font-family: sans-serif;
-        font-size: 16px;
+        font-size: 12px;
         fill: black;
         pointer-events: none;
     }
@@ -111,8 +111,8 @@ DONE batch drawing edges
         background-color: white;
         position: absolute;
         width: 80%;
-        height: 20%;
-        top: 75%;
+        /*height: 20%;*/
+        bottom: 2%;
         left: 10%;
         margin-bottom: 10px;
 
@@ -150,6 +150,7 @@ DONE batch drawing edges
     let nodes = {};
     let edges = {};
     let course_descriptions = {};
+    let course_sections = {};
     window.nodes = {};
     window.edges = {};
     let adjacency_list = {};
@@ -294,10 +295,19 @@ DONE batch drawing edges
     }
 
     function import_descriptions(){
-        // Peace Agreements data
         d3.tsv("./data/descriptions.csv")
             .row(function(row){
-                course_descriptions['nid_' + row.SubjectID] = row.Summary_EN; 
+                course_descriptions['nid_' + row.SubjectID] = row.Summary_EN;
+            })
+            .get(function(err, rows) {
+                if (err) return console.error(err);
+            });
+    }
+
+    function import_sections(){
+        d3.tsv("./data/sections.csv")
+            .row(function(row){
+                course_sections['nid_' + row.SubjectID] = row.sections.split('|');
             })
             .get(function(err, rows) {
                 if (err) return console.error(err);
@@ -308,7 +318,7 @@ DONE batch drawing edges
     // load and display
     import_data('/data/data4.gexf', function(){display_graph();});
     import_descriptions();
-    console.log(course_descriptions)
+    import_sections();
 
 
 
@@ -579,7 +589,12 @@ DONE batch drawing edges
     function node_to_string(nid){
         let result = '';
         result += '<div><strong>' + nodes[nid].title + '</strong></div><br/>';
-        result += '<div>' + course_descriptions[nid] + '</div>';
+        result += '<div>' + course_descriptions[nid] + '</div><br/>';
+        if(course_sections[nid]){
+            result += '<div>Sections: ';
+            result += course_sections[nid].toString();
+            result += '</div>';
+        }
         return result;
     }
 
