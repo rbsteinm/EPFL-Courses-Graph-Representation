@@ -1,19 +1,13 @@
 <html>
 <!--
-TODO infopanel
-TODO disambiguiate click and zoom to not redraw when click
-TODO re-implement search function
-TODO rethink the colors and design
-TODO when a node is selected and there's a redraw, first redraw the selected edges
+TODO display titles above nodes
 TODO nodes "clustering" (supernodes)
-TODO handle screen rotate (recompute width and height?)
+TODO infopanel
+TODO constrain zoom (for ex. stop when all nodes are visible)
+TODO re-implement search function
 
 
-DONE hide arrowheads when unzoom threshold is reached for cleaner display
-DONE constrain zoom (for ex. stop when all nodes are visible)
-DONE adaptive labels font size
-DONE only display titles of visible nodes
-DONE display titles above nodes
+DONE don't update edges when a node is clicked
 DONE dashed lines (import type of edges)
 DONE take radius into account in node_is_visible function
 DONE zindex of node should be higher that those of edges to avoid misclicks on edges
@@ -37,7 +31,6 @@ DONE batch drawing edges
 
 
 <div id="graph" class = "svg-container"></div>
-<div id='infopanel'></div>
 
 <!--<table id="results" class="table table-striped table-hover">
     <thead>
@@ -55,7 +48,6 @@ DONE batch drawing edges
 <style type="text/css">
     body{
         margin: 0px;
-        font-family: sans-serif;
     }
     .link {
         stroke: rgba(125, 125, 125, .8);
@@ -70,11 +62,12 @@ DONE batch drawing edges
 
     .svg-container {
         display: inline-block;
-        position: absolute;
+        position: relative;
         width: 100%;
         height: 100% ;
         vertical-align: top;
         overflow: hidden;
+        /*border: 1px solid black;*/
     }
     .svg-content {
         display: inline-block;
@@ -95,7 +88,6 @@ DONE batch drawing edges
         font-family: sans-serif;
         font-size: 16px;
         fill: black;
-        pointer-events: none;
     }
 
     .selected_node{
@@ -105,22 +97,6 @@ DONE batch drawing edges
 
     .unselected_node{
 
-    }
-
-    #infopanel{
-        background-color: white;
-        position: absolute;
-        width: 80%;
-        height: 20%;
-        top: 75%;
-        left: 10%;
-        margin-bottom: 10px;
-
-        border: 2px black solid;
-        border-radius: 10px;
-        padding: 10px;
-        opacity: 0;
-        pointer-events: none;
     }
     </style>
 
@@ -132,24 +108,23 @@ DONE batch drawing edges
 
 <script type="text/javascript">
 
+    const MAX_SCALE_FACTOR = 30.0;
+    const MIN_SCALE_FACTOR = 0.1;
+    const MAX_RADIUS = 20;
+    const MIN_RADIUS = 1;
+    const MAX_LINE_WIDTH = 10;
+    const MIN_LINE_WIDTH = 0.1;
     const NODE_COLOR = "rgba(125, 125, 125, 1)";
     const EDGE_COLOR = "rgba(125, 125, 125, 0.8)";
     const SELECTED_NODE_COLOR = "rgba(0, 0, 0, 1)";
     const SELECTED_EDGE_COLOR = "rgba(0, 0, 0, 0.8)";
     const BACKGROUND_NODE_COLOR = "rgba(125, 125, 125, 0.2)";
     const BACKGROUND_EDGE_COLOR = "rgba(125, 125, 125, 0.2)";
-
     const BATCH_SIZE = 50;
     const SHOW_LABELS_THRESHOLD = 0.5;
-    const NODE_SIZE = 13;
-    const MAX_NODE_SIZE = 75;
-    const FONT_SIZE = 12;
-    const ZOOM_CONSTRAIN = [0.05, 2.5];
-    const HIDE_ARROWHEADS_THRESHOLD = 0.25;
 
     let nodes = {};
     let edges = {};
-    let course_descriptions = {};
     window.nodes = {};
     window.edges = {};
     let adjacency_list = {};
@@ -157,7 +132,6 @@ DONE batch drawing edges
     let previous_transform;
     let drawing_complete = true;
     let show_labels = true;
-    let arrowheads_visible = true;
 
 
     // define width/height as the svg container dimensions
@@ -178,8 +152,8 @@ DONE batch drawing edges
         'refX':23,
         'refY':0,
         'orient':'auto',
-        'markerWidth':0.7 * NODE_SIZE,
-        'markerHeight':0.7 * NODE_SIZE,
+        'markerWidth':7,
+        'markerHeight':7,
         'xoverflow':'visible'})
     .append('svg:path')
     .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
@@ -189,23 +163,22 @@ DONE batch drawing edges
 
     // handle zoom events on the svg
     let zoom_handler = d3.zoom()
-        .scaleExtent(ZOOM_CONSTRAIN)
-        .on("start", function(){
-            return zoomBegin();
-        })
-        .on("end", function(){
-            return zoomEnd(width, height, d3.event.transform);
-        })
-        .on("zoom", function(){
-            return zoomed(g, width, height);
-        });
+
+    .on("start", function(){
+        return zoomBegin();
+    })
+    .on("end", function(){
+        return zoomEnd(width, height, d3.event.transform);
+    })
+    .on("zoom", function(){
+        return zoomed(g, width, height);
+    });
 
     svg.call(zoom_handler);
 
     // When the background is clicked, clear the current selection
     d3.select("div#graph").on("click", function(){
         clear_selection(false);
-        hide_infopanel();
     });
 
 
@@ -249,8 +222,6 @@ DONE batch drawing edges
         display_callback();
     }
 
-    // this function creates a circle for each course and an edge for each relationship
-    // it is called as a callback of the import_data method
     function display_graph(){
         g.selectAll(".node")
             .data(Object.values(nodes)).enter()
@@ -258,13 +229,15 @@ DONE batch drawing edges
             .attr("cx", function(d) {return d.x;})
             .attr("cy", function(d) {return d.y;})
             .attr("class", "node unselected_node")
+            //.attr("radius", 100)
             .attr("id", d => d.id)
+            .attr("title", d => d.subjectname)
             .on("click", function(d) {
+                console.log(d)
                 highlight_selection(d);
-                fill_infopanel(node_to_string(d.id));
-                show_infopanel();
                 event.stopPropagation(); // only the node is clicked, not the background
             });
+            //.append("title").text(function (d) { return d.attributes.subjectname;});
 
 
         // create an SVG line for each link in the JSON data
@@ -283,46 +256,28 @@ DONE batch drawing edges
 
         // add text above nodes
         g.selectAll("text")
-            .data(Object.values(nodes), function(d){return d.id;})
+            .data(Object.values(nodes))
             .enter()
             .append('text')
-            .attr('x', function(d){return d.x;})
-            .attr('y', function(d){return d.y-10;})
-            .attr('id', function(d){return 'title_' + d.id;})
+            .attr('x', function(d){return d.x})
+            .attr('y', function(d){return d.y})
             .attr('class', 'node_title')
             .text(function(d){ return d.title});
-    }
-
-    function import_descriptions(){
-        // Peace Agreements data
-        d3.tsv("./data/descriptions.csv")
-            .row(function(row){
-                course_descriptions['nid_' + row.SubjectID] = row.Summary_EN; 
-            })
-            .get(function(err, rows) {
-                if (err) return console.error(err);
-            });
     }
 
 
     // load and display
     import_data('/data/data4.gexf', function(){display_graph();});
-    import_descriptions();
-    console.log(course_descriptions)
 
 
 
     function get_node_size(scale_factor){
         //return (5/(Math.sqrt(scale_factor))).toFixed(1);
-        return Math.min(MAX_NODE_SIZE, (NODE_SIZE/scale_factor));
+        return (10/scale_factor);
     }
 
     function get_line_width(scale_factor){
         return (1.0/((scale_factor))).toFixed(2);
-    }
-
-    function get_label_font_size(scale_factor){
-        return (FONT_SIZE/scale_factor);
     }
 
     // returns the coordinates after a transformation (zoom, pan)
@@ -460,7 +415,6 @@ DONE batch drawing edges
         svg.attr("transform", d3.event.transform);
         const radius = get_node_size(d3.event.transform.k);
         d3.selectAll('.node').filter(node => node_is_visible(node, width, height, d3.event.transform)).style("r", radius); // update node size
-        console.log('zommed');
     }
 
     // this function is called at the beginning of any zoom or drag event
@@ -481,7 +435,6 @@ DONE batch drawing edges
     function zoomEnd(width, height, transform){
         update_graph(width, height, transform);
         show_node_labels(transform);
-        show_hide_arrowheads(transform);
     }
 
     // this function draws a single batch of edges
@@ -501,14 +454,11 @@ DONE batch drawing edges
     // it launches the redrawing of visible edges
     // the visible edges are drawn by batches of size BATCH_SIZE
     function update_graph(width, height, transform){
+        console.log(transform)
         // if the graph did not move, no need tn redraw everything
         // this allows to avoid redrawing when a node is clicked
         // also need to check if the rendering was finished, if not redraw anyway
-        // EDIT this does not work, as the edges will be erased in zoomBegin but never be redrawn
-        /*if(JSON.stringify(transform) === JSON.stringify(previous_transform) && drawing_complete){
-            console.log('no movement')
-            return;
-        }*/
+        if(JSON.stringify(transform) === JSON.stringify(previous_transform) && drawing_complete) return;
         drawing_complete = false;
 
         const line_width = get_line_width(transform.k);
@@ -531,56 +481,11 @@ DONE batch drawing edges
     }
 
     // shows the labels of the nodes if the zoom threshold is reached
-    // only shows labels of visible nodes
+    // TODO only show labels of visible nodes
     function show_node_labels(transform){
-        // is the zoom threshold reached?
         if(transform.k > SHOW_LABELS_THRESHOLD){
-            let font_size = get_label_font_size(transform.k);
-            // filter out the nodes that do not appear on the screen
-            let visible_nodes = d3.selectAll('.node')
-            .filter(node => node_is_visible(node, width, height, d3.event.transform))
-            .data();
-
-            // display the label for each visible node
-            d3.selectAll('.node_title')
-                .data(visible_nodes, function(d){return d.id;})
-                .style('display', 'block')
-                .style('font-size', font_size);
+            d3.selectAll('.node_title').style('display', 'block');
         }
-    }
-
-    // at a certain unzooming threshold, the arrowheads are hidden
-    // to avoid the graph to be messy
-    function show_hide_arrowheads(transform){
-        if(transform.k < HIDE_ARROWHEADS_THRESHOLD && arrowheads_visible){
-            g.selectAll('.link').attr('marker-end','none');
-            arrowheads_visible = false;
-            console.log('hide arrowheads');
-        }
-        else if(transform.k >= HIDE_ARROWHEADS_THRESHOLD && !arrowheads_visible){
-            g.selectAll('.link').attr('marker-end','url(#arrowhead)');
-            arrowheads_visible = true;
-            console.log('show arrowheads');
-        }
-    }
-
-    function show_infopanel(){
-        d3.select('#infopanel').style('opacity', 0).transition().duration(500).style('opacity', 1).style('pointer-events', 'auto');
-    }
-
-    function hide_infopanel(){
-        d3.select('#infopanel').transition().duration(500).style('opacity', 0).style('pointer-events', 'none');
-    }
-
-    function fill_infopanel(text){
-        d3.select('#infopanel').html(text);
-    }
-
-    function node_to_string(nid){
-        let result = '';
-        result += '<div><strong>' + nodes[nid].title + '</strong></div><br/>';
-        result += '<div>' + course_descriptions[nid] + '</div>';
-        return result;
     }
 
 
