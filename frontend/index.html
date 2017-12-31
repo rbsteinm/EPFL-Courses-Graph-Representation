@@ -1,15 +1,18 @@
 <html>
 <!--
-TODO z-index of highlighted edges > z-index of background nodes
+TODO fix bug unzoom edges not rendered
+    the bug occurs when selection event, then zoom, then selection event again
+    the solution is either to still update everything that's not visible in the background
+    or to re-update everything at each click (which is the same as not disambiguiating click and zoom?) <== that's the solution implemented for the moment
 TODO connected courses on infopanel
-TODO disambiguiate click and zoom to not redraw when click
 TODO re-implement search function
 TODO rethink the colors and design
-TODO when a node is selected and there's a redraw, first redraw the selected edges
 TODO nodes "clustering" (supernodes)
 TODO handle screen rotate (recompute width and height?)
 
 
+DONE when a node is selected and there's a redraw, only redraw the selected edges
+DONE disambiguiate click and zoom to not redraw when click
 DONE infopanel
 DONE hide arrowheads when unzoom threshold is reached for cleaner display
 DONE constrain zoom (for ex. stop when all nodes are visible)
@@ -157,11 +160,8 @@ DONE batch drawing edges
     let EDGE_SELECTION = [];
     let course_descriptions = {};
     let course_sections = {};
-    window.nodes = {};
-    window.edges = {};
     let adjacency_list = {};
     let drawing_timer;
-    let previous_transform;
     let drawing_complete = true;
     let show_labels = true;
     let arrowheads_visible = true;
@@ -205,7 +205,7 @@ DONE batch drawing edges
             return zoomEnd(width, height, d3.event.transform);
         })
         .on("zoom", function(){
-            return zoomed(g, width, height);
+            return zoomed(width, height, d3.event.transform);
         });
 
     svg.call(zoom_handler);
@@ -215,6 +215,9 @@ DONE batch drawing edges
         clear_selection(false);
         hide_infopanel();
         show_node_labels(d3.zoomTransform(svg.node()));
+        zoomBegin();
+        zoomed(width, height, d3.zoomTransform(svg.node()));
+        zoomEnd(width, height, d3.zoomTransform(svg.node()));
     });
 
 
@@ -309,6 +312,10 @@ DONE batch drawing edges
         // update visible node labels to show only those of selected courses
         hide_node_labels();
         show_node_labels(d3.zoomTransform(svg.node()));
+        // update the graph when a new node is selected
+        zoomBegin();
+        zoomed(width, height, d3.zoomTransform(svg.node()));
+        zoomEnd(width, height, d3.zoomTransform(svg.node()));
         // only the node is clicked, not the background
         event.stopPropagation();
     }
@@ -498,14 +505,16 @@ DONE batch drawing edges
     // This code is executed everytime the page is zoomed
     // It dinamically resizes the nodes and the edges
     // but only if they are visible to reduce computation time
-    function zoomed(svg, width, height){
+    function zoomed(width, height, transform){
         // hide all links
         d3.selectAll('.link').style('display', 'none');
         // hide node labels
         hide_node_labels();
-        svg.attr("transform", d3.event.transform);
-        const radius = get_node_size(d3.event.transform.k);
-        d3.selectAll('.node').filter(node => node_is_visible(node, width, height, d3.event.transform)).style("r", radius); // update node size
+        // transform
+        g.attr("transform", transform);
+        // update node size
+        const radius = get_node_size(transform.k);
+        d3.selectAll('.node').filter(node => node_is_visible(node, width, height, transform)).style("r", radius);
         console.log('zommed');
         ZOOMED = true;
     }
@@ -551,14 +560,6 @@ DONE batch drawing edges
     // it launches the redrawing of visible edges
     // the visible edges are drawn by batches of size BATCH_SIZE
     function update_graph(width, height, transform){
-        // if the graph did not move, no need tn redraw everything
-        // this allows to avoid redrawing when a node is clicked
-        // also need to check if the rendering was finished, if not redraw anyway
-        // EDIT this does not work, as the edges will be erased in zoomBegin but never be redrawn
-        /*if(JSON.stringify(transform) === JSON.stringify(previous_transform) && drawing_complete){
-            console.log('no movement')
-            return;
-        }*/
         drawing_complete = false;
 
         const line_width = get_line_width(transform.k);
@@ -578,8 +579,6 @@ DONE batch drawing edges
                 drawing_complete = true;
             }
         }, 0);
-        // deep copy of transform object
-        previous_transform = {...transform};
     }
 
     // shows the labels of the nodes if the zoom threshold is reached
