@@ -153,6 +153,7 @@ DONE batch drawing edges
 
     let nodes = {};
     let edges = {};
+    let SELECTION = [];
     let course_descriptions = {};
     let course_sections = {};
     window.nodes = {};
@@ -211,6 +212,7 @@ DONE batch drawing edges
     d3.select("div#graph").on("click", function(){
         clear_selection(false);
         hide_infopanel();
+        show_node_labels(d3.zoomTransform(svg.node()));
     });
 
 
@@ -283,6 +285,9 @@ DONE batch drawing edges
                 highlight_selection(d);
                 fill_infopanel(node_to_string(d.id));
                 show_infopanel();
+                // update visible node labels to show only those of selected courses
+                hide_node_labels();
+                show_node_labels(d3.zoomTransform(svg.node()));
                 event.stopPropagation(); // only the node is clicked, not the background
             });
 
@@ -409,6 +414,7 @@ DONE batch drawing edges
             already_seen.push(node_id);
         }
         highlight_node(node, distance);
+        SELECTION.push(node_id);
 
         // also highlight neighbors (and the edge that links to each neighbor)
         if(distance > 0){
@@ -460,6 +466,7 @@ DONE batch drawing edges
 
     // clears the highlighting and all node/edge selection
     function clear_selection(new_selection=false){
+        SELECTION = [];
         if(new_selection){
             d3.selectAll('.node').style('fill', BACKGROUND_NODE_COLOR);
             d3.selectAll('.link').style('stroke', BACKGROUND_EDGE_COLOR);
@@ -490,7 +497,7 @@ DONE batch drawing edges
             drawing_timer.stop();
         }
         // hide node labels
-        g.selectAll('.node_title').style('display', 'none');
+        hide_node_labels();
     }
 
     // this function is called at the end of any zoom or drag event
@@ -554,10 +561,14 @@ DONE batch drawing edges
         // is the zoom threshold reached?
         if(transform.k > SHOW_LABELS_THRESHOLD){
             let font_size = get_label_font_size(transform.k);
+
             // filter out the nodes that do not appear on the screen
             let visible_nodes = d3.selectAll('.node')
-            .filter(node => node_is_visible(node, width, height, d3.event.transform))
+            .filter(node => node_is_visible(node, width, height, transform))
             .data();
+
+            // if there is a selection, only show labels of selected nodes
+            if(SELECTION.length > 0) visible_nodes = visible_nodes.filter(node => SELECTION.includes(node.id));
 
             // display the label for each visible node
             d3.selectAll('.node_title')
@@ -567,14 +578,21 @@ DONE batch drawing edges
         }
     }
 
+    // hides all the node labels
+    function hide_node_labels(){
+        g.selectAll('.node_title').style('display', 'none');
+    }
+
     // at a certain unzooming threshold, the arrowheads are hidden
     // to avoid the graph to be messy
     function show_hide_arrowheads(transform){
+        // to zoomed out, don't display arrowheads
         if(transform.k < HIDE_ARROWHEADS_THRESHOLD && arrowheads_visible){
             g.selectAll('.link').attr('marker-end','none');
             arrowheads_visible = false;
             console.log('hide arrowheads');
         }
+        // display arrowheads
         else if(transform.k >= HIDE_ARROWHEADS_THRESHOLD && !arrowheads_visible){
             g.selectAll('.link').attr('marker-end','url(#arrowhead)');
             arrowheads_visible = true;
