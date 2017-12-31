@@ -1,6 +1,7 @@
 <html>
 <!--
-TODO infopanel
+TODO z-index of highlighted edges > z-index of background nodes
+TODO connected courses on infopanel
 TODO disambiguiate click and zoom to not redraw when click
 TODO re-implement search function
 TODO rethink the colors and design
@@ -9,6 +10,7 @@ TODO nodes "clustering" (supernodes)
 TODO handle screen rotate (recompute width and height?)
 
 
+DONE infopanel
 DONE hide arrowheads when unzoom threshold is reached for cleaner display
 DONE constrain zoom (for ex. stop when all nodes are visible)
 DONE adaptive labels font size
@@ -136,8 +138,8 @@ DONE batch drawing edges
     const EDGE_COLOR = "rgba(125, 125, 125, 0.8)";
     const SELECTED_NODE_COLOR = "rgba(0, 0, 0, 1)";
     const SELECTED_EDGE_COLOR = "rgba(0, 0, 0, 0.8)";
-    const BACKGROUND_NODE_COLOR = "rgba(125, 125, 125, 0.2)";
-    const BACKGROUND_EDGE_COLOR = "rgba(125, 125, 125, 0.2)";
+    const BACKGROUND_NODE_COLOR = "rgb(235,235,235)";
+    const BACKGROUND_EDGE_COLOR = "rgb(229,229,229)";
 
     const BATCH_SIZE = 50;
     const SHOW_LABELS_THRESHOLD = 0.5;
@@ -146,6 +148,8 @@ DONE batch drawing edges
     const FONT_SIZE = 12;
     const ZOOM_CONSTRAIN = [0.05, 2.5];
     const HIDE_ARROWHEADS_THRESHOLD = 0.25;
+    //const HIGHLIGHT_COLORS = ['#5C5C5C', '#454545', '#2E2E2E', '#171717', '#000000'];
+    const HIGHLIGHT_COLORS = ['rgb(180, 180, 180)', 'rgb(100, 100, 100)', 'rgb(0, 0, 0)'];
 
     let nodes = {};
     let edges = {};
@@ -253,6 +257,21 @@ DONE batch drawing edges
     // this function creates a circle for each course and an edge for each relationship
     // it is called as a callback of the import_data method
     function display_graph(){
+        // create an SVG line for each link in the JSON data
+        g.selectAll(".link")
+            .data(Object.values(edges)).enter()
+            .append("line")
+            .attr("x1", function(d) {return d.x1;})
+            .attr("y1", function(d) {return d.y1;})
+            .attr("x2", function(d) {return d.x2;})
+            .attr("y2", function(d) {return d.y2;})
+            .attr("id", function(d) {return d.id;})
+            .attr("class", function(d) {
+                return (d.type == 'baseline') ? 'link': 'link indicative_link';
+            })
+            .attr('marker-end','url(#arrowhead)');
+
+        // draw the nodes
         g.selectAll(".node")
             .data(Object.values(nodes)).enter()
             .append("circle")
@@ -268,19 +287,6 @@ DONE batch drawing edges
             });
 
 
-        // create an SVG line for each link in the JSON data
-        g.selectAll(".link")
-            .data(Object.values(edges)).enter()
-            .append("line")
-            .attr("x1", function(d) {return d.x1;})
-            .attr("y1", function(d) {return d.y1;})
-            .attr("x2", function(d) {return d.x2;})
-            .attr("y2", function(d) {return d.y2;})
-            .attr("id", function(d) {return d.id;})
-            .attr("class", function(d) {
-                return (d.type == 'baseline') ? 'link': 'link indicative_link';
-            })
-            .attr('marker-end','url(#arrowhead)');
 
         // add text above nodes
         g.selectAll("text")
@@ -430,8 +436,10 @@ DONE batch drawing edges
 
     // highlights the given node with opacity proportional to the root distance
     function highlight_node(node, distance_to_leaf){
-        const opacity = 0.4 + 0.3 * distance_to_leaf;
-        d3.select('circle#'+node.id).style('fill', "rgba(0, 0, 0, " + opacity + ")");
+        //const opacity = 0.4 + 0.3 * distance_to_leaf;
+        //d3.select('circle#'+node.id).style('fill', "rgba(0, 0, 0, " + opacity + ")");
+        d3.select('circle#'+node.id).style('fill', HIGHLIGHT_COLORS[distance_to_leaf]);
+
     }
 
     // highlights an edge
