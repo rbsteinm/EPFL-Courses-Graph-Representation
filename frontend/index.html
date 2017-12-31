@@ -154,6 +154,7 @@ DONE batch drawing edges
     let nodes = {};
     let edges = {};
     let NODE_SELECTION = [];
+    let EDGE_SELECTION = [];
     let course_descriptions = {};
     let course_sections = {};
     window.nodes = {};
@@ -164,6 +165,7 @@ DONE batch drawing edges
     let drawing_complete = true;
     let show_labels = true;
     let arrowheads_visible = true;
+    let ZOOMED = false;
 
 
     // define width/height as the svg container dimensions
@@ -426,7 +428,10 @@ DONE batch drawing edges
         if(distance > 0){
             if(!adjacency_list[node_id]) return;
             let adjacent_edges = adjacency_list[node_id].map(edge_id => get_edge_by_id(edge_id));
-            adjacent_edges.forEach(edge => highlight_edge(edge, distance));
+            adjacent_edges.forEach(function(edge){
+                highlight_edge(edge, distance);
+                EDGE_SELECTION.push(edge);
+            });
             let unvisited_nodes = adjacent_edges.map(edge => get_neighbor(node_id, edge)).filter(nid => !already_seen.includes(nid));
             unvisited_nodes.forEach(nid => already_seen.push(nid));
             unvisited_nodes.forEach(nid =>  highlight_selection(get_node_by_id(nid), false, distance-1, already_seen));
@@ -475,6 +480,7 @@ DONE batch drawing edges
     // clears the highlighting and all node/edge selection
     function clear_selection(new_selection=false){
         NODE_SELECTION = [];
+        EDGE_SELECTION = [];
         if(new_selection){
             //d3.selectAll('.node').style('fill', BACKGROUND_NODE_COLOR);
             //d3.selectAll('.link').style('stroke', BACKGROUND_EDGE_COLOR);
@@ -493,11 +499,15 @@ DONE batch drawing edges
     // It dinamically resizes the nodes and the edges
     // but only if they are visible to reduce computation time
     function zoomed(svg, width, height){
+        // hide all links
         d3.selectAll('.link').style('display', 'none');
+        // hide node labels
+        hide_node_labels();
         svg.attr("transform", d3.event.transform);
         const radius = get_node_size(d3.event.transform.k);
         d3.selectAll('.node').filter(node => node_is_visible(node, width, height, d3.event.transform)).style("r", radius); // update node size
         console.log('zommed');
+        ZOOMED = true;
     }
 
     // this function is called at the beginning of any zoom or drag event
@@ -508,17 +518,20 @@ DONE batch drawing edges
             console.log('stopped timer')
             drawing_timer.stop();
         }
-        // hide node labels
-        hide_node_labels();
     }
 
     // this function is called at the end of any zoom or drag event
     // it launches the redrawing of visible edges
     // the visible edges are drawn by batches of size BATCH_SIZE
     function zoomEnd(width, height, transform){
-        update_graph(width, height, transform);
-        show_node_labels(transform);
-        show_hide_arrowheads(transform);
+        // check if the graph has been moved
+        // this allows to distinguish a click and a drag event
+        if(ZOOMED){
+            update_graph(width, height, transform);
+            show_node_labels(transform);
+            show_hide_arrowheads(transform);
+            ZOOMED = false;
+        }
     }
 
     // this function draws a single batch of edges
@@ -552,7 +565,7 @@ DONE batch drawing edges
         let batch_number = 0;
         let visible_edges = d3.selectAll('.link').filter(edge => edge_is_visible(edge, width, height, transform)).data();
         // if there is a selection, only draw selected edges
-        //if(SELECTION.length > 0)
+        if(EDGE_SELECTION.length > 0) visible_edges = visible_edges.filter(edge => EDGE_SELECTION.includes(edge));
         // this timer calls its parameter function over and over again until it is stopped
         drawing_timer = d3.timer(function(){
             let batch = visible_edges.splice(0, Math.min(BATCH_SIZE, visible_edges.length));
@@ -566,7 +579,7 @@ DONE batch drawing edges
             }
         }, 0);
         // deep copy of transform object
-        //previous_transform = {...transform};
+        previous_transform = {...transform};
     }
 
     // shows the labels of the nodes if the zoom threshold is reached
