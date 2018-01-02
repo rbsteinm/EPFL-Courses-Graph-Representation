@@ -289,7 +289,7 @@ DONE batch drawing edges
             .attr("class", "node unselected_node")
             .attr("id", d => d.id)
             .on("click", function(d) {
-                on_click_node(d);
+                on_click_node(d.id);
             });
 
         // add text above nodes
@@ -305,11 +305,11 @@ DONE batch drawing edges
     }
 
     // this function is called when a node is clicked
-    function on_click_node(node){
+    function on_click_node(node_id){
         // highlight the node and its neighbors
-        highlight_selection(node);
+        highlight_selection(node_id);
         // fill the information panel with the node's information
-        fill_infopanel(node.id);
+        fill_infopanel(node_id);
         show_infopanel();
         // update visible node labels to show only those of selected courses
         hide_node_labels();
@@ -423,14 +423,13 @@ DONE batch drawing edges
     // is_source: true if the node is the selected node (root node)
     // distance: highlight all nodes that are d hops away from the root, for all d <= distance
     // already_seen: the nodes that were already visited and highlightd by the algorithm (to avoid highlighting a node twice)
-    function highlight_selection(node, is_source=true, distance=2, already_seen=[]){
-        let node_id = node.id;
+    function highlight_selection(node_id, is_source=true, distance=2, already_seen=[]){
 
         if(is_source){
             clear_selection(true);
             already_seen.push(node_id);
         }
-        highlight_node(node, distance);
+        highlight_node(node_id, distance);
         NODE_SELECTION.push(node_id);
 
         // also highlight neighbors (and the edge that links to each neighbor)
@@ -443,7 +442,7 @@ DONE batch drawing edges
             });
             let unvisited_nodes = adjacent_edges.map(edge => get_neighbor(node_id, edge)).filter(nid => !already_seen.includes(nid));
             unvisited_nodes.forEach(nid => already_seen.push(nid));
-            unvisited_nodes.forEach(nid =>  highlight_selection(get_node_by_id(nid), false, distance-1, already_seen));
+            unvisited_nodes.forEach(nid =>  highlight_selection(nid, false, distance-1, already_seen));
         }
     }
 
@@ -461,11 +460,11 @@ DONE batch drawing edges
     }
 
     // highlights the given node with opacity proportional to the root distance
-    function highlight_node(node, distance_to_leaf){
+    function highlight_node(node_id, distance_to_leaf){
         //const opacity = 0.4 + 0.3 * distance_to_leaf;
         //d3.select('circle#'+node.id).style('fill', "rgba(0, 0, 0, " + opacity + ")");
-        d3.select('circle#'+node.id).style('fill', HIGHLIGHT_COLORS[distance_to_leaf]);
-        d3.select('circle#'+node.id).style('visibility', 'visible');
+        d3.select('circle#'+node_id).style('fill', HIGHLIGHT_COLORS[distance_to_leaf]);
+        d3.select('circle#'+node_id).style('visibility', 'visible');
 
     }
 
@@ -666,9 +665,7 @@ DONE batch drawing edges
                 infopanel.append('div')
                     .text(nodes[nid].title)
                     .on('click', function(){
-                        on_click_node(nodes[nid]);
-                        //highlight_selection(nodes[nid]);
-                        //fill_infopanel(nid);
+                        on_click_node(nid);
                     })
             });
         }
