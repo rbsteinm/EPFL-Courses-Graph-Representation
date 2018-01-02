@@ -1,16 +1,18 @@
 <html>
 <!--
-TODO fix bug unzoom edges not rendered
-    the bug occurs when selection event, then zoom, then selection event again
-    the solution is either to still update everything that's not visible in the background
-    or to re-update everything at each click (which is the same as not disambiguiating click and zoom?) <== that's the solution implemented for the moment
 TODO connected courses on infopanel
 TODO re-implement search function
+TODO automatically translate/zoom the graph when there is a selection so that is is entirely visible and centered above the infopanel
 TODO rethink the colors and design
 TODO nodes "clustering" (supernodes)
 TODO handle screen rotate (recompute width and height?)
 
 
+DONE fix bug unzoom edges not rendered
+    the bug occurs when selection event, then zoom, then selection event again
+    the solution is either to still update everything that's not visible in the background
+    or to re-update everything at each click (which is the same as not disambiguiating click and zoom?) <== that's the solution implemented for the moment
+    or other solution: update only when the selection has changed!
 DONE when a node is selected and there's a redraw, only redraw the selected edges
 DONE disambiguiate click and zoom to not redraw when click
 DONE infopanel
@@ -115,15 +117,14 @@ DONE batch drawing edges
     #infopanel{
         background-color: white;
         position: absolute;
-        width: 80%;
+        width: 94%;
         /*height: 20%;*/
         bottom: 2%;
-        left: 10%;
-        margin-bottom: 10px;
+        left: 2%;
 
         border: 2px black solid;
         border-radius: 10px;
-        padding: 10px;
+        padding: 1%;
         opacity: 0;
         pointer-events: none;
     }
@@ -307,7 +308,8 @@ DONE batch drawing edges
         // highlight the node and its neighbors
         highlight_selection(node);
         // fill the information panel with the node's information
-        fill_infopanel(node_to_string(node.id));
+        //fill_infopanel(node_to_string(node.id));
+        fill_infopanel(node.id);
         show_infopanel();
         // update visible node labels to show only those of selected courses
         hide_node_labels();
@@ -515,12 +517,14 @@ DONE batch drawing edges
         // update node size
         const radius = get_node_size(transform.k);
         d3.selectAll('.node').filter(node => node_is_visible(node, width, height, transform)).style("r", radius);
-        console.log('zommed');
+        // was there been a drag or a zoom or was it only a click?
         ZOOMED = true;
+        console.log('zommed');
     }
 
     // this function is called at the beginning of any zoom or drag event
-    // it interrupts any ongoing drawing of edges
+    // if a new drawing occurs while the current drawing is unfinished, 
+    // the current drawing is interrupted and the new one is launched immediately
     function zoomBegin(){
         // Stop the timer if a zoom/drag occurs
         if(drawing_timer){
@@ -536,7 +540,7 @@ DONE batch drawing edges
         // check if the graph has been moved
         // this allows to distinguish a click and a drag event
         if(ZOOMED){
-            update_graph(width, height, transform);
+            redraw_edges(width, height, transform);
             show_node_labels(transform);
             show_hide_arrowheads(transform);
             ZOOMED = false;
@@ -556,10 +560,10 @@ DONE batch drawing edges
     }
 
     
-    // this function updates the graph after any zoom or drag
-    // it launches the redrawing of visible edges
+    // this function draws back the visible edges after any zoom or drag
+    // it interrupts the drawing timer if and when the drawing is completed
     // the visible edges are drawn by batches of size BATCH_SIZE
-    function update_graph(width, height, transform){
+    function redraw_edges(width, height, transform){
         drawing_complete = false;
 
         const line_width = get_line_width(transform.k);
@@ -634,19 +638,54 @@ DONE batch drawing edges
         d3.select('#infopanel').transition().duration(500).style('opacity', 0).style('pointer-events', 'none');
     }
 
-    function fill_infopanel(text){
+    /*function fill_infopanel(text){
         d3.select('#infopanel').html(text);
+    }*/
+
+    function fill_infopanel(nid){
+        let infopanel = d3.select('#infopanel');
+        // empty the infopanel
+        infopanel.selectAll('*').remove();
+        // title
+        infopanel.append('div')
+            .append('strong')
+            .text(nodes[nid].title);
+        // description
+        infopanel.append('div').text(course_descriptions[nid]);
+        infopanel.append('br');
+        // sections
+        if(course_sections[nid]){
+            let text = 'Sections: <br/>';
+            course_sections[nid].forEach(function(s){
+                text += s + '<br/>';
+            });
+            infopanel.append('div').html(text);
+        }
+        infopanel.append('br');
+        // related courses
+        if(adjacency_list[nid]){
+            let related_courses = adjacency_list[nid].map(eid => edges[eid].target);
+            let text = '';
+            related_courses.forEach(function(nid){
+                text += nodes[nid].title + '<br/>';
+            });
+            infopanel.append('div').html('Related courses: <br/>' + text);
+        }
     }
 
     function node_to_string(nid){
         let result = '';
         result += '<div><strong>' + nodes[nid].title + '</strong></div><br/>';
         result += '<div>' + course_descriptions[nid] + '</div><br/>';
+        // add sections
         if(course_sections[nid]){
             result += '<div>Sections: ';
             result += course_sections[nid].toString();
             result += '</div>';
         }
+        // add related courses
+        let related_courses = adjacency_list[nid].map(eid => edges[eid].target);
+
         return result;
     }
 
