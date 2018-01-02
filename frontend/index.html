@@ -308,7 +308,6 @@ DONE batch drawing edges
         // highlight the node and its neighbors
         highlight_selection(node);
         // fill the information panel with the node's information
-        //fill_infopanel(node_to_string(node.id));
         fill_infopanel(node.id);
         show_infopanel();
         // update visible node labels to show only those of selected courses
@@ -638,10 +637,6 @@ DONE batch drawing edges
         d3.select('#infopanel').transition().duration(500).style('opacity', 0).style('pointer-events', 'none');
     }
 
-    /*function fill_infopanel(text){
-        d3.select('#infopanel').html(text);
-    }*/
-
     function fill_infopanel(nid){
         let infopanel = d3.select('#infopanel');
         // empty the infopanel
@@ -671,22 +666,6 @@ DONE batch drawing edges
             });
             infopanel.append('div').html('Related courses: <br/>' + text);
         }
-    }
-
-    function node_to_string(nid){
-        let result = '';
-        result += '<div><strong>' + nodes[nid].title + '</strong></div><br/>';
-        result += '<div>' + course_descriptions[nid] + '</div><br/>';
-        // add sections
-        if(course_sections[nid]){
-            result += '<div>Sections: ';
-            result += course_sections[nid].toString();
-            result += '</div>';
-        }
-        // add related courses
-        let related_courses = adjacency_list[nid].map(eid => edges[eid].target);
-
-        return result;
     }
 
 
