@@ -1,7 +1,5 @@
 <html>
 <!--
-TODO make infopanel scrollable
-TODO connected courses on infopanel
 TODO re-implement search function
 TODO automatically translate/zoom the graph when there is a selection so that is is entirely visible and centered above the infopanel
 TODO rethink the colors and design
@@ -9,6 +7,8 @@ TODO nodes "clustering" (supernodes)
 TODO handle screen rotate (recompute width and height?)
 
 
+DONE make infopanel scrollable
+DONE connected courses on infopanel
 DONE fix bug unzoom edges not rendered
     the bug occurs when selection event, then zoom, then selection event again
     the solution is either to still update everything that's not visible in the background
@@ -31,6 +31,7 @@ DONE batch drawing edges
     DONE fade in the edges when you draw them
 -->
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EPFL courses</title>
 </head>
@@ -42,8 +43,14 @@ DONE batch drawing edges
     </div>
     <button class="btn btn-default" type="submit">Search</button>
 </form>-->
+<!--<form>
+    <i class="fa fa-search" style="font-size: 40px;" aria-hidden="true"></i>
+    <input type="text" name="search" placeholder="Search..">
+</form>-->
 
-
+<form>
+  <input type="text" name="search" placeholder="">
+</form>
 <div id="graph" class = "svg-container"></div>
 <div id='infopanel'></div>
 
@@ -130,6 +137,41 @@ DONE batch drawing edges
         opacity: 0;
         pointer-events: none;
     }
+
+    /*i{
+        position: absolute;
+        z-index: 2;
+    }
+
+    form{
+
+    }*/
+
+    input[type=text] {
+        top: 1%;
+        position: absolute;
+        width: 0px;
+        box-sizing: border-box;
+        border-radius: 10px;
+        font-size: 16px;
+        border: 2px solid transparent;
+        background-color: transparent;
+        background-image: url('data/searchicon.png');
+        background-repeat: no-repeat;
+        background-size: auto 80%;
+        background-position: 5px 50%;
+        padding: 12px 20px 12px 40px;
+        -webkit-transition: width 0.4s ease-in-out, background-color 0.4s ease-in, border-color 0.4s ease-in;
+        transition: width 0.4s ease-in-out, background-color 0.4s ease-in, border-color 0.4s ease-in;
+        z-index: 2;
+    }
+
+    input[type=text]:focus {
+        width: 60%;
+        border: 2px solid #ccc;
+        background-color: white;
+        outline: 0;
+    }
     </style>
 
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
@@ -186,11 +228,11 @@ DONE batch drawing edges
     .append('marker')
     .attrs({'id':'arrowhead',
         'viewBox':'-0 -5 10 10',
-        'refX':23,
+        'refX':29,
         'refY':0,
         'orient':'auto',
-        'markerWidth':0.7 * NODE_SIZE,
-        'markerHeight':0.7 * NODE_SIZE,
+        'markerWidth':0.5 * NODE_SIZE,
+        'markerHeight':0.5 * NODE_SIZE,
         'xoverflow':'visible'})
     .append('svg:path')
     .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
