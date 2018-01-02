@@ -1,5 +1,6 @@
 <html>
 <!--
+TODO make infopanel scrollable
 TODO connected courses on infopanel
 TODO re-implement search function
 TODO automatically translate/zoom the graph when there is a selection so that is is entirely visible and centered above the infopanel
@@ -659,12 +660,17 @@ DONE batch drawing edges
         infopanel.append('br');
         // related courses
         if(adjacency_list[nid]){
+            infopanel.append('div').text('Related courses:');
             let related_courses = adjacency_list[nid].map(eid => edges[eid].target);
-            let text = '';
             related_courses.forEach(function(nid){
-                text += nodes[nid].title + '<br/>';
+                infopanel.append('div')
+                    .text(nodes[nid].title)
+                    .on('click', function(){
+                        on_click_node(nodes[nid]);
+                        //highlight_selection(nodes[nid]);
+                        //fill_infopanel(nid);
+                    })
             });
-            infopanel.append('div').html('Related courses: <br/>' + text);
         }
     }
 
