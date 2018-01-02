@@ -48,9 +48,8 @@ DONE batch drawing edges
     <input type="text" name="search" placeholder="Search..">
 </form>-->
 
-<form>
-  <input type="text" name="search" placeholder="">
-</form>
+<input type="text" name="search" placeholder="" onkeyup="search(this.value);">
+<div id="search_results"></div>
 <div id="graph" class = "svg-container"></div>
 <div id='infopanel'></div>
 
@@ -138,15 +137,6 @@ DONE batch drawing edges
         pointer-events: none;
     }
 
-    /*i{
-        position: absolute;
-        z-index: 2;
-    }
-
-    form{
-
-    }*/
-
     input[type=text] {
         top: 1%;
         position: absolute;
@@ -171,6 +161,10 @@ DONE batch drawing edges
         border: 2px solid #ccc;
         background-color: white;
         outline: 0;
+    }
+
+    #search_results{
+        position: absolute;
     }
     </style>
 
@@ -714,11 +708,37 @@ DONE batch drawing edges
         }
     }
 
+    function search(query){
+        // the courses that contain the query on their title
+        let result_nids = (Object.values(nodes).filter(node => String(node.title).includes(query))).map(n => n.id);
+        // keep only the first 10
+        result_nids = result_nids.slice(0,10);
+        console.log(result_nids);
+
+        let cells = d3.select('#search_results')
+            .selectAll('.result_cell')
+            .data(result_nids, function(d){return d;});
+
+        if(query == ''){
+            d3.selectAll('.result_cell').remove();
+            return;
+        }
+
+        cells.enter()
+            .append('div')
+            .attr('class', 'result_cell')
+            .text(function(d){return d;});
+
+        cells.exit().remove();
+
+
+    }
+
 
 </script>
 
 <script type="text/javascript">
-    const t = $("table#results tbody");
+    /*const t = $("table#results tbody");
     function clear_search(){
         $(".selected_node").attr("class", "node");
         t.empty();
@@ -748,7 +768,7 @@ DONE batch drawing edges
     }
 
     $("#search").submit(search);
-    //search();
+    //search();*/
 </script>
 </body>
 </html>
