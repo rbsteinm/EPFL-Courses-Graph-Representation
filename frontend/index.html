@@ -760,42 +760,7 @@ DONE batch drawing edges
         d3.selectAll('.search_results_cell').remove();
         d3.select('#searchbox').property('value', '');
     }
-
-
-</script>
-
-<script type="text/javascript">
-    /*const t = $("table#results tbody");
-    function clear_search(){
-        $(".selected_node").attr("class", "node");
-        t.empty();
-    }
-
-    function search() {
-        var query=$("#search").find("input[name=search]").val();
-        clear_search();
-        if(query.length != 0){
-            $.get("/search?q=" + encodeURIComponent(query),
-                    function (data) {
-                        if (!data || data.length == 0){
-                            console.log("empty search");
-                            return false;
-                        }
-                        // for each node returned by the query
-                        data.forEach(function (course) {
-                            // append a line in the list of selected courses with the course's title and code
-                            $("<tr><td class='course'>" + course.title + "</td><td>" + course.code + "</td><td>" + "</td></tr>").appendTo(t);
-                            var node = $('#' + course.id);
-                            node.attr("class", "node selected_node");
-                        });
-                    }, "json");
-        }
-        return false;
-        
-    }
-
-    $("#search").submit(search);
-    //search();*/
+    
 </script>
 </body>
 </html>
