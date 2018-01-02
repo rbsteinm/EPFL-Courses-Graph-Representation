@@ -48,8 +48,8 @@ DONE batch drawing edges
     <input type="text" name="search" placeholder="Search..">
 </form>-->
 
-<input type="text" name="search" placeholder="" onkeyup="search(this.value);">
-<div id="search_results"></div>
+<input id='searchbox' type="text" name="search" placeholder="" onkeyup="search(this.value);" autocomplete="off">
+<div id="search_results_container"></div>
 <div id="graph" class = "svg-container"></div>
 <div id='infopanel'></div>
 
@@ -138,9 +138,11 @@ DONE batch drawing edges
     }
 
     input[type=text] {
+        left: 1%;
         top: 1%;
         position: absolute;
         width: 0px;
+        height: 5%;
         box-sizing: border-box;
         border-radius: 10px;
         font-size: 16px;
@@ -157,14 +159,29 @@ DONE batch drawing edges
     }
 
     input[type=text]:focus {
-        width: 60%;
+        width: 50%;
         border: 2px solid #ccc;
         background-color: white;
         outline: 0;
     }
 
-    #search_results{
+    #search_results_container{
+        z-index: 2;
+        height: 5%;
         position: absolute;
+        width: 800px;
+        top: 6%;
+        left: 1%;
+    }
+
+    .search_results_cell{
+        //width: 98%;
+        background-color: white;
+        border: 2px solid #ccc;
+        outline: 0;
+        padding: 12px 20px 12px 40px;
+        border-radius: 10px;
+        font-size: 16px;
     }
     </style>
 
@@ -254,9 +271,12 @@ DONE batch drawing edges
         clear_selection(false);
         hide_infopanel();
         show_node_labels(d3.zoomTransform(svg.node()));
+        // refresh the graph
         zoomBegin();
         zoomed(width, height, d3.zoomTransform(svg.node()));
         zoomEnd(width, height, d3.zoomTransform(svg.node()));
+        // clear search box
+        hide_searchbox();
     });
 
 
@@ -709,29 +729,36 @@ DONE batch drawing edges
     }
 
     function search(query){
-        // the courses that contain the query on their title
-        let result_nids = (Object.values(nodes).filter(node => String(node.title).includes(query))).map(n => n.id);
-        // keep only the first 10
-        result_nids = result_nids.slice(0,10);
-        console.log(result_nids);
-
-        let cells = d3.select('#search_results')
-            .selectAll('.result_cell')
-            .data(result_nids, function(d){return d;});
-
+        // empty query => no result
         if(query == ''){
-            d3.selectAll('.result_cell').remove();
+            d3.selectAll('.search_results_cell').remove();
             return;
         }
+        // the courses that contain the query on their title
+        let result_nids = Object.values(nodes).filter(node => String(node.title).includes(query));
+        // keep only the first 10
+        result_nids = result_nids.slice(0,10);
+
+        let cells = d3.select('#search_results_container')
+            .selectAll('.search_results_cell')
+            .data(result_nids, function(d){return d.id;});
+
 
         cells.enter()
             .append('div')
-            .attr('class', 'result_cell')
-            .text(function(d){return d;});
+            .attr('class', 'search_results_cell')
+            .on('click', function(d){
+                hide_searchbox();
+                on_click_node(d.id);
+            })
+            .text(function(d){return d.title;});
 
         cells.exit().remove();
+    }
 
-
+    function hide_searchbox(){
+        d3.selectAll('.search_results_cell').remove();
+        d3.select('#searchbox').property('value', '');
     }
 
 
