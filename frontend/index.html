@@ -1,7 +1,7 @@
 <html>
 <!--
 TODO fix bug: when searching from text field, graph does not refresh afterwards (only on tablet, apparently only when selecting disconnected nodes)
-    issue is caused by a drawing timer that's never ending
+    issue is caused by a drawing timer that's never ending GO TO LINE 677
 TODO when screen is horizontal, the search cells go too much down
 TODO search don't take capital letters into account
 TODO nodes "clustering" (supernodes)
@@ -674,6 +674,8 @@ DONE batch drawing edges
         let visible_edges = d3.selectAll('.link').filter(edge => edge_is_visible(edge, width, height, transform)).data();
         // if there is a selection, only draw selected edges
         if(EDGE_SELECTION.length > 0) visible_edges = visible_edges.filter(edge => EDGE_SELECTION.includes(edge));
+        // end the timer in case it's running <= TODO this might be the fix for never ending bug 
+        if(drawing_timer) drawing_timer.stop();
         // this timer calls its parameter function over and over again until it is stopped
         drawing_timer = d3.timer(function(){
             let batch = visible_edges.splice(0, Math.min(BATCH_SIZE, visible_edges.length));
