@@ -1,12 +1,13 @@
 <html>
 <!--
 TODO the search results block clicks, pointer-events should be null when it's closed, or size 0
-TODO fix weird zoom (margins bottom and right) issue on mobile (the infopanel should not be zoomable)
+TODO (the infopanel should not be zoomable)
 TODO rethink the colors and design
 TODO nodes "clustering" (supernodes)
 TODO handle screen rotate (recompute width and height?)
 
 
+DONE fix weird zoom (margins bottom and right) issue on mobile
 DONE re-implement search function
 DONE automatically translate/zoom the graph when there is a selection so that is is entirely visible and centered above the infopanel
 DONE make infopanel scrollable
@@ -168,10 +169,10 @@ DONE batch drawing edges
     }
 
     #search_results_container{
+        position: absolute;
         z-index: 2;
         height: 5%;
-        position: absolute;
-        width: 800px;
+        width: 80%;
         top: 6%;
         left: 1%;
     }
@@ -385,7 +386,7 @@ DONE batch drawing edges
         event.stopPropagation();
 
         // animated movement
-        svg.transition().duration(1000).call(zoom_handler.transform, translate_to(node_id));
+        svg.transition().duration(1000).call(zoom_handler.transform, translate_to(node_id, 0.3));
     }
 
     function import_descriptions(){
@@ -774,13 +775,13 @@ DONE batch drawing edges
 
     // transforms the graph so that the node with id nid is
     // at the center of the viewport
-    function translate_to(nid) {
+    function translate_to(nid, scale_factor) {
         let node = nodes[nid];
         let [x, y] = get_new_coordinates(node.x, node.y, d3.zoomTransform(svg.node()));
         console.log(parseInt(d3.select('#infopanel').style('height')));
       return d3.zoomIdentity
           .translate(width/2, (height - parseInt(d3.select('#infopanel').style('height')))/2)
-          .scale(0.3)
+          .scale(scale_factor)
           .translate(-node.x, -node.y);
     }
 </script>
