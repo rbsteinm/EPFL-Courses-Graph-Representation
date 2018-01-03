@@ -1,12 +1,13 @@
 <html>
 <!--
-TODO the search results block clicks, pointer-events should be null when it's closed, or size 0
-TODO (the infopanel should not be zoomable)
+TODO search don't take capital letters into account
 TODO rethink the colors and design
 TODO nodes "clustering" (supernodes)
 TODO handle screen rotate (recompute width and height?)
+TODO (the infopanel should not be zoomable)
 
 
+DONE the search results block clicks, pointer-events should be null when it's closed, or size 0
 DONE fix weird zoom (margins bottom and right) issue on mobile
 DONE re-implement search function
 DONE automatically translate/zoom the graph when there is a selection so that is is entirely visible and centered above the infopanel
@@ -126,7 +127,7 @@ DONE batch drawing edges
 
     #infopanel{
         background-color: white;
-        position: absolute;
+        position: fixed;
         overflow-y: auto;
         width: 94%;
         max-height: 40%;
@@ -165,20 +166,22 @@ DONE batch drawing edges
         width: 50%;
         border: 2px solid #ccc;
         background-color: white;
+        padding: 12px 20px 12px 40px;
+        background-size: auto 80%;
+        background-position: 5px 50%;
         outline: 0;
     }
 
     #search_results_container{
         position: absolute;
         z-index: 2;
-        height: 5%;
-        width: 80%;
+        height: 0%;
+        width: 50%;
         top: 6%;
         left: 1%;
     }
 
     .search_results_cell{
-        //width: 98%;
         background-color: white;
         border: 2px solid #ccc;
         outline: 0;
@@ -225,6 +228,8 @@ DONE batch drawing edges
     let show_labels = true;
     let arrowheads_visible = true;
     let ZOOMED = false;
+
+    // _______________________________________________________ DOM ELEMENTS _______________________________________________________
 
 
     // define width/height as the svg container dimensions
@@ -281,6 +286,9 @@ DONE batch drawing edges
         // clear search box
         hide_searchbox();
     });
+
+
+    // _______________________________________________________ IMPORT AND INIT _______________________________________________________
 
 
     // this function imports the data from a .gexf file
@@ -364,31 +372,6 @@ DONE batch drawing edges
             .text(function(d){ return d.title});
     }
 
-    // this function is called when a node is clicked
-    function on_click_node(node_id){
-        // highlight the node and its neighbors
-        highlight_selection(node_id);
-
-        // fill the information panel with the node's information
-        fill_infopanel(node_id);
-        show_infopanel();
-
-        // update visible node labels to show only those of selected courses
-        hide_node_labels();
-        show_node_labels(d3.zoomTransform(svg.node()));
-
-        // update the graph when a new node is selected
-        //zoomBegin();
-        //zoomed(width, height, d3.zoomTransform(svg.node()));
-        //zoomEnd(width, height, d3.zoomTransform(svg.node()));
-
-        // only the node is clicked, not the background
-        event.stopPropagation();
-
-        // animated movement
-        svg.transition().duration(1000).call(zoom_handler.transform, translate_to(node_id, 0.3));
-    }
-
     function import_descriptions(){
         d3.tsv("./data/descriptions.csv")
             .row(function(row){
@@ -416,6 +399,33 @@ DONE batch drawing edges
     import_sections();
 
 
+    // _______________________________________________________ NODES AND EDGES METHODS _______________________________________________________
+
+
+    // this function is called when a node is clicked
+    function on_click_node(node_id){
+        // highlight the node and its neighbors
+        highlight_selection(node_id);
+
+        // fill the information panel with the node's information
+        fill_infopanel(node_id);
+        show_infopanel();
+
+        // update visible node labels to show only those of selected courses
+        hide_node_labels();
+        show_node_labels(d3.zoomTransform(svg.node()));
+
+        // update the graph when a new node is selected
+        //zoomBegin();
+        //zoomed(width, height, d3.zoomTransform(svg.node()));
+        //zoomEnd(width, height, d3.zoomTransform(svg.node()));
+
+        // only the node is clicked, not the background
+        event.stopPropagation();
+
+        // animated movement
+        svg.transition().duration(1000).call(zoom_handler.transform, translate_to(node_id, 0.3));
+    }
 
     function get_node_size(scale_factor){
         //return (5/(Math.sqrt(scale_factor))).toFixed(1);
@@ -570,6 +580,10 @@ DONE batch drawing edges
         }
     }
 
+
+    // _______________________________________________________ ZOOM AND DRAG EVENTS _______________________________________________________
+
+
     // This code is executed everytime the page is zoomed
     // It dinamically resizes the nodes and the edges
     // but only if they are visible to reduce computation time
@@ -624,7 +638,6 @@ DONE batch drawing edges
             .style("stroke-width", line_width)
             .style('display', 'block');
     }
-
     
     // this function draws back the visible edges after any zoom or drag
     // it interrupts the drawing timer if and when the drawing is completed
@@ -650,6 +663,22 @@ DONE batch drawing edges
             }
         }, 0);
     }
+
+    // transforms the graph so that the node with id nid is
+    // at the center of the viewport
+    function translate_to(nid, scale_factor) {
+        let node = nodes[nid];
+        let [x, y] = get_new_coordinates(node.x, node.y, d3.zoomTransform(svg.node()));
+        console.log(parseInt(d3.select('#infopanel').style('height')));
+      return d3.zoomIdentity
+          .translate(width/2, (height - parseInt(d3.select('#infopanel').style('height')))/2)
+          .scale(scale_factor)
+          .translate(-node.x, -node.y);
+    }
+
+
+    // _______________________________________________________ NODE LABELS AND ARROWHEADS _______________________________________________________
+
 
     // shows the labels of the nodes if the zoom threshold is reached
     // only shows labels of visible nodes
@@ -696,6 +725,10 @@ DONE batch drawing edges
         }
     }
 
+
+    // _______________________________________________________ INFOPANEL _______________________________________________________
+
+
     function show_infopanel(){
         d3.select('#infopanel').style('opacity', 0).transition().duration(500).style('opacity', 1).style('pointer-events', 'auto');
     }
@@ -738,6 +771,10 @@ DONE batch drawing edges
         }
     }
 
+
+    // _______________________________________________________ SEARCHBOX _______________________________________________________
+
+
     // fills the search panel results
     // called each time a key is pressed in the searchbox
     function search(query){
@@ -773,17 +810,6 @@ DONE batch drawing edges
         d3.select('#searchbox').property('value', '');
     }
 
-    // transforms the graph so that the node with id nid is
-    // at the center of the viewport
-    function translate_to(nid, scale_factor) {
-        let node = nodes[nid];
-        let [x, y] = get_new_coordinates(node.x, node.y, d3.zoomTransform(svg.node()));
-        console.log(parseInt(d3.select('#infopanel').style('height')));
-      return d3.zoomIdentity
-          .translate(width/2, (height - parseInt(d3.select('#infopanel').style('height')))/2)
-          .scale(scale_factor)
-          .translate(-node.x, -node.y);
-    }
 </script>
 </body>
 </html>
