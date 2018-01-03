@@ -1,12 +1,14 @@
 <html>
 <!--
-TODO re-implement search function
-TODO automatically translate/zoom the graph when there is a selection so that is is entirely visible and centered above the infopanel
+TODO the search results block clicks, pointer-events should be null when it's closed, or size 0
+TODO fix weird zoom (margins bottom and right) issue on mobile (the infopanel should not be zoomable)
 TODO rethink the colors and design
 TODO nodes "clustering" (supernodes)
 TODO handle screen rotate (recompute width and height?)
 
 
+DONE re-implement search function
+DONE automatically translate/zoom the graph when there is a selection so that is is entirely visible and centered above the infopanel
 DONE make infopanel scrollable
 DONE connected courses on infopanel
 DONE fix bug unzoom edges not rendered
@@ -365,18 +367,25 @@ DONE batch drawing edges
     function on_click_node(node_id){
         // highlight the node and its neighbors
         highlight_selection(node_id);
+
         // fill the information panel with the node's information
         fill_infopanel(node_id);
         show_infopanel();
+
         // update visible node labels to show only those of selected courses
         hide_node_labels();
         show_node_labels(d3.zoomTransform(svg.node()));
+
         // update the graph when a new node is selected
-        zoomBegin();
-        zoomed(width, height, d3.zoomTransform(svg.node()));
-        zoomEnd(width, height, d3.zoomTransform(svg.node()));
+        //zoomBegin();
+        //zoomed(width, height, d3.zoomTransform(svg.node()));
+        //zoomEnd(width, height, d3.zoomTransform(svg.node()));
+
         // only the node is clicked, not the background
         event.stopPropagation();
+
+        // animated movement
+        svg.transition().duration(1000).call(zoom_handler.transform, translate_to(node_id));
     }
 
     function import_descriptions(){
@@ -728,6 +737,8 @@ DONE batch drawing edges
         }
     }
 
+    // fills the search panel results
+    // called each time a key is pressed in the searchbox
     function search(query){
         // empty query => no result
         if(query == ''){
@@ -760,7 +771,18 @@ DONE batch drawing edges
         d3.selectAll('.search_results_cell').remove();
         d3.select('#searchbox').property('value', '');
     }
-    
+
+    // transforms the graph so that the node with id nid is
+    // at the center of the viewport
+    function translate_to(nid) {
+        let node = nodes[nid];
+        let [x, y] = get_new_coordinates(node.x, node.y, d3.zoomTransform(svg.node()));
+        console.log(parseInt(d3.select('#infopanel').style('height')));
+      return d3.zoomIdentity
+          .translate(width/2, (height - parseInt(d3.select('#infopanel').style('height')))/2)
+          .scale(0.3)
+          .translate(-node.x, -node.y);
+    }
 </script>
 </body>
 </html>
