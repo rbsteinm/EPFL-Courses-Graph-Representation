@@ -89,6 +89,7 @@ DONE batch drawing edges
     }
 
     .svg-container {
+        background-color: #F2ECE6;
         display: inline-block;
         position: absolute;
         width: 100%;
@@ -114,7 +115,7 @@ DONE batch drawing edges
     .node_title{
         font-family: sans-serif;
         font-size: 12px;
-        fill: black;
+        fill: #0D1319;
         pointer-events: none;
     }
 
@@ -128,7 +129,7 @@ DONE batch drawing edges
     }
 
     #infopanel{
-        background-color: white;
+        background-color: rgba(255, 250, 245, 0.7);
         position: fixed;
         overflow-y: auto;
         width: 94%;
@@ -149,6 +150,7 @@ DONE batch drawing edges
         box-sizing: border-box;
         border-radius: 10px;
         font-size: 16px;
+        color: #0D1319;
         border: 2px solid transparent;
         background-color: transparent;
         background-image: url('data/searchicon.png');
@@ -162,8 +164,8 @@ DONE batch drawing edges
 
     input[type=text]:focus {
         width: 100%;
-        border: 2px solid #ccc;
-        background-color: white;
+        border: 2px solid rgb(145, 145, 145);
+        background-color: rgba(255, 255, 250, 0.8);
         padding: 12px 20px 12px 40px;
         background-size: auto 80%;
         background-position: 5px 50%;
@@ -171,15 +173,19 @@ DONE batch drawing edges
     }
 
     #search_results_container{
+        background-color: rgba(255, 255, 250, 0.8);
+        border: 0.5px hidden rgba(195, 195, 195, 1);
+        border-radius: 10px;
     }
 
     .search_results_cell{
-        background-color: white;
-        border: 2px solid #ccc;
+        background-color: transparent;
+        border-bottom: 0.5px solid rgba(195, 195, 195, 1);
         outline: 0;
         padding: 12px 20px 12px 40px;
-        border-radius: 10px;
+        //border-radius: 100px;
         font-size: 16px;
+        color: #0D1319;
     }
 
     #search_container{
@@ -199,9 +205,11 @@ DONE batch drawing edges
 
 <script type="text/javascript">
 
-    const NODE_COLOR = "rgba(125, 125, 125, 1)";
-    const EDGE_COLOR = "rgba(125, 125, 125, 0.8)";
-    const SELECTED_NODE_COLOR = "rgba(0, 0, 0, 1)";
+    const NODE_COLOR = "rgba(145, 145, 145, 1)";
+    const EDGE_COLOR = "rgba(145, 145, 145, 0.8)";
+    //const NODE_COLOR = '#B9C9CE';
+    //const EDGE_COLOR = NODE_COLOR;
+    //const SELECTED_NODE_COLOR = "rgba(0, 0, 0, 1)";
     const SELECTED_EDGE_COLOR = "rgba(0, 0, 0, 0.8)";
     const BACKGROUND_NODE_COLOR = "rgb(235,235,235)";
     const BACKGROUND_EDGE_COLOR = "rgb(229,229,229)";
@@ -215,6 +223,7 @@ DONE batch drawing edges
     const HIDE_ARROWHEADS_THRESHOLD = 0.25;
     //const HIGHLIGHT_COLORS = ['#5C5C5C', '#454545', '#2E2E2E', '#171717', '#000000'];
     const HIGHLIGHT_COLORS = ['rgb(180, 180, 180)', 'rgb(100, 100, 100)', 'rgb(0, 0, 0)'];
+    //const HIGHLIGHT_COLORS = ['#90BECE', '#67B3CE', '#29A2CE'];
 
     let nodes = {};
     let edges = {};
@@ -255,7 +264,7 @@ DONE batch drawing edges
         'xoverflow':'visible'})
     .append('svg:path')
     .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
-    .attr('fill', '#999')
+    .attr('fill', EDGE_COLOR)
     .style('stroke','none');
 
 
@@ -357,6 +366,7 @@ DONE batch drawing edges
             .attr("class", function(d) {
                 return (d.type == 'baseline') ? 'link': 'link indicative_link';
             })
+            .style('stroke', EDGE_COLOR)
             .attr('marker-end','url(#arrowhead)');
 
         // draw the nodes
@@ -367,6 +377,7 @@ DONE batch drawing edges
             .attr("cy", function(d) {return d.y;})
             .attr("class", "node unselected_node")
             .attr("id", d => d.id)
+            .style('fill', NODE_COLOR)
             .on("click", function(d) {
                 on_click_node(d.id);
             });
@@ -376,8 +387,8 @@ DONE batch drawing edges
             .data(Object.values(nodes), function(d){return d.id;})
             .enter()
             .append('text')
-            .attr('x', function(d){return d.x;})
-            .attr('y', function(d){return d.y-10;})
+            .attr('x', function(d){return d.x+5;})
+            .attr('y', function(d){return d.y-16;})
             .attr('id', function(d){return 'title_' + d.id;})
             .attr('class', 'node_title')
             .text(function(d){ return d.title});
@@ -558,7 +569,7 @@ DONE batch drawing edges
 
     // highlights an edge
     function highlight_edge(edge, distance_to_leaf){
-        d3.select('#' + edge.id).style('stroke', SELECTED_EDGE_COLOR);
+        d3.select('#' + edge.id).style('stroke', HIGHLIGHT_COLORS[distance_to_leaf]);
          d3.select('#' + edge.id).style('visibility', 'visible');
     }
 
@@ -789,6 +800,7 @@ DONE batch drawing edges
     // fills the search panel results
     // called each time a key is pressed in the searchbox
     function search(query){
+        d3.select('#search_results_container').style('border-style', 'solid');
         // empty query => no result
         if(query == ''){
             d3.selectAll('.search_results_cell').remove();
@@ -817,6 +829,7 @@ DONE batch drawing edges
     }
 
     function hide_searchbox(){
+        d3.select('#search_results_container').style('border-style', 'hidden');
         d3.selectAll('.search_results_cell').remove();
         d3.select('#searchbox').property('value', '');
     }
