@@ -1,5 +1,6 @@
 <html>
 <!--
+TODO when screen is horizontal, the search cells go too much down
 TODO search don't take capital letters into account
 TODO rethink the colors and design
 TODO nodes "clustering" (supernodes)
@@ -51,9 +52,10 @@ DONE batch drawing edges
     <i class="fa fa-search" style="font-size: 40px;" aria-hidden="true"></i>
     <input type="text" name="search" placeholder="Search..">
 </form>-->
-
-<input id='searchbox' type="text" name="search" placeholder="" onkeyup="search(this.value);" autocomplete="off">
-<div id="search_results_container"></div>
+<div id=search_container>
+    <input id='searchbox' type="text" name="search" placeholder="" onkeyup="search(this.value);" autocomplete="off">
+    <div id="search_results_container"></div>
+</div>
 <div id="graph" class = "svg-container"></div>
 <div id='infopanel'></div>
 
@@ -142,9 +144,6 @@ DONE batch drawing edges
     }
 
     input[type=text] {
-        left: 1%;
-        top: 1%;
-        position: absolute;
         width: 0px;
         height: 5%;
         box-sizing: border-box;
@@ -159,11 +158,10 @@ DONE batch drawing edges
         padding: 12px 20px 12px 40px;
         -webkit-transition: width 0.4s ease-in-out, background-color 0.4s ease-in, border-color 0.4s ease-in;
         transition: width 0.4s ease-in-out, background-color 0.4s ease-in, border-color 0.4s ease-in;
-        z-index: 2;
     }
 
     input[type=text]:focus {
-        width: 50%;
+        width: 100%;
         border: 2px solid #ccc;
         background-color: white;
         padding: 12px 20px 12px 40px;
@@ -173,12 +171,6 @@ DONE batch drawing edges
     }
 
     #search_results_container{
-        position: absolute;
-        z-index: 2;
-        height: 0%;
-        width: 50%;
-        top: 6%;
-        left: 1%;
     }
 
     .search_results_cell{
@@ -188,6 +180,14 @@ DONE batch drawing edges
         padding: 12px 20px 12px 40px;
         border-radius: 10px;
         font-size: 16px;
+    }
+
+    #search_container{
+        max-height: 30px;
+        left: 20px;
+        top: 20px;
+        position: absolute;
+        z-index: 2;
     }
     </style>
 
@@ -233,8 +233,8 @@ DONE batch drawing edges
 
 
     // define width/height as the svg container dimensions
-    const width = document.getElementsByClassName('svg-container')[0].clientWidth;
-    const height = document.getElementsByClassName('svg-container')[0].clientHeight;
+    let width = document.getElementsByClassName('svg-container')[0].clientWidth;
+    let height = document.getElementsByClassName('svg-container')[0].clientHeight;
 
     let svg = d3.select("div#graph").append("svg")
         .attr("width", "100%")
@@ -273,6 +273,17 @@ DONE batch drawing edges
         });
 
     svg.call(zoom_handler);
+
+    // called when the window is resized (on tablet, rotated for example)
+    window.addEventListener("resize", function(){
+        // recompute width and height of the screen
+        width = document.getElementsByClassName('svg-container')[0].clientWidth;
+        height = document.getElementsByClassName('svg-container')[0].clientHeight;
+        // refresh the graph
+        zoomBegin();
+        zoomed(width, height, d3.zoomTransform(svg.node()));
+        zoomEnd(width, height, d3.zoomTransform(svg.node()));
+    });
 
     // When the background is clicked, clear the current selection
     d3.select("div#graph").on("click", function(){
