@@ -44,34 +44,13 @@ DONE batch drawing edges
 </head>
 
 <body>
-<!--<form role="search" class="navbar-form" id="search">
-    <div class="form-group">
-        <input type="text" placeholder="Search for courses" class="form-control" name="search">
-    </div>
-    <button class="btn btn-default" type="submit">Search</button>
-</form>-->
-<!--<form>
-    <i class="fa fa-search" style="font-size: 40px;" aria-hidden="true"></i>
-    <input type="text" name="search" placeholder="Search..">
-</form>-->
+
 <div id=search_container>
     <input id='searchbox' type="text" name="search" placeholder="" onkeyup="search(this.value);" autocomplete="off">
     <div id="search_results_container"></div>
 </div>
 <div id="graph" class = "svg-container"></div>
 <div id='infopanel'></div>
-
-<!--<table id="results" class="table table-striped table-hover">
-    <thead>
-    <tr>
-        <th>Course</th>
-        <th>Code</th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>-->
-
 
 
 <style type="text/css">
@@ -162,6 +141,7 @@ DONE batch drawing edges
         padding: 12px 20px 12px 30px;
         -webkit-transition: width 0.4s ease-in-out, background-color 0.4s ease-in, border-color 0.4s ease-in, background-size 0.4s ease-out;
         transition: width 0.4s ease-in-out, background-color 0.4s ease-in, border-color 0.4s ease-in, background-size 0.4s ease-out;
+        cursor: pointer;
     }
 
     input[type=text]:focus {
@@ -172,6 +152,7 @@ DONE batch drawing edges
         background-size: auto 40%;
         background-position: 5px 50%;
         outline: 0;
+        cursor: auto;
     }
 
     #search_results_container{
@@ -308,6 +289,10 @@ DONE batch drawing edges
         // clear search box
         hide_searchbox();
     });
+
+    /*d3.select('#searchbox').on('mouseover', function(){
+        d3.select(this).style('cursor', 'pointer');
+    });*/
 
 
     // _______________________________________________________ IMPORT AND INIT _______________________________________________________
