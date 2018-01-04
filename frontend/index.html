@@ -1,11 +1,11 @@
 <html>
 <!--
 TODO when screen is horizontal, the search cells go too much down
-TODO search don't take capital letters into account
 TODO nodes "clustering" (supernodes)
 TODO (the infopanel should not be zoomable)
 
 
+DONE search don't take capital letters into account
 DONE fix bug: when searching from text field, graph does not refresh afterwards (only on tablet, apparently only when selecting disconnected nodes)
     issue is caused by a drawing timer that's never ending GO TO LINE 677
 DONE handle screen rotate (recompute width and height?)
@@ -806,7 +806,7 @@ DONE batch drawing edges
             return;
         }
         // the courses that contain the query on their title
-        let result_nids = Object.values(nodes).filter(node => String(node.title).includes(query));
+        let result_nids = Object.values(nodes).filter(node => String(node.title).toLowerCase().includes(query.toLowerCase()));
         // keep only the first 10
         result_nids = result_nids.slice(0,10);
 
