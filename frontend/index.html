@@ -793,6 +793,16 @@ DONE batch drawing edges
                     .on('click', function(){
                         on_click_node(nid);
                     })
+                    .on('mouseover', function(){
+                        d3.select(this)
+                            .style('font-weight', 'bold')
+                            .style('cursor', 'pointer');
+                    })
+                    .on('mouseout', function(){
+                        d3.select(this)
+                            .style('font-weight', 'normal')
+                            .style('cursor', 'default');
+                    })
             });
         }
     }
@@ -826,6 +836,16 @@ DONE batch drawing edges
             .on('click', function(d){
                 hide_searchbox();
                 on_click_node(d.id);
+            })
+            .on('mouseover', function(d){
+                d3.select(this)
+                    .style('background-color', 'rgba(180, 180, 180, 0.2)')
+                    .style('cursor', 'pointer');
+            })
+            .on('mouseout', function(d){
+                d3.select(this)
+                    .style('background-color', 'transparent')
+                    .style('cursor', 'default');
             })
             .text(function(d){return d.title;});
 
