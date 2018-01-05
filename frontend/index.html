@@ -1,5 +1,9 @@
 <html>
 <!--
+TOOD add nice transitions on_node_click
+TODO add nice anomation when opening the graph
+TODO check get_neighbor method in highlight_selection, can probably be replaced by edge.target
+
 TODO when screen is horizontal, the search cells go too much down
 TODO nodes "clustering" (supernodes)
 TODO (the infopanel should not be zoomable)
@@ -194,7 +198,7 @@ DONE batch drawing edges
     //const EDGE_COLOR = NODE_COLOR;
     //const SELECTED_NODE_COLOR = "rgba(0, 0, 0, 1)";
     const SELECTED_EDGE_COLOR = "rgba(0, 0, 0, 0.8)";
-    const BACKGROUND_NODE_COLOR = "rgb(235,235,235)";
+    const BACKGROUND_NODE_COLOR = "rgba(142,136,130, 0.1)";
     const BACKGROUND_EDGE_COLOR = "rgb(229,229,229)";
 
     const BATCH_SIZE = 50;
@@ -228,13 +232,14 @@ DONE batch drawing edges
     let width = document.getElementsByClassName('svg-container')[0].clientWidth;
     let height = document.getElementsByClassName('svg-container')[0].clientHeight;
 
+    // create the SVG element that will contain the nodes and edges
     let svg = d3.select("div#graph").append("svg")
         .attr("width", "100%")
         .attr("height", "100%")
         .classed("svg-content", true);
-
     let g = svg.append("g");
 
+    // triangle at the end of edges (arrowheads)
     svg.append('defs')
     .append('marker')
     .attrs({'id':'arrowhead',
@@ -290,10 +295,6 @@ DONE batch drawing edges
         hide_searchbox();
     });
 
-    /*d3.select('#searchbox').on('mouseover', function(){
-        d3.select(this).style('cursor', 'pointer');
-    });*/
-
 
     // _______________________________________________________ IMPORT AND INIT _______________________________________________________
 
@@ -334,14 +335,14 @@ DONE batch drawing edges
             adjacency_list[(e.source)].push(e.id);
         });
 
-        // display the data when loading is done
+        // callback function that displays the data when loading is done
         display_callback();
     }
 
     // this function creates a circle for each course and an edge for each relationship
     // it is called as a callback of the import_data method
     function display_graph(){
-        // create an SVG line for each link in the JSON data
+        // draw the edges
         g.selectAll(".link")
             .data(Object.values(edges)).enter()
             .append("line")
@@ -381,6 +382,7 @@ DONE batch drawing edges
             .text(function(d){ return d.title});
     }
 
+    // import course descriptions in a dictionary nodeID -> description
     function import_descriptions(){
         d3.tsv("./data/descriptions.csv")
             .row(function(row){
@@ -391,6 +393,8 @@ DONE batch drawing edges
             });
     }
 
+    // import course sections in a dictionary nodeID -> sections
+    // a course can be given to multiple sections
     function import_sections(){
         d3.tsv("./data/sections.csv")
             .row(function(row){
@@ -402,7 +406,7 @@ DONE batch drawing edges
     }
 
 
-    // load and display
+    // data loading and initial graph display
     import_data('/data/data4.gexf', function(){display_graph();});
     import_descriptions();
     import_sections();
@@ -436,15 +440,18 @@ DONE batch drawing edges
         svg.transition().duration(1000).call(zoom_handler.transform, translate_to(node_id, 0.3));
     }
 
+    // returns the size each node should have according the the current zoom level
+    // each time there is a zoom event, the nodes must be resized so that they keep the same size visually
     function get_node_size(scale_factor){
-        //return (5/(Math.sqrt(scale_factor))).toFixed(1);
         return Math.min(MAX_NODE_SIZE, (NODE_SIZE/scale_factor));
     }
 
+    // same as get_node_size, but for the width of the edged
     function get_line_width(scale_factor){
         return (1.0/((scale_factor))).toFixed(2);
     }
 
+    // same again, but for the font size of node labels
     function get_label_font_size(scale_factor){
         return (FONT_SIZE/scale_factor);
     }
@@ -457,6 +464,7 @@ DONE batch drawing edges
     }
 
     // does this node appear on the screen with the current scale/translate values?
+    // this allows to only resize/draw/... nodes that are visible to gain computation time
     function node_is_visible(node, width, height, transf){
         let x, y;
         //let radius = parseInt(g.select('#'+node.id).style('r'));
@@ -467,6 +475,8 @@ DONE batch drawing edges
     }
 
     // does this edge appear on the screen with the current scale/translate values?
+    // this algorithm basically checks if the edge intersects at least on on the SVG borders
+    // if it's the case, then the edge is visible in the viewport
     function edge_is_visible(edge, width, height, transf){
         let x1, x2, y1, y2;
         [x1, y1] = get_new_coordinates(edge.x1 ,edge.y1, transf);
@@ -505,7 +515,7 @@ DONE batch drawing edges
         return (s >= 0 && s <= 1 && t >= 0 && t <= 1);
     }
 
-    // BFS search to highlight the given node and its neighbors
+    // recursive BFS algorithm to highlight the given node and its neighbors and their neighbors
     // is_source: true if the node is the selected node (root node)
     // distance: highlight all nodes that are d hops away from the root, for all d <= distance
     // already_seen: the nodes that were already visited and highlightd by the algorithm (to avoid highlighting a node twice)
@@ -540,6 +550,7 @@ DONE batch drawing edges
             neighbor = (edge.target);
         }
         else if(node_id == edge.target){
+            console.log('hello');
             neighbor = (edge.source);
         }
         return neighbor;
@@ -572,13 +583,14 @@ DONE batch drawing edges
     }
 
     // clears the highlighting and all node/edge selection
+    // new_selection: true if a new node was clicked, false if the background was clicked
     function clear_selection(new_selection=false){
         NODE_SELECTION = [];
         EDGE_SELECTION = [];
         if(new_selection){
-            //d3.selectAll('.node').style('fill', BACKGROUND_NODE_COLOR);
+            d3.selectAll('.node').style('fill', BACKGROUND_NODE_COLOR);
             //d3.selectAll('.link').style('stroke', BACKGROUND_EDGE_COLOR);
-            d3.selectAll('.node').style('visibility', 'hidden');
+            //d3.selectAll('.node').style('visibility', 'hidden');
             d3.selectAll('.link').style('visibility', 'hidden');
         }
         else{
@@ -594,19 +606,21 @@ DONE batch drawing edges
 
 
     // This code is executed everytime the page is zoomed
-    // It dinamically resizes the nodes and the edges
-    // but only if they are visible to reduce computation time
+    // it's executed at each single zoom event, so a lot of time in a single scroll/drag
+    // It dinamically resizes the nodes, but only if they are visible to reduce computation time
     function zoomed(width, height, transform){
         // hide all links
         d3.selectAll('.link').style('display', 'none');
         // hide node labels
         hide_node_labels();
-        // transform
+        // apply the transformation
         g.attr("transform", transform);
         // update node size
         const radius = get_node_size(transform.k);
         d3.selectAll('.node').filter(node => node_is_visible(node, width, height, transform)).style("r", radius);
         // was there been a drag or a zoom or was it only a click?
+        // if this method is executed, it means the SVG has moved
+        // thus, redrawing the edges and labels will be necessary and the end of the zoom event
         ZOOMED = true;
         console.log('zommed');
     }
@@ -615,7 +629,7 @@ DONE batch drawing edges
     // if a new drawing occurs while the current drawing is unfinished, 
     // the current drawing is interrupted and the new one is launched immediately
     function zoomBegin(){
-        // Stop the timer if a zoom/drag occurs
+        // Stop the timer (if it's initialized)
         if(drawing_timer){
             console.log('stopped timer')
             drawing_timer.stop();
@@ -627,7 +641,7 @@ DONE batch drawing edges
     // the visible edges are drawn by batches of size BATCH_SIZE
     function zoomEnd(width, height, transform){
         // check if the graph has been moved
-        // this allows to distinguish a click and a drag event
+        // this allows to distinguish a click and a drag event (the click event does not go through the 'zoomed()' method)
         if(ZOOMED){
             redraw_edges(width, height, transform);
             show_node_labels(transform);
@@ -650,6 +664,7 @@ DONE batch drawing edges
     
     // this function draws back the visible edges after any zoom or drag
     // it interrupts the drawing timer if and when the drawing is completed
+    // note that the timer can also be interrupted by a more recent zoom event in 'zoomBegin()'
     // the visible edges are drawn by batches of size BATCH_SIZE
     function redraw_edges(width, height, transform){
         drawing_complete = false;
@@ -677,6 +692,7 @@ DONE batch drawing edges
 
     // transforms the graph so that the node with id nid is
     // at the center of the viewport
+    // called when a new node is selected (on_click_node())
     function translate_to(nid, scale_factor) {
         let node = nodes[nid];
         let [x, y] = get_new_coordinates(node.x, node.y, d3.zoomTransform(svg.node()));
@@ -740,6 +756,7 @@ DONE batch drawing edges
     // _______________________________________________________ INFOPANEL _______________________________________________________
 
 
+    // show the information panel for the selected course at the bottom of the screen
     function show_infopanel(){
         d3.select('#infopanel').style('opacity', 0).transition().duration(500).style('opacity', 1).style('pointer-events', 'auto');
     }
@@ -748,6 +765,7 @@ DONE batch drawing edges
         d3.select('#infopanel').transition().duration(500).style('opacity', 0).style('pointer-events', 'none');
     }
 
+    // fills the information panel with info about course with id nid
     function fill_infopanel(nid){
         let infopanel = d3.select('#infopanel');
         // empty the infopanel
@@ -837,6 +855,7 @@ DONE batch drawing edges
         cells.exit().remove();
     }
 
+    // hide search results
     function hide_searchbox(){
         d3.select('#search_results_container').style('border-style', 'hidden');
         d3.selectAll('.search_results_cell').remove();
