@@ -1,7 +1,5 @@
 <html>
 <!--
-TOOD add nice transitions on_node_click
-TODO add nice animation when opening the graph
 TODO check get_neighbor method in highlight_selection, can probably be replaced by edge.target
 
 TODO when screen is horizontal, the search cells go too much down
@@ -9,6 +7,8 @@ TODO nodes "clustering" (supernodes)
 TODO (the infopanel should not be zoomable)
 
 
+DONE add nice transitions on_node_click
+DONE add nice animation when opening the graph
 DONE search don't take capital letters into account
 DONE fix bug: when searching from text field, graph does not refresh afterwards (only on tablet, apparently only when selecting disconnected nodes)
     issue is caused by a drawing timer that's never ending GO TO LINE 677
@@ -212,6 +212,7 @@ DONE batch drawing edges
     const BACKGROUND_NODE_COLOR = "rgba(142,136,130, 0.1)";
     const BACKGROUND_EDGE_COLOR = "rgb(229,229,229)";
 
+    const HIGHLIGHT_DEPTH = 2;
     const BATCH_SIZE = 50;
     const SHOW_LABELS_THRESHOLD = 0.5;
     const NODE_SIZE = 13;
@@ -354,7 +355,7 @@ DONE batch drawing edges
     // this function creates a circle for each course and an edge for each relationship
     // it is called as a callback of the import_data method
     function display_graph(){
-        // initial scaling and position of the graph with a mind-blowing futuristic avant-gardiste transition
+        // initial scaling and position of the graph with a mind-blowing futuristic avant-gardiste animation
         svg.call(zoom_handler.transform, translate_to_center(150));
         svg.transition().delay(2000).duration(2500).call(zoom_handler.transform, translate_to_center(0.06))
             .transition().duration(1500).delay(0).call(zoom_handler.transform, translate_to_center(0.07));
@@ -535,7 +536,7 @@ DONE batch drawing edges
     // is_source: true if the node is the selected node (root node)
     // distance: highlight all nodes that are d hops away from the root, for all d <= distance
     // already_seen: the nodes that were already visited and highlightd by the algorithm (to avoid highlighting a node twice)
-    function highlight_selection(node_id, is_source=true, distance=2, already_seen=[]){
+    function highlight_selection(node_id, is_source=true, distance=HIGHLIGHT_DEPTH, already_seen=[]){
 
         if(is_source){
             clear_selection(true);
@@ -575,15 +576,27 @@ DONE batch drawing edges
     function highlight_node(node_id, distance_to_leaf){
         //const opacity = 0.4 + 0.3 * distance_to_leaf;
         //d3.select('circle#'+node.id).style('fill', "rgba(0, 0, 0, " + opacity + ")");
-        d3.select('circle#'+node_id).style('fill', HIGHLIGHT_COLORS[distance_to_leaf]);
-        d3.select('circle#'+node_id).style('visibility', 'visible');
+        d3.select('circle#'+node_id).transition().duration(1000).delay(get_highlight_delay(distance_to_leaf)).style('fill', HIGHLIGHT_COLORS[distance_to_leaf]);
+        //d3.select('circle#'+node_id).style('visibility', 'visible');
 
     }
 
     // highlights an edge
     function highlight_edge(edge, distance_to_leaf){
-        d3.select('#' + edge.id).style('stroke', HIGHLIGHT_COLORS[distance_to_leaf]);
-         d3.select('#' + edge.id).style('visibility', 'visible');
+        let selected_edge = d3.select('#' + edge.id);
+        selected_edge.style('stroke', HIGHLIGHT_COLORS[distance_to_leaf-1]);
+        // use transition so that the edge becomes visible exactly when its target node has finished to draw
+        selected_edge.transition().duration(0).delay(get_highlight_delay(distance_to_leaf-1)+1000).style('visibility', 'visible');
+        // having an opacity transition is nice on a computer, but too costly => laggy on the tablet
+        //selected_edge.style('opacity', 0).transition().duration(0).delay(get_highlight_delay(distance_to_leaf-1)).style('opacity', 1);
+    }
+
+    // when a node is selected, the BFS algorithm is ran and its neighborhood nodes are displayed after a delay
+    // the bigger the distance to the source node, the bigger the delay
+    // this function computes the delay before showing a node/edge given its distance to the leaf level
+    // of the highlighted tree
+    function get_highlight_delay(distance_to_leaf){
+        return d3.scaleLinear().domain([HIGHLIGHT_DEPTH, 0]).range([0, 2000])(distance_to_leaf);
     }
 
     // returns the DOM node object given its node ID
@@ -603,16 +616,16 @@ DONE batch drawing edges
         NODE_SELECTION = [];
         EDGE_SELECTION = [];
         if(new_selection){
-            d3.selectAll('.node').style('fill', BACKGROUND_NODE_COLOR);
+            d3.selectAll('.node').transition().style('fill', BACKGROUND_NODE_COLOR);
             //d3.selectAll('.link').style('stroke', BACKGROUND_EDGE_COLOR);
             //d3.selectAll('.node').style('visibility', 'hidden');
-            d3.selectAll('.link').style('visibility', 'hidden');
+            d3.selectAll('.link').transition().style('visibility', 'hidden');
         }
         else{
-            d3.selectAll('.node').style('fill', NODE_COLOR);
+            d3.selectAll('.node').transition().style('fill', NODE_COLOR);
             d3.selectAll('.link').style('stroke', EDGE_COLOR);
             d3.selectAll('.node').style('visibility', 'visible');
-            d3.selectAll('.link').style('visibility', 'visible');
+            d3.selectAll('.link').transition().style('visibility', 'visible');
         }
     }
 
@@ -718,6 +731,7 @@ DONE batch drawing edges
           .translate(-node.x, -node.y);
     }
 
+    // translates the graph to the center of the screen
     function translate_to_center(scale_factor){    
         return d3.zoomIdentity
           .translate(width/2, height/2)
