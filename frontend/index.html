@@ -1,7 +1,7 @@
 <html>
 <!--
 TOOD add nice transitions on_node_click
-TODO add nice anomation when opening the graph
+TODO add nice animation when opening the graph
 TODO check get_neighbor method in highlight_selection, can probably be replaced by edge.target
 
 TODO when screen is horizontal, the search cells go too much down
@@ -182,6 +182,17 @@ DONE batch drawing edges
         position: absolute;
         z-index: 2;
     }
+
+    .related_course{
+        background-color: rgba(100, 100, 100, 0.2);
+        border: 2px solid transparent;
+        border-radius: 6px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        padding: 5px;
+        display: inline-block;
+        font-size: 13px;
+    }
     </style>
 
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
@@ -204,6 +215,7 @@ DONE batch drawing edges
     const BATCH_SIZE = 50;
     const SHOW_LABELS_THRESHOLD = 0.5;
     const NODE_SIZE = 13;
+    let current_node_size = NODE_SIZE;
     const MAX_NODE_SIZE = 75;
     const FONT_SIZE = 12;
     const ZOOM_CONSTRAIN = [0.05, 2.5];
@@ -366,6 +378,11 @@ DONE batch drawing edges
             .attr("class", "node unselected_node")
             .attr("id", d => d.id)
             .style('fill', NODE_COLOR)
+            /*.on('mouseover', function(d){
+                d3.select(this).style('stroke', 'black').style('stroke-width', current_node_size/6 + 'px');
+            }).on('mouseout', function(d){
+                d3.select(this).style('stroke-width', '0px');
+            })*/
             .on("click", function(d) {
                 on_click_node(d.id);
             });
@@ -617,6 +634,7 @@ DONE batch drawing edges
         g.attr("transform", transform);
         // update node size
         const radius = get_node_size(transform.k);
+        current_node_size = radius;
         d3.selectAll('.node').filter(node => node_is_visible(node, width, height, transform)).style("r", radius);
         // was there been a drag or a zoom or was it only a click?
         // if this method is executed, it means the SVG has moved
@@ -779,32 +797,36 @@ DONE batch drawing edges
         infopanel.append('br');
         // sections
         if(course_sections[nid]){
-            let text = 'Sections: <br/>';
+            let text = '<strong style="">This course is thaught to: </strong> <br/>';
             course_sections[nid].forEach(function(s){
                 text += s + '<br/>';
             });
-            infopanel.append('div').html(text);
+            infopanel.append('div').style('font-size', '13px').html(text);
         }
         infopanel.append('br');
         // related courses
         if(adjacency_list[nid]){
-            infopanel.append('div').text('Related courses:');
+            infopanel.append('div').style('font-size', '13px').style('font-weight', 'bold').text('Related courses:');
             let related_courses = adjacency_list[nid].map(eid => edges[eid].target);
             related_courses.forEach(function(nid){
-                infopanel.append('div')
+                infopanel.append('span')
                     .text(nodes[nid].title)
+                    .attr('class', 'related_course')
                     .on('click', function(){
                         on_click_node(nid);
+                        g.select('circle#' + nid).style('stroke-width', '0px');
                     })
                     .on('mouseover', function(){
                         d3.select(this)
-                            .style('font-weight', 'bold')
+                            .style('border-color', 'rgba(100, 100, 100, 1)')
                             .style('cursor', 'pointer');
+                        g.select('circle#' + nid).style('stroke', 'black').style('stroke-width', current_node_size/6 + 'px');
                     })
                     .on('mouseout', function(){
                         d3.select(this)
-                            .style('font-weight', 'normal')
+                            .style('border-color', 'transparent')
                             .style('cursor', 'default');
+                            g.select('circle#' + nid).style('stroke-width', '0px');
                     })
             });
         }
