@@ -1,5 +1,6 @@
 <html>
 <!--
+TODO ease transitions?
 TODO check get_neighbor method in highlight_selection, can probably be replaced by edge.target
 
 TODO when screen is horizontal, the search cells go too much down
@@ -454,7 +455,7 @@ DONE batch drawing edges
         event.stopPropagation();
 
         // animated movement
-        svg.transition().duration(1000).call(zoom_handler.transform, translate_to(node_id, 0.3));
+        svg.transition().duration(1500).call(zoom_handler.transform, translate_to(node_id, 0.3));
     }
 
     // returns the size each node should have according the the current zoom level
