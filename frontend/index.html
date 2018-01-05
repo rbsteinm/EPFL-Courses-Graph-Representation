@@ -354,6 +354,10 @@ DONE batch drawing edges
     // this function creates a circle for each course and an edge for each relationship
     // it is called as a callback of the import_data method
     function display_graph(){
+        // initial scaling and position of the graph with a mind-blowing futuristic avant-gardiste transition
+        svg.call(zoom_handler.transform, translate_to_center(150));
+        svg.transition().delay(2000).duration(2500).call(zoom_handler.transform, translate_to_center(0.06))
+            .transition().duration(1500).delay(0).call(zoom_handler.transform, translate_to_center(0.07));
         // draw the edges
         g.selectAll(".link")
             .data(Object.values(edges)).enter()
@@ -378,11 +382,6 @@ DONE batch drawing edges
             .attr("class", "node unselected_node")
             .attr("id", d => d.id)
             .style('fill', NODE_COLOR)
-            /*.on('mouseover', function(d){
-                d3.select(this).style('stroke', 'black').style('stroke-width', current_node_size/6 + 'px');
-            }).on('mouseout', function(d){
-                d3.select(this).style('stroke-width', '0px');
-            })*/
             .on("click", function(d) {
                 on_click_node(d.id);
             });
@@ -567,7 +566,6 @@ DONE batch drawing edges
             neighbor = (edge.target);
         }
         else if(node_id == edge.target){
-            console.log('hello');
             neighbor = (edge.source);
         }
         return neighbor;
@@ -714,11 +712,16 @@ DONE batch drawing edges
     function translate_to(nid, scale_factor) {
         let node = nodes[nid];
         let [x, y] = get_new_coordinates(node.x, node.y, d3.zoomTransform(svg.node()));
-        console.log(parseInt(d3.select('#infopanel').style('height')));
       return d3.zoomIdentity
           .translate(width/2, (height - parseInt(d3.select('#infopanel').style('height')))/2)
           .scale(scale_factor)
           .translate(-node.x, -node.y);
+    }
+
+    function translate_to_center(scale_factor){    
+        return d3.zoomIdentity
+          .translate(width/2, height/2)
+          .scale(scale_factor)
     }
 
 
