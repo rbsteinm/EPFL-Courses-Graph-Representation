@@ -1,13 +1,12 @@
 <html>
 <!--
-TODO ease transitions?
 TODO check get_neighbor method in highlight_selection, can probably be replaced by edge.target
 
 TODO when screen is horizontal, the search cells go too much down
-TODO nodes "clustering" (supernodes)
 TODO (the infopanel should not be zoomable)
 
 
+DONE ease transitions?
 DONE add nice transitions on_node_click
 DONE add nice animation when opening the graph
 DONE search don't take capital letters into account
@@ -357,9 +356,9 @@ DONE batch drawing edges
     // it is called as a callback of the import_data method
     function display_graph(){
         // initial scaling and position of the graph with a mind-blowing futuristic avant-gardiste animation
-        svg.call(zoom_handler.transform, translate_to_center(150));
-        svg.transition().delay(2000).duration(2500).call(zoom_handler.transform, translate_to_center(0.06))
-            .transition().duration(1500).delay(0).call(zoom_handler.transform, translate_to_center(0.07));
+        svg.call(zoom_handler.transform, translate_to_center(50));
+        svg.transition().delay(1500).duration(5000).call(zoom_handler.transform, translate_to_center(0.07)).ease(d3.easeBack);
+            //.transition().duration(1500).delay(0).call(zoom_handler.transform, translate_to_center(0.07));
         // draw the edges
         g.selectAll(".link")
             .data(Object.values(edges)).enter()
