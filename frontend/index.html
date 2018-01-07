@@ -3,6 +3,7 @@
 
 TODO when screen is horizontal, the search cells go too much down
 TODO (the infopanel should not be zoomable)
+TODO deactivate double-click zoom
 
 
 DONE check get_neighbor method in highlight_selection, can probably be replaced by edge.target
@@ -283,6 +284,9 @@ DONE batch drawing edges
         });
 
     svg.call(zoom_handler);
+    
+    // no double click zoom
+    d3.select("svg").on("dblclick.zoom", null);
 
     // called when the window is resized (on tablet, rotated for example)
     window.addEventListener("resize", function(){
