@@ -1,11 +1,11 @@
 <html>
 <!--
-TODO check get_neighbor method in highlight_selection, can probably be replaced by edge.target
 
 TODO when screen is horizontal, the search cells go too much down
 TODO (the infopanel should not be zoomable)
 
 
+DONE check get_neighbor method in highlight_selection, can probably be replaced by edge.target
 DONE ease transitions?
 DONE add nice transitions on_node_click
 DONE add nice animation when opening the graph
@@ -356,9 +356,8 @@ DONE batch drawing edges
     // it is called as a callback of the import_data method
     function display_graph(){
         // initial scaling and position of the graph with a mind-blowing futuristic avant-gardiste animation
-        svg.call(zoom_handler.transform, translate_to_center(50));
+        svg.call(zoom_handler.transform, translate_to_center(60));
         svg.transition().delay(1500).duration(5000).call(zoom_handler.transform, translate_to_center(0.07)).ease(d3.easeBack);
-            //.transition().duration(1500).delay(0).call(zoom_handler.transform, translate_to_center(0.07));
         // draw the edges
         g.selectAll(".link")
             .data(Object.values(edges)).enter()
@@ -553,23 +552,10 @@ DONE batch drawing edges
                 highlight_edge(edge, distance);
                 EDGE_SELECTION.push(edge);
             });
-            let unvisited_nodes = adjacent_edges.map(edge => get_neighbor(node_id, edge)).filter(nid => !already_seen.includes(nid));
+            let unvisited_nodes = adjacent_edges.map(edge => edge.target).filter(nid => !already_seen.includes(nid));
             unvisited_nodes.forEach(nid => already_seen.push(nid));
             unvisited_nodes.forEach(nid =>  highlight_selection(nid, false, distance-1, already_seen));
         }
-    }
-
-    // input: an edge and one of its endpoints
-    //output: the other edge's endpoint
-    function get_neighbor(node_id, edge){
-        let neighbor;
-        if(node_id == edge.source){
-            neighbor = (edge.target);
-        }
-        else if(node_id == edge.target){
-            neighbor = (edge.source);
-        }
-        return neighbor;
     }
 
     // highlights the given node with opacity proportional to the root distance
@@ -612,6 +598,7 @@ DONE batch drawing edges
 
     // clears the highlighting and all node/edge selection
     // new_selection: true if a new node was clicked, false if the background was clicked
+    // the transition() are here to kill any ongoing transition on the nodes/links
     function clear_selection(new_selection=false){
         NODE_SELECTION = [];
         EDGE_SELECTION = [];
