@@ -1,11 +1,10 @@
 <html>
 <!--
-
 TODO when screen is horizontal, the search cells go too much down
 TODO (the infopanel should not be zoomable)
-TODO deactivate double-click zoom
 
 
+DONE deactivate double-click zoom
 DONE check get_neighbor method in highlight_selection, can probably be replaced by edge.target
 DONE ease transitions?
 DONE add nice transitions on_node_click
@@ -45,7 +44,8 @@ DONE batch drawing edges
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EPFL courses</title>
+    <title>Explore EPFL courses</title>
+    <link rel="shortcut icon" href="data/graph_icon.png">
 </head>
 
 <body>
@@ -284,7 +284,7 @@ DONE batch drawing edges
         });
 
     svg.call(zoom_handler);
-    
+
     // no double click zoom
     d3.select("svg").on("dblclick.zoom", null);
 
