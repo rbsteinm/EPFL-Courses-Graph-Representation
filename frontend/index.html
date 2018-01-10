@@ -1,46 +1,4 @@
 <html>
-<!--
-TODO when screen is horizontal, the search cells go too much down
-TODO (the infopanel should not be zoomable)
-
-
-DONE deactivate double-click zoom
-DONE check get_neighbor method in highlight_selection, can probably be replaced by edge.target
-DONE ease transitions?
-DONE add nice transitions on_node_click
-DONE add nice animation when opening the graph
-DONE search don't take capital letters into account
-DONE fix bug: when searching from text field, graph does not refresh afterwards (only on tablet, apparently only when selecting disconnected nodes)
-    issue is caused by a drawing timer that's never ending GO TO LINE 677
-DONE handle screen rotate (recompute width and height?)
-DONE rethink the colors and design
-DONE the search results block clicks, pointer-events should be null when it's closed, or size 0
-DONE fix weird zoom (margins bottom and right) issue on mobile
-DONE re-implement search function
-DONE automatically translate/zoom the graph when there is a selection so that is is entirely visible and centered above the infopanel
-DONE make infopanel scrollable
-DONE connected courses on infopanel
-DONE fix bug unzoom edges not rendered
-    the bug occurs when selection event, then zoom, then selection event again
-    the solution is either to still update everything that's not visible in the background
-    or to re-update everything at each click (which is the same as not disambiguiating click and zoom?) <== that's the solution implemented for the moment
-    or other solution: update only when the selection has changed!
-DONE when a node is selected and there's a redraw, only redraw the selected edges
-DONE disambiguiate click and zoom to not redraw when click
-DONE infopanel
-DONE hide arrowheads when unzoom threshold is reached for cleaner display
-DONE constrain zoom (for ex. stop when all nodes are visible)
-DONE adaptive labels font size
-DONE only display titles of visible nodes
-DONE display titles above nodes
-DONE dashed lines (import type of edges)
-DONE take radius into account in node_is_visible function
-DONE zindex of node should be higher that those of edges to avoid misclicks on edges
-DONE batch drawing edges: drawing only edge outgoing from visible nodes is wrong. Draw all visible edges
-DONE batch drawing edges
-    DONE interrupt drawing between the batches if a move has been made
-    DONE fade in the edges when you draw them
--->
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -103,15 +61,6 @@ DONE batch drawing edges
         font-size: 12px;
         fill: #0D1319;
         pointer-events: none;
-    }
-
-    .selected_node{
-        fill: black;
-        r: 4;
-    }
-
-    .unselected_node{
-
     }
 
     #infopanel{
@@ -206,9 +155,6 @@ DONE batch drawing edges
 
     const NODE_COLOR = "rgba(145, 145, 145, 1)";
     const EDGE_COLOR = "rgba(145, 145, 145, 0.8)";
-    //const NODE_COLOR = '#B9C9CE';
-    //const EDGE_COLOR = NODE_COLOR;
-    //const SELECTED_NODE_COLOR = "rgba(0, 0, 0, 1)";
     const SELECTED_EDGE_COLOR = "rgba(0, 0, 0, 0.8)";
     const BACKGROUND_NODE_COLOR = "rgba(142,136,130, 0.1)";
     const BACKGROUND_EDGE_COLOR = "rgb(229,229,229)";
@@ -383,7 +329,7 @@ DONE batch drawing edges
             .append("circle")
             .attr("cx", function(d) {return d.x;})
             .attr("cy", function(d) {return d.y;})
-            .attr("class", "node unselected_node")
+            .attr("class", "node")
             .attr("id", d => d.id)
             .style('fill', NODE_COLOR)
             .on("click", function(d) {
@@ -447,11 +393,6 @@ DONE batch drawing edges
         // update visible node labels to show only those of selected courses
         hide_node_labels();
         show_node_labels(d3.zoomTransform(svg.node()));
-
-        // update the graph when a new node is selected
-        //zoomBegin();
-        //zoomed(width, height, d3.zoomTransform(svg.node()));
-        //zoomEnd(width, height, d3.zoomTransform(svg.node()));
 
         // only the node is clicked, not the background
         event.stopPropagation();
@@ -564,8 +505,6 @@ DONE batch drawing edges
 
     // highlights the given node with opacity proportional to the root distance
     function highlight_node(node_id, distance_to_leaf){
-        //const opacity = 0.4 + 0.3 * distance_to_leaf;
-        //d3.select('circle#'+node.id).style('fill', "rgba(0, 0, 0, " + opacity + ")");
         d3.select('circle#'+node_id).transition().duration(1000).delay(get_highlight_delay(distance_to_leaf)).style('fill', HIGHLIGHT_COLORS[distance_to_leaf]);
         //d3.select('circle#'+node_id).style('visibility', 'visible');
 
