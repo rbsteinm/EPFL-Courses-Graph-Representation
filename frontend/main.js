@@ -1,3 +1,6 @@
+// This file contains the original Javascript code
+// The production has been retro-compiled for ES-2015 to fix compatibility issues and is located in frontend/main_ES5.js
+
 const NODE_COLOR = "rgba(145, 145, 145, 1)";
 const EDGE_COLOR = "rgba(145, 145, 145, 0.8)";
 const SELECTED_EDGE_COLOR = "rgba(0, 0, 0, 0.8)";
